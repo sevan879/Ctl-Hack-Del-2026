@@ -1,0 +1,185 @@
+/* ---- Body override for quiz ---- */
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ---- Gaze dot ---- */
+#gaze-dot {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 0, 0, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: left 0.08s, top 0.08s;
+  display: none;
+}
+
+/* ---- Screens ---- */
+.screen { 
+  display: none; 
+  padding: 40px; 
+}
+
+.screen.active { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  height: 100vh; 
+}
+
+/* ---- Start screen ---- */
+#start-screen h1 { font-size: 48px; margin-bottom: 10px; }
+#start-screen p { color: #888; margin-bottom: 30px; }
+
+#topic-input {
+  width: 350px;
+  text-align: center;
+}
+
+/* ---- Calibration ---- */
+.cal-btn {
+  position: fixed;
+  font-size: 30px;
+  background: none;
+  border: 2px solid #555;
+  color: #666;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+.cal-btn.clicked { 
+  color: #0f0; 
+  border-color: #0f0; 
+}
+
+#cal-done-btn { 
+  position: fixed; 
+  bottom: 40px; 
+  left: 50%; 
+  transform: translateX(-50%); 
+}
+
+/* ---- Quiz ---- */
+#quiz-header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 700px;
+  margin-bottom: 30px;
+  font-size: 18px;
+  color: #888;
+}
+
+#question-text {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 40px;
+  max-width: 700px;
+  line-height: 1.5;
+}
+
+/* ---- Answer options ---- */
+#options-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+  max-width: 700px;
+}
+
+.option {
+  background: #1a1a2e;
+  border: 2px solid #333;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.option:hover { 
+  border-color: #4f46e5; 
+}
+
+.option.gazing {
+  border-color: #f59e0b;
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+.option.correct { 
+  border-color: #10b981; 
+  background: rgba(16, 185, 129, 0.1); 
+}
+
+.option.wrong { 
+  border-color: #ef4444; 
+  background: rgba(239, 68, 68, 0.1); 
+}
+
+.option-letter {
+  font-size: 14px;
+  font-weight: bold;
+  color: #4f46e5;
+  margin-bottom: 5px;
+}
+
+.option-text { 
+  font-size: 16px; 
+}
+
+/* ---- Dwell progress bar ---- */
+.dwell-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #333;
+}
+
+.dwell-fill {
+  height: 100%;
+  width: 0%;
+  background: #f59e0b;
+  transition: width 0.1s linear;
+}
+
+/* ---- Feedback ---- */
+#feedback {
+  text-align: center;
+  margin-top: 30px;
+  max-width: 700px;
+}
+
+#feedback-text { 
+  font-size: 22px; 
+  margin-bottom: 10px; 
+}
+
+#explanation { 
+  color: #888; 
+  margin-bottom: 20px; 
+}
+
+/* ---- Results ---- */
+#final-score { 
+  font-size: 48px; 
+  margin: 20px 0; 
+}
+
+#results-details { 
+  color: #888; 
+  margin-bottom: 30px;
+  white-space: pre-line;
+}
