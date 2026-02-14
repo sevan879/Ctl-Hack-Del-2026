@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}EyeQ - Eye-Tracking Study Platform{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block body_content %}
+  <div id="gaze-dot"></div>
+
+  <div class="home-container">
+    <div class="header">
+      <h1>👁️ EyeQ</h1>
+      <button id="calibrate-btn" class="calibrate-btn">
+        🎯
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+    </div>
+
+    <div class="modes-grid">
+      <a href="/ai-quiz" class="mode-card" data-href="/ai-quiz">
+        <div class="mode-icon">🤖</div>
+        <h2>AI Quiz</h2>
+        <p>Generate instant quizzes</p>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </a>
+
+      <a href="/create-set" class="mode-card" data-href="/create-set">
+        <div class="mode-icon">📝</div>
+        <h2>Create Set</h2>
+        <p>Build custom flashcards</p>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </a>
+
+      <a href="/library" class="mode-card" data-href="/library">
+        <div class="mode-icon">📚</div>
+        <h2>Library</h2>
+        <p>Browse study sets</p>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </a>
+
+      <a href="/practice" class="mode-card" data-href="/practice">
+        <div class="mode-icon">⚡</div>
+        <h2>Practice</h2>
+        <p>Review mode</p>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </a>
+    </div>
+  </div>
+{% endblock %}
+
+{% block base_scripts %}
+  <script src="https://cdn.jsdelivr.net/npm/webgazer@2.1.0/dist/webgazer.min.js"></script>
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}
