@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  name      String     @default("Default User")
+  createdAt DateTime   @default(now())
+  decks     Deck[]
+  quizzes   Quiz[]
+  feedback  Feedback[]
+}
+
+model Deck {
+  id        String      @id @default(cuid())
+  title     String
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  cards     Flashcard[]
+  createdAt DateTime    @default(now())
+}
+
+model Flashcard {
+  id        String     @id @default(cuid())
+  front     String
+  back      String
+  hint      String?
+  deckId    String
+  deck      Deck       @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  feedback  Feedback[]
+  createdAt DateTime   @default(now())
+}
+
+model Feedback {
+  id          String    @id @default(cuid())
+  flashcardId String
+  flashcard   Flashcard @relation(fields: [flashcardId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  liked       Boolean
+  createdAt   DateTime  @default(now())
+}
+
+model Quiz {
+  id        String     @id @default(cuid())
+  title     String
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  questions Question[]
+  createdAt DateTime   @default(now())
+}
+
+model Question {
+  id            String @id @default(cuid())
+  questionText  String
+  options       String
+  correctAnswer Int
+  quizId        String
+  quiz          Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
