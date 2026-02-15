@@ -643,20 +643,76 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('wr-feedback').style.display = 'none';
     document.getElementById('wr-submit-btn').style.display = '';
 
+    // Reset voiceSystem so it doesn't carry over old text
+    if (typeof voiceSystem !== 'undefined') {
+      voiceSystem.existingText = '';
+    }
+
     activeDwellButtons = [];
     rebuildDwellButtons();
+
+    // Auto-start voice after card renders
+    setTimeout(function () {
+      if (!wrAnswered && writeScreen.classList.contains('active')) {
+        wrStartVoice();
+      }
+    }, 600);
+  }
+
+  // NEW FUNCTION — add this alongside the other write functions
+  function wrStartVoice() {
+    if (wrAnswered) return;
+    if (typeof switchToFieldMode !== 'function') return;
+
+    var wrapper = document.getElementById('wr-input-wrapper');
+    if (!wrapper) return;
+
+    // Clear old text so voice starts fresh
+    var input = document.getElementById('wr-input');
+    if (input) input.value = '';
+    if (typeof voiceSystem !== 'undefined') voiceSystem.existingText = '';
+
+    switchToFieldMode(wrapper, function () {
+      // Fired when user says "EyeQ done"
+      var answer = document.getElementById('wr-input').value.trim();
+      if (answer && !wrAnswered) {
+        wrCheckAnswer();
+      }
+    });
+  }
+
+  function handleWriteGaze(x, y) {
+    var input = document.getElementById('wr-input');
+    if (!input || wrAnswered) return;
+
+    var rect = input.getBoundingClientRect();
+    var pad = 60;
+    var inside = x >= rect.left - pad && x <= rect.right + pad &&
+                 y >= rect.top - pad && y <= rect.bottom + pad;
+
+    if (inside) {
+      input.classList.add('gazing');
+      // Re-activate voice if it stopped
+      if (typeof voiceSystem !== 'undefined' && voiceSystem.mode !== 'field') {
+        wrStartVoice();
+      }
+    } else {
+      input.classList.remove('gazing');
+    }
   }
 
   function wrCheckAnswer() {
     wrAnswered = true;
+
+    // Stop voice when answer is submitted
+    if (typeof switchToGlobalMode === 'function') switchToGlobalMode();
+
     var card = wrCards[wrIndex];
     var userAnswer = document.getElementById('wr-input').value.trim().toLowerCase();
     var correctAnswer = card.definition.trim().toLowerCase();
 
-    /* Simple similarity check */
     var isCorrect = userAnswer === correctAnswer;
     if (!isCorrect) {
-      /* Check if at least 80% of words match */
       var userWords = userAnswer.split(/\s+/);
       var correctWords = correctAnswer.split(/\s+/);
       var matchCount = 0;
@@ -691,22 +747,6 @@ document.addEventListener('DOMContentLoaded', function () {
       wrIndex++;
       loadWriteCard();
     }
-  }
-
-  document.getElementById('wr-submit-btn').addEventListener('click', function () { if (!wrAnswered) wrCheckAnswer(); });
-  document.getElementById('wr-next-btn').addEventListener('click', function () { wrNextCard(); });
-  document.getElementById('wr-exit-btn').addEventListener('click', function () { showScreen(modeScreen); });
-
-  /* Write gaze — focus input */
-  function handleWriteGaze(x, y) {
-    var input = document.getElementById('wr-input');
-    if (!input || wrAnswered) return;
-    var rect = input.getBoundingClientRect();
-    var pad = 50;
-    var inside = x >= rect.left - pad && x <= rect.right + pad &&
-                 y >= rect.top - pad && y <= rect.bottom + pad;
-    if (inside) { input.classList.add('gazing'); input.focus(); }
-    else { input.classList.remove('gazing'); }
   }
 
   /* ═══════════════════════════════════════

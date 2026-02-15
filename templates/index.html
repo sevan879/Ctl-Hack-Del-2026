@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}EyeQ - AI-Powered Eye-Tracking Quizlet{% endblock %}
+{% block title %}EyeQ - AI-Powered Eye-Tracking Quiz{% endblock %}
 
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
@@ -11,7 +11,7 @@
 
   <div id="start-screen" class="screen active">
     <h1><span class="material-symbols-outlined" style="font-size: 1.2em; vertical-align: text-bottom; margin-right: 0.3em;">visibility</span>EyeQ</h1>
-    <p>AI-Powered Eye-Tracking Quizlet</p>
+    <p>AI-Powered Eye-Tracking Quiz</p>
 
     <div class="topic-input-wrapper">
       <input type="text" id="topic-input" placeholder="Look here to speak your topic...">
@@ -19,11 +19,6 @@
     </div>
     <div id="voice-status" class="voice-status"></div>
 
-    <select id="difficulty-select">
-      <option value="easy">Easy</option>
-      <option value="medium" selected>Medium</option>
-      <option value="hard">Hard</option>
-    </select>
     <button id="start-btn">
       Generate Quiz
       <div class="dwell-bar"><div class="dwell-fill"></div></div>

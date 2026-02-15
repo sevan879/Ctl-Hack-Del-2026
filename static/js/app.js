@@ -81,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function startTopicListening() {
       if (typeof switchToFieldMode === 'function') {
         switchToFieldMode(wrapper, function () {
-          // Field mode complete callback
           if (topicDwellBtn) topicDwellBtn.reset();
         });
       }
@@ -113,7 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
       var topic = topicInput.value.trim();
       if (!topic) return;
 
-      var difficulty = document.getElementById('difficulty-select').value;
       var loading = document.getElementById('loading');
       loading.style.display = 'block';
       startBtn.disabled = true;
@@ -121,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
       fetch('/api/generate-quiz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic: topic, difficulty: difficulty, num_questions: 5 }),
+        body: JSON.stringify({ topic: topic, num_questions: 5 }),
       })
         .then(function (res) { return res.json(); })
         .then(function (data) {
@@ -193,6 +191,8 @@ document.addEventListener('DOMContentLoaded', function () {
     activeDwellButtons = [];
     setupDwellButtons();
 
+    document.getElementById('options-container').classList.remove('compact');
+
     var q = questions[index];
     document.getElementById('q-counter').textContent = 'Question ' + (index + 1) + '/' + questions.length;
     document.getElementById('score').textContent = 'Score: ' + score;
@@ -217,6 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function selectAnswer(selectedIndex, dwellTime) {
+    if (answered) return;
     answered = true;
     clearInterval(timerInterval);
     var q = questions[currentQ];
@@ -228,6 +229,8 @@ document.addEventListener('DOMContentLoaded', function () {
     options.forEach(function (opt) { opt.classList.remove('gazing'); });
     options[selectedIndex].classList.add(isCorrect ? 'correct' : 'wrong');
     options[q.correct].classList.add('correct');
+
+    document.getElementById('options-container').classList.add('compact');
 
     var feedback = document.getElementById('feedback');
     feedback.style.display = 'block';
@@ -248,9 +251,14 @@ document.addEventListener('DOMContentLoaded', function () {
     nextBtn.textContent = currentQ >= questions.length - 1 ? 'See Results →' : 'Next Question →';
 
     activeDwellButtons.push(new DwellButton(nextBtn, 1500, function () {
-      if (currentQ >= questions.length - 1) showResults();
-      else loadQuestion(currentQ + 1);
+      goNext();
     }));
+  }
+
+  function goNext() {
+    document.getElementById('options-container').classList.remove('compact');
+    if (currentQ >= questions.length - 1) showResults();
+    else loadQuestion(currentQ + 1);
   }
 
   function showResults() {
@@ -271,33 +279,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var restartBtn = document.getElementById('restart-btn');
     activeDwellButtons.push(new DwellButton(restartBtn, 2000, function () {
-      questions = []; currentQ = 0; score = 0; results = [];
-      answered = false;
-      dwellTarget = null;
-      dwellStart = 0;
-      topicInput.value = ''; 
-      startBtn.disabled = false;
-      showScreen(startScreen);
-      topicInput.focus();
+      restartQuiz();
     }));
   }
 
-  document.addEventListener('click', function (e) {
-    if (e.target.id === 'next-btn' || (e.target.closest && e.target.closest('#next-btn'))) {
-      if (!answered) return;
-      if (currentQ >= questions.length - 1) showResults();
-      else loadQuestion(currentQ + 1);
-    }
-    if (e.target.id === 'restart-btn' || (e.target.closest && e.target.closest('#restart-btn'))) {
-      questions = []; currentQ = 0; score = 0; results = [];
-      answered = false;
-      dwellTarget = null;
-      dwellStart = 0;
-      topicInput.value = ''; 
-      startBtn.disabled = false;
-      showScreen(startScreen);
-      topicInput.focus();
-    }
+  function restartQuiz() {
+    document.getElementById('options-container').classList.remove('compact');
+    questions = []; currentQ = 0; score = 0; results = [];
+    answered = false;
+    dwellTarget = null;
+    dwellStart = 0;
+    topicInput.value = '';
+    startBtn.disabled = false;
+    showScreen(startScreen);
+    topicInput.focus();
+  }
+
+  // Click handlers
+  document.getElementById('next-btn').addEventListener('click', function () {
+    if (!answered) return;
+    goNext();
+  });
+
+  document.getElementById('restart-btn').addEventListener('click', function () {
+    restartQuiz();
   });
 
   onGaze(function (x, y) {
@@ -305,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function () {
       handleQuizGaze(x, y);
     }
     activeDwellButtons.forEach(function (b) { b.update(x, y); });
-    
+
     if (window.updateChatbotDwell) {
       window.updateChatbotDwell(x, y);
     }

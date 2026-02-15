@@ -39,7 +39,6 @@ class AnswerSubmit(BaseModel):
 @app.post("/api/generate-quiz")
 async def generate_quiz(req: QuizRequest):
     prompt = f"""Generate {req.num_questions} multiple choice questions about: {req.topic}
-Difficulty: {req.difficulty}
 
 Return ONLY a JSON array in this exact format, no other text:
 [

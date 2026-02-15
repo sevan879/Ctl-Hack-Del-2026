@@ -456,12 +456,32 @@ function snapToTargetGlobal(x, y) {
   if (_calibrationActive) return { x: x, y: y };
   if (guidedTour.active) return { x: x, y: y };
   var selectors = [
-    '.mode-card', '.set-card', '.create-card', '.option',
-    '.action-btn', '.delete-card-btn', '.modal-btn', '.modal-close',
-    '.empty-cta', '.home-button', '.calibrate-btn',
-    '#start-btn', '#next-btn', '#restart-btn',
+    /* Nav */
+    '.home-button', '.calibrate-btn',
+    /* Calibration */
+    '#cal-skip-btn',
+    /* Tour */
+    '#tour-tooltip', '#tour-skip-btn',
+    /* Home page cards */
+    '.mode-card',
+    /* Practice — select & mode screens */
+    '.select-card', '.set-card',
+    /* Practice — study buttons */
+    '.big-btn', '.fc-exit', '.qz-exit', '.mt-exit', '.wr-exit',
+    /* Practice — quiz options & match tiles */
+    '.qz-option', '.mt-tile',
+    /* Practice — write input */
+    '.wr-input', '#wr-input-wrapper',
+    /* AI Quiz */
+    '.option', '#start-btn', '#next-btn', '#restart-btn',
+    /* Create set */
+    '.action-btn', '.delete-card-btn', '.voice-input-wrapper',
+    /* Inputs */
     '.gaze-input', '.gaze-textarea', '.field-group textarea', '#topic-input',
-    '#tour-tooltip', '#tour-skip-btn', '#cal-skip-btn'
+    /* Chatbox */
+    '#chatbox-trigger', '#chatbox-close', '#chat-text-input',
+    /* Misc */
+    '.modal-btn', '.modal-close', '.empty-cta', '.create-card'
   ];
   var targets = document.querySelectorAll(selectors.join(', '));
   var closest = null;
