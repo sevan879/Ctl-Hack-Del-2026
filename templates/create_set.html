@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}EyeQ - Create Study Set{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/create_set.css') }}">
+{% endblock %}
+
+{% block body_content %}
+  <div id="gaze-dot"></div>
+
+  <div class="create-container">
+    <div class="create-header">
+      <h1>📝 Create Study Set</h1>
+    </div>
+
+    <div class="title-section">
+      <input type="text" id="set-title" class="gaze-input" placeholder="Set title (e.g. Biology Chapter 5)" autocomplete="off">
+      <input type="text" id="set-description" class="gaze-input" placeholder="Description (optional)" autocomplete="off">
+    </div>
+
+    <div class="cards-wrapper" id="cards-wrapper">
+      <div id="cards-list"></div>
+    </div>
+
+    <div class="action-bar">
+      <button id="add-card-btn" class="action-btn add-btn">
+        <span class="action-icon">➕</span>
+        <span class="action-label">Add Card</span>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+      <div class="card-count" id="card-count">0 cards</div>
+      <button id="save-set-btn" class="action-btn save-btn">
+        <span class="action-icon">💾</span>
+        <span class="action-label">Save Set</span>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{{ url_for('static', filename='js/create_set.js') }}"></script>
+{% endblock %}

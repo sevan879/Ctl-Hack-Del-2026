@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}EyeQ - Library{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/library.css') }}">
+{% endblock %}
+
+{% block body_content %}
+  <div id="gaze-dot"></div>
+
+  <div class="library-container">
+    <div class="library-header">
+      <h1>📚 My Library</h1>
+    </div>
+
+    <div id="empty-state" class="empty-state" style="display:none;">
+      <div class="empty-icon">📭</div>
+      <h2>No Study Sets Yet</h2>
+      <p>Create your first study set to get started!</p>
+      <a href="/create-set" class="empty-cta" id="empty-create-btn">
+        <span>📝 Create a Set</span>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </a>
+    </div>
+
+    <div id="loading-state" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading your sets…</p>
+    </div>
+
+    <div id="sets-grid" class="sets-grid" style="display:none;"></div>
+  </div>
+
+  <div id="set-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 id="modal-title"></h2>
+        <button id="modal-close-btn" class="modal-close">
+          ✕
+          <div class="dwell-bar"><div class="dwell-fill"></div></div>
+        </button>
+      </div>
+      <p id="modal-description" class="modal-description"></p>
+      <div id="modal-meta" class="modal-meta"></div>
+
+      <div class="modal-cards-header">
+        <h3>Cards</h3>
+        <span id="modal-card-count" class="modal-count"></span>
+      </div>
+      <div id="modal-cards-list" class="modal-cards-list"></div>
+
+      <div class="modal-actions">
+        <a href="#" id="modal-study-btn" class="modal-btn study-btn">
+          <span>⚡ Study</span>
+          <div class="dwell-bar"><div class="dwell-fill"></div></div>
+        </a>
+        <button id="modal-delete-btn" class="modal-btn delete-btn">
+          <span>🗑️ Delete</span>
+          <div class="dwell-bar"><div class="dwell-fill"></div></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirm-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-card confirm-card">
+      <div class="confirm-icon">⚠️</div>
+      <h2>Delete this set?</h2>
+      <p id="confirm-text" class="modal-description"></p>
+      <div class="modal-actions">
+        <button id="confirm-yes-btn" class="modal-btn delete-btn">
+          <span>Yes, Delete</span>
+          <div class="dwell-bar"><div class="dwell-fill"></div></div>
+        </button>
+        <button id="confirm-no-btn" class="modal-btn cancel-btn">
+          <span>Cancel</span>
+          <div class="dwell-bar"><div class="dwell-fill"></div></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{{ url_for('static', filename='js/library.js') }}"></script>
+{% endblock %}

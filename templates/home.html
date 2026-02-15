@@ -12,10 +12,6 @@
   <div class="home-container">
     <div class="header">
       <h1>👁️ EyeQ</h1>
-      <button id="calibrate-btn" class="calibrate-btn">
-        🎯
-        <div class="dwell-bar"><div class="dwell-fill"></div></div>
-      </button>
     </div>
 
     <div class="modes-grid">
@@ -50,7 +46,6 @@
   </div>
 {% endblock %}
 
-{% block base_scripts %}
-  <script src="https://cdn.jsdelivr.net/npm/webgazer@2.1.0/dist/webgazer.min.js"></script>
+{% block extra_js %}
   <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 {% endblock %}

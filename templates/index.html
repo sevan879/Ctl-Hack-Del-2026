@@ -9,21 +9,25 @@
 {% block body_content %}
   <div id="gaze-dot"></div>
 
-  <button id="recalibrate-btn" class="recalibrate-btn">
-    🎯
-    <div class="dwell-bar"><div class="dwell-fill"></div></div>
-  </button>
-
   <div id="start-screen" class="screen active">
     <h1>👁️ EyeQ</h1>
     <p>AI-Powered Eye-Tracking Quizlet</p>
-    <input type="text" id="topic-input" placeholder="Enter a topic (e.g. Python, Biology)">
+
+    <div class="topic-input-wrapper">
+      <input type="text" id="topic-input" placeholder="Look here to speak your topic...">
+      <div class="dwell-bar"><div class="dwell-fill"></div></div>
+    </div>
+    <div id="voice-status" class="voice-status"></div>
+
     <select id="difficulty-select">
       <option value="easy">Easy</option>
       <option value="medium" selected>Medium</option>
       <option value="hard">Hard</option>
     </select>
-    <button id="start-btn">Generate Quiz</button>
+    <button id="start-btn">
+      Generate Quiz
+      <div class="dwell-bar"><div class="dwell-fill"></div></div>
+    </button>
     <p id="loading" style="display:none;">⏳ AI is generating your quiz...</p>
   </div>
 
@@ -74,7 +78,6 @@
   </div>
 {% endblock %}
 
-{% block base_scripts %}
-  <script src="https://cdn.jsdelivr.net/npm/webgazer@2.1.0/dist/webgazer.min.js"></script>
+{% block extra_js %}
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 {% endblock %}
