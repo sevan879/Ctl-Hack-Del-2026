@@ -1,3 +1,5 @@
+@import url('https://fonts.cdnfonts.com/css/open-dyslexic');
+
 * {
   margin: 0;
   padding: 0;
@@ -5,9 +7,9 @@
 }
 
 body {
-  font-family: 'Segoe UI', -apple-system, sans-serif;
-  background: #0f0f1a;
-  color: #e0e0e0;
+  font-family: 'Open Dyslexic', 'OpenDyslexic', 'Segoe UI', -apple-system, sans-serif;
+  background: #2F3E46;
+  color: #CAD2C5;
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -18,8 +20,8 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
   font-size: 1.25rem;
   border: none;
   border-radius: 1rem;
-  background: #4f46e5;
-  color: white;
+  background: #52796F;
+  color: #CAD2C5;
   cursor: pointer;
   margin-top: 0.75rem;
   transition: all 0.3s ease;
@@ -27,12 +29,13 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
 }
 
 button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-btn):not(#cal-skip-btn):hover {
-  background: #4338ca;
+  background: #84A98C;
   transform: scale(1.03);
 }
 
 button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-btn):not(#cal-skip-btn):disabled {
-  background: #666;
+  background: #354F52;
+  color: #84A98C;
   cursor: not-allowed;
   transform: none;
 }
@@ -44,8 +47,8 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
   top: 0.75rem;
   min-width: 14rem;
   height: 4.5rem;
-  background: linear-gradient(135deg, #10b981, #059669);
-  border: 2px solid #34d399;
+  background: #52796F;
+  border: 2px solid #84A98C;
   border-radius: 1.25rem;
   display: flex;
   flex-direction: row;
@@ -55,12 +58,12 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
   padding: 0 1.5rem;
   margin: 0;
   text-decoration: none;
-  color: white;
+  color: #CAD2C5;
   cursor: pointer;
   z-index: 9998;
   transition: all 0.3s ease;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 4px 15px rgba(82, 121, 111, 0.25);
   font-family: inherit;
   font-size: inherit;
 }
@@ -70,10 +73,11 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
 
 .home-button:hover, .home-button.gazing,
 .calibrate-btn:hover, .calibrate-btn.gazing {
-  background: linear-gradient(135deg, #059669, #047857);
+  background: #84A98C;
+  color: #2F3E46;
   transform: scale(1.08);
-  box-shadow: 0 0 1.5rem rgba(16, 185, 129, 0.5);
-  border-color: #6ee7b7;
+  box-shadow: 0 0 1.5rem rgba(132, 169, 140, 0.5);
+  border-color: #CAD2C5;
 }
 
 .home-icon, .calibrate-icon {
@@ -84,10 +88,15 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
 
 .home-text, .calibrate-text {
   font-size: 1.3rem;
-  color: white;
+  color: #CAD2C5;
   font-weight: 600;
   letter-spacing: 0.02em;
   white-space: nowrap;
+}
+
+.home-button:hover .home-text, .home-button.gazing .home-text,
+.calibrate-btn:hover .calibrate-text, .calibrate-btn.gazing .calibrate-text {
+  color: #2F3E46;
 }
 
 .home-button .dwell-bar,
@@ -105,7 +114,7 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
 .calibrate-btn .dwell-fill {
   height: 100%;
   width: 0%;
-  background: #f59e0b;
+  background: #CAD2C5;
   transition: width 0.1s linear;
 }
 
@@ -113,7 +122,7 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
 h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 0.625rem; }
 h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); margin-bottom: 0.9375rem; }
 h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); margin-bottom: 0.625rem; }
-p { color: #888; line-height: 1.6; }
+p { color: #84A98C; line-height: 1.6; }
 
 /* ── Inputs ── */
 input[type="text"],
@@ -123,10 +132,10 @@ textarea,
 select {
   padding: 1rem 1.5rem;
   font-size: 1.25rem;
-  border: 3px solid #333;
+  border: 3px solid #84A98C;
   border-radius: 1rem;
-  background: #1a1a2e;
-  color: white;
+  background: #354F52;
+  color: #CAD2C5;
   margin-bottom: 0.75rem;
   transition: all 0.3s ease;
   font-family: inherit;
@@ -134,9 +143,9 @@ select {
 
 input:focus,
 textarea:focus,
-select:focus {
+select:focus {~
   outline: none;
-  border-color: #4f46e5;
+  border-color: #CAD2C5;
 }
 
 /* ── Gaze dot ── */
@@ -144,21 +153,21 @@ select:focus {
   position: fixed;
   width: 1rem;
   height: 1rem;
-  background: radial-gradient(circle, rgba(255,80,80,0.8), rgba(255,0,0,0.3));
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.95), rgba(0, 255, 255, 0.3));
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
   transform: translate(-50%, -50%);
   transition: left 0.06s ease-out, top 0.06s ease-out;
   display: none;
-  box-shadow: 0 0 0.625rem rgba(255, 0, 0, 0.4);
+  box-shadow: 0 0 0.75rem rgba(0, 255, 255, 0.7), 0 0 1.5rem rgba(0, 255, 255, 0.3);
 }
 
 /* ── Calibration Overlay ── */
 #cal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: #0a0a15;
+  background: #2F3E46;
   z-index: 10000;
   display: flex;
   flex-direction: column;
@@ -168,15 +177,15 @@ select:focus {
 }
 
 #cal-instruction { text-align: center; margin-bottom: 1.25rem; z-index: 10002; }
-#cal-instruction h2 { font-size: clamp(1.5rem, 4vw, 1.75rem); color: #e0e0e0; margin-bottom: 0.5rem; }
-#cal-instruction p { color: #888; font-size: clamp(0.875rem, 2vw, 1rem); }
+#cal-instruction h2 { font-size: clamp(1.5rem, 4vw, 1.75rem); color: #CAD2C5; margin-bottom: 0.5rem; }
+#cal-instruction p { color: #84A98C; font-size: clamp(0.875rem, 2vw, 1rem); }
 
 #cal-dot-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10001; }
 
 #cal-dot {
   position: absolute;
   width: 5rem; height: 5rem;
-  background: radial-gradient(circle, #4f46e5 40%, #6366f1 70%, transparent 71%);
+  background: radial-gradient(circle, #52796F 40%, #84A98C 70%, transparent 71%);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: left 0.3s ease, top 0.3s ease, width 0.3s ease, height 0.3s ease;
@@ -188,7 +197,7 @@ select:focus {
   position: absolute;
   top: 50%; left: 50%;
   width: 0.5rem; height: 0.5rem;
-  background: white;
+  background: #CAD2C5;
   border-radius: 50%;
   transform: translate(-50%, -50%);
 }
@@ -200,21 +209,21 @@ select:focus {
   transition: left 0.3s ease, top 0.3s ease, width 0.3s ease, height 0.3s ease;
   z-index: 10002;
   border: 3px solid transparent;
-  border-top-color: #f59e0b;
-  border-right-color: #f59e0b;
+  border-top-color: #84A98C;
+  border-right-color: #84A98C;
 }
 
 @keyframes ring-fill {
-  0%   { transform: translate(-50%, -50%) rotate(0deg); border-color: transparent; border-top-color: #f59e0b; }
-  25%  { border-right-color: #f59e0b; }
-  50%  { border-bottom-color: #f59e0b; transform: translate(-50%, -50%) rotate(180deg); }
-  75%  { border-left-color: #f59e0b; }
-  100% { border-color: #10b981; transform: translate(-50%, -50%) rotate(360deg); }
+  0%   { transform: translate(-50%, -50%) rotate(0deg); border-color: transparent; border-top-color: #84A98C; }
+  25%  { border-right-color: #84A98C; }
+  50%  { border-bottom-color: #84A98C; transform: translate(-50%, -50%) rotate(180deg); }
+  75%  { border-left-color: #84A98C; }
+  100% { border-color: #CAD2C5; transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-#cal-progress-container { position: fixed; bottom: 2.5rem; left: 10%; right: 10%; height: 0.375rem; background: #1a1a2e; border-radius: 0.1875rem; z-index: 10002; }
-#cal-progress-bar { height: 100%; background: linear-gradient(90deg, #4f46e5, #10b981); border-radius: 0.1875rem; width: 0%; transition: width 0.3s ease; }
-#cal-counter { position: fixed; bottom: 3.4375rem; left: 50%; transform: translateX(-50%); color: #555; font-size: clamp(0.75rem, 1.5vw, 0.875rem); z-index: 10002; }
+#cal-progress-container { position: fixed; bottom: 2.5rem; left: 10%; right: 10%; height: 0.375rem; background: #354F52; border-radius: 0.1875rem; z-index: 10002; }
+#cal-progress-bar { height: 100%; background: linear-gradient(90deg, #52796F, #84A98C); border-radius: 0.1875rem; width: 0%; transition: width 0.3s ease; }
+#cal-counter { position: fixed; bottom: 3.4375rem; left: 50%; transform: translateX(-50%); color: #84A98C; font-size: clamp(0.75rem, 1.5vw, 0.875rem); z-index: 10002; }
 
 #cal-skip-btn {
   position: fixed;
@@ -222,34 +231,79 @@ select:focus {
   padding: 1.25rem 2.5rem;
   font-size: 1.25rem;
   background: transparent;
-  border: 2px solid #888;
+  border: 2px solid #84A98C;
   border-radius: 1rem;
-  color: #888;
+  color: #84A98C;
   cursor: pointer;
   z-index: 10003;
   transition: all 0.3s;
 }
 
 #cal-skip-btn:hover {
-  border-color: #4f46e5;
-  color: #4f46e5;
-  background: rgba(79, 70, 229, 0.1);
+  border-color: #CAD2C5;
+  color: #CAD2C5;
+  background: rgba(82, 121, 111, 0.2);
   transform: scale(1.05);
 }
 
-/* ── WebGazer webcam ── */
+/* ── WebGazer: hide elements before JS moves them into the container ── */
 #webgazerVideoFeed,
-#webgazerVideoCanvas {
+#webgazerFaceOverlay,
+#webgazerVideoContainer {
+  visibility: hidden !important;
   position: fixed !important;
-  bottom: 0.625rem !important;
-  right: 0.625rem !important;
+  bottom: 16px !important;
+  right: 16px !important;
   top: auto !important;
   left: auto !important;
-  width: 8.75rem !important;
-  height: 6.5625rem !important;
-  border: 2px solid #333 !important;
-  border-radius: 0.5rem !important;
-  z-index: 9000 !important;
+}
+
+/* ── WebGazer webcam preview ── */
+#webgazer-preview {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  width: 240px;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #84A98C;
+  z-index: 9000;
+  transform: scaleX(-1);
+  background: #2F3E46;
+}
+
+#webgazer-preview #webgazerVideoFeed {
+  visibility: visible !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: auto !important;
+  right: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+#webgazer-preview #webgazerFaceOverlay {
+  visibility: visible !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: auto !important;
+  right: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+#webgazerVideoCanvas {
+  display: none !important;
 }
 
 #webgazerFaceFeedbackBox,

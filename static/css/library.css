@@ -37,15 +37,15 @@ body {
 }
 
 .loading-state p {
-  color: #888;
+  color: #84A98C;
   font-size: 1.25rem;
 }
 
 .spinner {
   width: 3.5rem;
   height: 3.5rem;
-  border: 4px solid #1a1a2e;
-  border-top-color: #4f46e5;
+  border: 4px solid #354F52;
+  border-top-color: #84A98C;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -67,6 +67,11 @@ body {
 .empty-icon {
   font-size: 6rem;
   margin-bottom: 0.5rem;
+  color: #84A98C;
+}
+
+.empty-icon .material-icons {
+  font-size: inherit;
 }
 
 .empty-state h2 {
@@ -75,7 +80,7 @@ body {
 }
 
 .empty-state p {
-  color: #666;
+  color: #84A98C;
   font-size: 1.25rem;
   margin-bottom: 1.5rem;
 }
@@ -87,8 +92,8 @@ body {
   padding: 1.5rem 4rem;
   font-size: 1.4rem;
   font-weight: 600;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: white;
+  background: #52796F;
+  color: #CAD2C5;
   border: none;
   border-radius: 1.25rem;
   text-decoration: none;
@@ -101,8 +106,10 @@ body {
 
 .empty-cta:hover,
 .empty-cta.gazing {
+  background: #84A98C;
+  color: #2F3E46;
   transform: scale(1.06);
-  box-shadow: 0 0 2.5rem rgba(79, 70, 229, 0.5);
+  box-shadow: 0 0 2.5rem rgba(132, 169, 140, 0.5);
 }
 
 .empty-cta .dwell-bar {
@@ -118,7 +125,7 @@ body {
 .empty-cta .dwell-fill {
   height: 100%;
   width: 0%;
-  background: #f59e0b;
+  background: #CAD2C5;
   transition: width 0.1s linear;
 }
 
@@ -132,7 +139,6 @@ body {
   overflow-x: hidden;
   min-height: 0;
   align-content: start;
-  /* Extra padding so scaled cards don't clip against edges */
   padding: 1rem 1.5rem 2rem 1.5rem;
 }
 
@@ -141,23 +147,23 @@ body {
 }
 
 .sets-grid::-webkit-scrollbar-track {
-  background: #1a1a2e;
+  background: #354F52;
   border-radius: 0.25rem;
 }
 
 .sets-grid::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #84A98C;
   border-radius: 0.25rem;
 }
 
 .sets-grid::-webkit-scrollbar-thumb:hover {
-  background: #4f46e5;
+  background: #CAD2C5;
 }
 
 /* ── Set Card ── */
 .set-card {
-  background: #1a1a2e;
-  border: 3px solid #2a2a3e;
+  background: #354F52;
+  border: 3px solid #84A98C;
   border-radius: 1.5rem;
   padding: 2rem;
   cursor: pointer;
@@ -185,10 +191,10 @@ body {
 
 .set-card:hover,
 .set-card.gazing {
-  border-color: #4f46e5;
+  border-color: #CAD2C5;
   border-width: 4px;
   padding: calc(2rem - 1px);
-  box-shadow: 0 0 3rem rgba(79, 70, 229, 0.5), 0 0.75rem 2.5rem rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 3rem rgba(132, 169, 140, 0.5), 0 0.75rem 2.5rem rgba(0, 0, 0, 0.3);
   z-index: 10;
 }
 
@@ -200,12 +206,17 @@ body {
 .set-card-icon {
   font-size: 3rem;
   line-height: 1;
+  color: #84A98C;
+}
+
+.set-card-icon .material-icons {
+  font-size: inherit;
 }
 
 .set-card-title {
   font-size: 1.4rem;
   font-weight: 700;
-  color: #e0e0e0;
+  color: #CAD2C5;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -213,7 +224,7 @@ body {
 
 .set-card-desc {
   font-size: 1.05rem;
-  color: #666;
+  color: #84A98C;
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -228,7 +239,7 @@ body {
   align-items: center;
   margin-top: auto;
   padding-top: 0.75rem;
-  border-top: 1px solid #222;
+  border-top: 1px solid #52796F;
 }
 
 .set-card-count {
@@ -236,13 +247,13 @@ body {
   align-items: center;
   gap: 0.4rem;
   font-size: 1rem;
-  color: #4f46e5;
+  color: #84A98C;
   font-weight: 600;
 }
 
 .set-card-date {
   font-size: 0.9rem;
-  color: #555;
+  color: #84A98C;
 }
 
 .set-card .dwell-bar {
@@ -252,21 +263,21 @@ body {
   left: 0;
   right: 0;
   height: 0.35rem;
-  background: #222;
+  background: #2F3E46;
 }
 
 .set-card .dwell-fill {
   display: block;
   height: 100%;
   width: 0%;
-  background: #f59e0b;
+  background: #84A98C;
   transition: width 0.1s linear;
 }
 
 /* ── Create Card ── */
 .create-card {
   background: transparent;
-  border: 3px dashed #444;
+  border: 3px dashed #84A98C;
   border-radius: 1.5rem;
   padding: 2rem;
   cursor: pointer;
@@ -280,16 +291,16 @@ body {
   gap: 1rem;
   min-height: 14rem;
   text-decoration: none;
-  color: #666;
+  color: #84A98C;
   z-index: 1;
 }
 
 .create-card:hover,
 .create-card.gazing {
-  border-color: #4f46e5;
-  background: rgba(79, 70, 229, 0.05);
-  color: #4f46e5;
-  box-shadow: 0 0 3rem rgba(79, 70, 229, 0.4), 0 0.75rem 2.5rem rgba(0, 0, 0, 0.4);
+  border-color: #CAD2C5;
+  background: rgba(82, 121, 111, 0.1);
+  color: #CAD2C5;
+  box-shadow: 0 0 3rem rgba(132, 169, 140, 0.4), 0 0.75rem 2.5rem rgba(0, 0, 0, 0.3);
   z-index: 10;
 }
 
@@ -301,6 +312,10 @@ body {
 .create-card-icon {
   font-size: 4rem;
   line-height: 1;
+}
+
+.create-card-icon .material-icons {
+  font-size: inherit;
 }
 
 .create-card-text {
@@ -315,14 +330,14 @@ body {
   left: 0;
   right: 0;
   height: 0.35rem;
-  background: rgba(79, 70, 229, 0.1);
+  background: rgba(82, 121, 111, 0.2);
 }
 
 .create-card .dwell-fill {
   display: block;
   height: 100%;
   width: 0%;
-  background: #4f46e5;
+  background: #84A98C;
   transition: width 0.1s linear;
 }
 
@@ -333,7 +348,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(47, 62, 70, 0.8);
   backdrop-filter: blur(6px);
   z-index: 9990;
   display: flex;
@@ -348,8 +363,8 @@ body {
 }
 
 .modal-card {
-  background: #1a1a2e;
-  border: 2px solid #333;
+  background: #354F52;
+  border: 2px solid #84A98C;
   border-radius: 1.5rem;
   padding: 2rem;
   width: 90%;
@@ -375,6 +390,11 @@ body {
 .confirm-icon {
   font-size: 4rem;
   margin-bottom: 0.5rem;
+  color: #84A98C;
+}
+
+.confirm-icon .material-icons {
+  font-size: inherit;
 }
 
 .confirm-card h2 {
@@ -405,10 +425,10 @@ body {
   min-height: 4rem;
   width: 4rem;
   height: 4rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 3px solid #444;
+  background: rgba(82, 121, 111, 0.15);
+  border: 3px solid #84A98C;
   border-radius: 1rem;
-  color: #888;
+  color: #84A98C;
   cursor: pointer;
   font-size: 1.5rem;
   flex-shrink: 0;
@@ -421,11 +441,11 @@ body {
 
 .modal-close:hover,
 .modal-close.gazing {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: #ef4444;
-  color: #ef4444;
+  background: rgba(82, 121, 111, 0.3);
+  border-color: #CAD2C5;
+  color: #CAD2C5;
   transform: scale(1.1);
-  box-shadow: 0 0 1.5rem rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 1.5rem rgba(132, 169, 140, 0.4);
 }
 
 .modal-close .dwell-bar {
@@ -441,12 +461,12 @@ body {
 .modal-close .dwell-fill {
   height: 100%;
   width: 0%;
-  background: #ef4444;
+  background: #84A98C;
   transition: width 0.1s linear;
 }
 
 .modal-description {
-  color: #888;
+  color: #84A98C;
   font-size: 1.1rem;
   line-height: 1.5;
   margin-bottom: 0.75rem;
@@ -456,10 +476,10 @@ body {
   display: flex;
   gap: 2rem;
   font-size: 1rem;
-  color: #555;
+  color: #84A98C;
   margin-bottom: 1rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #222;
+  border-bottom: 1px solid #52796F;
 }
 
 .modal-meta span {
@@ -481,7 +501,7 @@ body {
 }
 
 .modal-count {
-  color: #666;
+  color: #84A98C;
   font-size: 1rem;
 }
 
@@ -506,7 +526,7 @@ body {
 }
 
 .modal-cards-list::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #84A98C;
   border-radius: 0.2rem;
 }
 
@@ -515,8 +535,8 @@ body {
   align-items: flex-start;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  background: #0f0f1a;
-  border: 1px solid #222;
+  background: #2F3E46;
+  border: 1px solid #52796F;
   border-radius: 1rem;
   font-size: 1.05rem;
 }
@@ -527,11 +547,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #4f46e5;
+  background: #52796F;
   border-radius: 0.6rem;
   font-size: 0.85rem;
   font-weight: 700;
-  color: white;
+  color: #CAD2C5;
   flex-shrink: 0;
 }
 
@@ -544,18 +564,18 @@ body {
 .modal-card-term {
   flex: 1;
   font-weight: 600;
-  color: #e0e0e0;
+  color: #CAD2C5;
 }
 
 .modal-card-divider {
   width: 1px;
-  background: #333;
+  background: #52796F;
   flex-shrink: 0;
 }
 
 .modal-card-def {
   flex: 1;
-  color: #888;
+  color: #84A98C;
 }
 
 /* ── Modal Action Buttons — BIG ── */
@@ -578,7 +598,7 @@ body {
   position: relative;
   overflow: hidden;
   transition: all 0.3s;
-  color: white;
+  color: #CAD2C5;
   font-family: inherit;
   text-decoration: none;
   margin: 0;
@@ -586,36 +606,39 @@ body {
 }
 
 .study-btn {
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  background: #52796F;
 }
 
 .study-btn:hover,
 .study-btn.gazing {
-  background: linear-gradient(135deg, #4338ca, #4f46e5);
+  background: #84A98C;
+  color: #2F3E46;
   transform: scale(1.04);
-  box-shadow: 0 0 2rem rgba(79, 70, 229, 0.5);
+  box-shadow: 0 0 2rem rgba(132, 169, 140, 0.5);
 }
 
 .delete-btn {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background: #52796F;
 }
 
 .delete-btn:hover,
 .delete-btn.gazing {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  background: #84A98C;
+  color: #2F3E46;
   transform: scale(1.04);
-  box-shadow: 0 0 2rem rgba(239, 68, 68, 0.5);
+  box-shadow: 0 0 2rem rgba(132, 169, 140, 0.5);
 }
 
 .cancel-btn {
-  background: #333;
+  background: #354F52;
+  border: 2px solid #84A98C;
 }
 
 .cancel-btn:hover,
 .cancel-btn.gazing {
-  background: #444;
+  background: #52796F;
   transform: scale(1.04);
-  box-shadow: 0 0 2rem rgba(100, 100, 100, 0.4);
+  box-shadow: 0 0 2rem rgba(132, 169, 140, 0.4);
 }
 
 .modal-btn .dwell-bar {
@@ -631,7 +654,7 @@ body {
 .modal-btn .dwell-fill {
   height: 100%;
   width: 0%;
-  background: #f59e0b;
+  background: #CAD2C5;
   transition: width 0.1s linear;
 }
 
@@ -652,9 +675,9 @@ body {
 }
 
 .toast.show { bottom: 2rem; }
-.toast.success { background: #10b981; color: white; }
-.toast.error { background: #ef4444; color: white; }
-.toast.info { background: #4f46e5; color: white; }
+.toast.success { background: #52796F; color: #CAD2C5; }
+.toast.error { background: #354F52; color: #CAD2C5; border: 2px solid #84A98C; }
+.toast.info { background: #52796F; color: #CAD2C5; }
 
 /* ── Responsive ── */
 @media (max-width: 768px) {

@@ -376,15 +376,47 @@ function bootWebGazer() {
 
         setTimeout(function () {
           var vid = document.getElementById('webgazerVideoFeed');
-          var canvas = document.getElementById('webgazerVideoCanvas');
-          var css =
-            'position:fixed!important;bottom:10px!important;right:10px!important;' +
-            'top:auto!important;left:auto!important;width:160px!important;height:120px!important;' +
-            'border:2px solid #333!important;border-radius:8px!important;z-index:9000!important;';
-          if (vid) vid.style.cssText = css;
-          if (canvas) canvas.style.cssText = css.replace('9000', '9001');
+          var faceOverlay = document.getElementById('webgazerFaceOverlay');
           var wgDot = document.getElementById('webgazerGazeDot');
           if (wgDot) wgDot.style.display = 'none';
+
+          if (vid) {
+            /* Build a container and move the video + face overlay into it */
+            var container = document.createElement('div');
+            container.id = 'webgazer-preview';
+            document.body.appendChild(container);
+
+            /* Reset inline styles WebGazer sets on the video */
+            vid.style.cssText = '';
+            container.appendChild(vid);
+
+            if (faceOverlay) {
+              faceOverlay.style.cssText = '';
+              container.appendChild(faceOverlay);
+
+              /* Patch the overlay canvas context so it stays transparent.
+                 WebGazer uses drawImage(video,...) to paint a video frame as
+                 background and fillRect for the mesh dots. We block the video
+                 copy and turn full-canvas fills into clears. */
+              var ctx = faceOverlay.getContext('2d');
+              if (ctx) {
+                var _origDrawImage = ctx.drawImage.bind(ctx);
+                ctx.drawImage = function () {
+                  if (arguments[0] instanceof HTMLVideoElement) return;
+                  _origDrawImage.apply(ctx, arguments);
+                };
+
+                var _origFillRect = ctx.fillRect.bind(ctx);
+                ctx.fillRect = function (x, y, w, h) {
+                  if (w >= faceOverlay.width * 0.5 && h >= faceOverlay.height * 0.5) {
+                    ctx.clearRect(x, y, w, h);
+                  } else {
+                    _origFillRect(x, y, w, h);
+                  }
+                };
+              }
+            }
+          }
         }, 1500);
 
         if (!_isCalibrated) {

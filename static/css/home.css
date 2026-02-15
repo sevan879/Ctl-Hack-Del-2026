@@ -34,15 +34,15 @@ body {
 }
 
 .mode-card {
-  background: #1a1a2e;
-  border: 0.25rem solid #333;
+  background: #354F52;
+  border: 0.25rem solid #84A98C;
   border-radius: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  color: #e0e0e0;
+  color: #CAD2C5;
   transition: all 0.3s;
   cursor: pointer;
   padding: 1.25rem;
@@ -52,14 +52,18 @@ body {
 
 .mode-card:hover,
 .mode-card.gazing {
-  border-color: #4f46e5;
+  border-color: #CAD2C5;
   transform: scale(1.06);
-  box-shadow: 0 0 2.5rem rgba(79, 70, 229, 0.4);
+  box-shadow: 0 0 2.5rem rgba(132, 169, 140, 0.4);
 }
 
 .mode-icon {
   font-size: clamp(3rem, 8vw, 5rem);
   margin-bottom: 1rem;
+}
+
+.mode-icon .material-icons {
+  font-size: inherit;
 }
 
 .mode-card h2 {
@@ -69,7 +73,7 @@ body {
 
 .mode-card p {
   font-size: clamp(1rem, 2vw, 1.25rem);
-  color: #888;
+  color: #84A98C;
 }
 
 .mode-card .dwell-bar {
@@ -78,13 +82,13 @@ body {
   left: 0;
   right: 0;
   height: 0.375rem;
-  background: #333;
+  background: #2F3E46;
 }
 
 .mode-card .dwell-fill {
   height: 100%;
   width: 0%;
-  background: #f59e0b;
+  background: #84A98C;
   transition: width 0.1s linear;
 }
 

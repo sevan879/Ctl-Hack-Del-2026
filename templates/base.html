@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}EyeQ{% endblock %}</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbox.css') }}">
   {% block extra_css %}{% endblock %}
@@ -11,13 +12,13 @@
 <body>
 
   <a href="/" class="home-button" id="home-btn">
-    <span class="home-icon">🏠</span>
+    <span class="home-icon material-icons">home</span>
     <span class="home-text">Home</span>
     <div class="dwell-bar"><div class="dwell-fill"></div></div>
   </a>
 
   <button id="calibrate-btn" class="calibrate-btn">
-    <span class="calibrate-icon">🎯</span>
+    <span class="calibrate-icon material-icons">gps_fixed</span>
     <span class="calibrate-text">Recalibrate</span>
     <div class="dwell-bar"><div class="dwell-fill"></div></div>
   </button>
@@ -26,16 +27,16 @@
   {% endblock %}
 
   <div id="chatbox-trigger" class="chatbox-trigger">
-    <span class="chatbox-trigger-icon">🤖</span>
+    <span class="chatbox-trigger-icon material-icons">smart_toy</span>
     <span class="chatbox-trigger-label">AI Help</span>
     <div class="dwell-bar"><div class="dwell-fill"></div></div>
   </div>
 
   <div id="chatbox-panel" class="chatbox-panel hidden">
     <div class="chatbox-header">
-      <h3>🤖 AI Assistant</h3>
+      <h3><span class="material-icons" style="vertical-align:middle;margin-right:0.4rem;">smart_toy</span>AI Assistant</h3>
       <button id="chatbox-close" class="chatbox-close-btn">
-        ✕
+        <span class="material-icons">close</span>
         <div class="dwell-bar"><div class="dwell-fill"></div></div>
       </button>
     </div>
@@ -49,7 +50,7 @@
     <div class="chatbox-input-area">
       <div id="chat-interim" class="chat-interim"></div>
       <button id="chat-mic-btn" class="chat-mic-btn">
-        🎤 Click or hover to speak
+        <span class="material-icons">mic</span> Click or hover to speak
         <div class="dwell-bar"><div class="dwell-fill"></div></div>
       </button>
       <div id="chat-listening" class="chat-listening hidden">

@@ -5,8 +5,8 @@
   transform: translateY(-50%);
   width: 8rem;
   height: 10rem;
-  background: #1a1a2e;
-  border: 4px solid #333;
+  background: #354F52;
+  border: 4px solid #84A98C;
   border-radius: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -21,19 +21,20 @@
 
 .chatbox-trigger-icon {
   font-size: 3.5rem;
+  color: #84A98C;
 }
 
 .chatbox-trigger-label {
   font-size: 1rem;
-  color: #888;
+  color: #84A98C;
   font-weight: 600;
 }
 
 .chatbox-trigger:hover,
 .chatbox-trigger.gazing {
-  border-color: #8b5cf6;
+  border-color: #CAD2C5;
   transform: translateY(-50%) scale(1.08);
-  box-shadow: 0 0 2.5rem rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 2.5rem rgba(132, 169, 140, 0.5);
 }
 
 .chatbox-trigger .dwell-bar {
@@ -42,13 +43,13 @@
   left: 0;
   right: 0;
   height: 6px;
-  background: #333;
+  background: #2F3E46;
 }
 
 .chatbox-trigger .dwell-fill {
   height: 100%;
   width: 0%;
-  background: #8b5cf6;
+  background: #84A98C;
   transition: width 0.1s linear;
 }
 
@@ -64,12 +65,12 @@
   top: 0;
   width: 26rem;
   height: 100vh;
-  background: #12121f;
-  border-left: 3px solid #2a2a3e;
+  background: #2F3E46;
+  border-left: 3px solid #84A98C;
   display: flex;
   flex-direction: column;
   z-index: 10001;
-  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.6);
+  box-shadow: -8px 0 30px rgba(0, 0, 0, 0.4);
   transition: transform 0.3s ease;
 }
 
@@ -88,7 +89,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  border-bottom: 2px solid #2a2a3e;
+  border-bottom: 2px solid #84A98C;
   flex-shrink: 0;
 }
 
@@ -100,10 +101,10 @@
 .chatbox-close-btn {
   width: 3.5rem;
   height: 3.5rem;
-  background: #2a2a3e;
-  border: 3px solid #444;
+  background: #354F52;
+  border: 3px solid #84A98C;
   border-radius: 1rem;
-  color: #e0e0e0;
+  color: #CAD2C5;
   font-size: 1.5rem;
   cursor: pointer;
   display: flex;
@@ -117,8 +118,8 @@
 
 .chatbox-close-btn:hover,
 .chatbox-close-btn.gazing {
-  background: #ef4444;
-  border-color: #dc2626;
+  background: #52796F;
+  border-color: #CAD2C5;
   transform: scale(1.1);
 }
 
@@ -128,13 +129,13 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.2);
 }
 
 .chatbox-close-btn .dwell-fill {
   height: 100%;
   width: 0%;
-  background: #ef4444;
+  background: #84A98C;
   transition: width 0.1s linear;
 }
 
@@ -146,7 +147,7 @@
   flex-direction: column;
   gap: 0.75rem;
   scrollbar-width: thin;
-  scrollbar-color: #333 transparent;
+  scrollbar-color: #52796F transparent;
 }
 
 .chat-msg {
@@ -173,19 +174,19 @@
   font-size: 0.95rem;
   line-height: 1.5;
   margin: 0;
-  color: #e0e0e0;
+  color: #CAD2C5;
   word-wrap: break-word;
 }
 
 .chat-msg.user p {
-  background: #4f46e5;
+  background: #52796F;
   border-bottom-right-radius: 0.25rem;
-  color: white;
+  color: #CAD2C5;
 }
 
 .chat-msg.bot p {
-  background: #1e1e30;
-  border: 1px solid #2a2a3e;
+  background: #354F52;
+  border: 1px solid #84A98C;
   border-bottom-left-radius: 0.25rem;
 }
 
@@ -198,7 +199,7 @@
 .typing-dots span {
   width: 6px;
   height: 6px;
-  background: #888;
+  background: #84A98C;
   border-radius: 50%;
   animation: typingBounce 1.4s infinite;
 }
@@ -213,13 +214,13 @@
 
 .chatbox-input-area {
   padding: 1.25rem;
-  border-top: 2px solid #2a2a3e;
+  border-top: 2px solid #84A98C;
   flex-shrink: 0;
 }
 
 .chat-interim {
   font-size: 0.9rem;
-  color: #f59e0b;
+  color: #84A98C;
   min-height: 1.25rem;
   margin-bottom: 0.5rem;
   font-style: italic;
@@ -229,10 +230,10 @@
   width: 100%;
   padding: 1.5rem 1.5rem;
   font-size: 1.25rem;
-  background: #8b5cf6;
-  border: 3px solid #7c3aed;
+  background: #52796F;
+  border: 3px solid #84A98C;
   border-radius: 1.25rem;
-  color: white;
+  color: #CAD2C5;
   cursor: pointer;
   transition: all 0.3s;
   position: relative;
@@ -245,20 +246,22 @@
 
 .chat-mic-btn:hover,
 .chat-mic-btn.gazing {
-  background: #7c3aed;
+  background: #84A98C;
+  color: #2F3E46;
   transform: scale(1.03);
-  box-shadow: 0 0 1.5rem rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 1.5rem rgba(132, 169, 140, 0.5);
 }
 
 .chat-mic-btn.listening {
-  background: #ef4444;
-  border-color: #dc2626;
+  background: #84A98C;
+  border-color: #CAD2C5;
+  color: #2F3E46;
   animation: pulse-mic 1.5s infinite;
 }
 
 @keyframes pulse-mic {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-  50% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(132, 169, 140, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(132, 169, 140, 0); }
 }
 
 .chat-mic-btn .dwell-bar {
@@ -267,13 +270,13 @@
   left: 0;
   right: 0;
   height: 6px;
-  background: rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.15);
 }
 
 .chat-mic-btn .dwell-fill {
   height: 100%;
   width: 0%;
-  background: #10b981;
+  background: #CAD2C5;
   transition: width 0.08s linear;
 }
 
@@ -282,7 +285,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0;
-  color: #ef4444;
+  color: #84A98C;
   font-size: 0.9rem;
 }
 
@@ -293,7 +296,7 @@
 .chat-pulse-dot {
   width: 10px;
   height: 10px;
-  background: #ef4444;
+  background: #84A98C;
   border-radius: 50%;
   animation: chatPulse 1s infinite;
 }
