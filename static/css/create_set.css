@@ -1,378 +1,479 @@
-body {
+:root{
+  /* Dark UI base */
+  --cs-bg: rgba(10, 12, 16, 0.0); /* page uses base background; keep transparent here */
+  --cs-surfaceTop: rgba(255,255,255,0.040);
+  --cs-surfaceBot: rgba(255,255,255,0.020);
+
+  --cs-border: rgba(255,255,255,0.10);
+  --cs-borderSoft: rgba(255,255,255,0.07);
+
+  --cs-text: rgba(255,255,255,0.96);
+  --cs-muted: rgba(255,255,255,0.95);
+  --cs-muted2: rgba(255, 255, 255, 0.977);
+
+  /* Keep your greens */
+  --cs-green: #84A98C;
+  --cs-greenDark: #52796F;
+
+  /* Teal accent glow (for gaze/hover state like reference) */
+  --cs-accent: #18f0a6;
+  --cs-accentGlow: rgba(24,240,166,0.25);
+  --cs-accentGlow2: rgba(24,240,166,0.12);
+
+  --cs-radiusCard: 22px;
+  --cs-radiusBtn: 18px;
+}
+
+/* Keep layout behavior */
+body{
   height: 100vh;
   overflow: hidden;
 }
 
 /* ── Layout ── */
-.create-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+.create-container{
+  display:flex;
+  flex-direction:column;
+  height:100vh;
   padding: 1.5rem;
-  box-sizing: border-box;
+  box-sizing:border-box;
 }
 
-.create-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.create-header{
+  display:flex;
+  justify-content:center;
+  align-items:center;
   margin-bottom: 1rem;
-  flex-shrink: 0;
+  flex-shrink:0;
   padding-top: 4rem;
 }
 
-.create-header h1 {
+.create-header h1{
   font-size: clamp(1.75rem, 4vw, 2.25rem);
-  margin: 0;
+  margin:0;
+  color: var(--cs-text);
 }
 
 /* ── Title Section ── */
-.title-section {
-  display: flex;
+.title-section{
+  display:flex;
   gap: 1rem;
   margin-bottom: 1rem;
-  flex-shrink: 0;
+  flex-shrink:0;
   max-width: 70rem;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
+  width:100%;
+  margin-left:auto;
+  margin-right:auto;
 }
 
-.title-section .gaze-input {
-  flex: 1;
-  padding: 1.25rem 1.75rem;
-  font-size: 1.25rem;
-  border: 3px solid #84A98C;
-  border-radius: 1rem;
-  background: #354F52;
-  color: #CAD2C5;
-  transition: all 0.3s;
+/* Input becomes “glass” like screenshot */
+.title-section .gaze-input{
+  flex:1;
+  padding: 1.25rem 1.5rem;
+  font-size: 1.2rem;
+
+  border: 1px solid var(--cs-border);
+  border-radius: 16px;
+  background: linear-gradient(180deg, var(--cs-surfaceTop), var(--cs-surfaceBot));
+  color: var(--cs-text);
+
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease;
   font-family: inherit;
-  margin: 0;
+  margin:0;
+
+  backdrop-filter: blur(12px);
 }
 
-.title-section .gaze-input:focus {
-  outline: none;
-  border-color: #CAD2C5;
-  transform: scale(1.01);
+.title-section .gaze-input:focus{
+  outline:none;
+  border-color: rgba(24,240,166,0.7);
+  box-shadow: 0 0 0 3px rgba(24,240,166,0.12);
+  transform: translateY(-1px);
 }
 
-.title-section .gaze-input.gazing {
-  border-color: #CAD2C5;
-  box-shadow: 0 0 1.5rem rgba(132, 169, 140, 0.3);
+.title-section .gaze-input.gazing{
+  border-color: rgba(24,240,166,0.75);
+  box-shadow:
+    0 0 0 1px rgba(24,240,166,0.20),
+    0 0 18px var(--cs-accentGlow);
 }
 
 /* ── Scrollable Cards Area ── */
-.cards-wrapper {
-  flex: 1;
-  overflow-y: auto;
-  min-height: 0;
+.cards-wrapper{
+  flex:1;
+  overflow-y:auto;
+  min-height:0;
   max-width: 70rem;
-  width: 100%;
-  margin: 0 auto;
+  width:100%;
+  margin:0 auto;
   padding-right: 0.5rem;
 }
 
-.cards-wrapper::-webkit-scrollbar {
-  width: 0.5rem;
+/* darker, subtler scrollbar */
+.cards-wrapper::-webkit-scrollbar{ width: 0.55rem; }
+.cards-wrapper::-webkit-scrollbar-track{
+  background: rgba(255,255,255,0.04);
+  border-radius: 999px;
 }
-
-.cards-wrapper::-webkit-scrollbar-track {
-  background: #354F52;
-  border-radius: 0.25rem;
+.cards-wrapper::-webkit-scrollbar-thumb{
+  background: rgba(132,169,140,0.35);
+  border-radius: 999px;
 }
-
-.cards-wrapper::-webkit-scrollbar-thumb {
-  background: #84A98C;
-  border-radius: 0.25rem;
-}
-
-.cards-wrapper::-webkit-scrollbar-thumb:hover {
-  background: #CAD2C5;
+.cards-wrapper::-webkit-scrollbar-thumb:hover{
+  background: rgba(24,240,166,0.45);
 }
 
 /* ── Card Entry ── */
-.card-entry {
-  background: #354F52;
-  border: 2px solid #84A98C;
-  border-radius: 1.5rem;
+.card-entry{
+  background: linear-gradient(180deg, var(--cs-surfaceTop), var(--cs-surfaceBot));
+  border: 1px solid var(--cs-border);
+  border-radius: var(--cs-radiusCard);
+
   padding: 1.5rem;
   margin-bottom: 1rem;
-  display: flex;
-  align-items: flex-start;
+
+  display:flex;
+  align-items:flex-start;
   gap: 1.25rem;
-  transition: all 0.3s;
-  position: relative;
-  animation: cardSlideIn 0.3s ease;
+
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease;
+  position:relative;
+  animation: cardSlideIn 0.25s ease;
+  backdrop-filter: blur(12px);
 }
 
-@keyframes cardSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(1rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes cardSlideIn{
+  from { opacity:0; transform: translateY(1rem); }
+  to   { opacity:1; transform: translateY(0); }
 }
 
-.card-entry:hover {
-  border-color: #CAD2C5;
+.card-entry:hover{
+  border-color: rgba(255,255,255,0.14);
 }
 
-.card-number {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.card-entry:focus-within{
+  border-color: rgba(24,240,166,0.65);
+  box-shadow: 0 0 20px rgba(24,240,166,0.10);
+}
+
+/* Number badge: keep green but more “chip” */
+.card-number{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
   min-width: 3.5rem;
   height: 3.5rem;
-  background: #52796F;
-  border-radius: 1rem;
-  font-weight: 700;
-  font-size: 1.35rem;
-  color: #CAD2C5;
-  flex-shrink: 0;
+
+  background: linear-gradient(180deg, rgba(82,121,111,0.55), rgba(82,121,111,0.28));
+  border: 1px solid rgba(132,169,140,0.25);
+  border-radius: 16px;
+
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: rgba(255,255,255,0.86);
+
+  flex-shrink:0;
   margin-top: 1.6rem;
+  backdrop-filter: blur(10px);
 }
 
-.card-fields {
-  flex: 1;
-  display: flex;
+.card-fields{
+  flex:1;
+  display:flex;
   gap: 1.25rem;
 }
 
-.field-group {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+.field-group{
+  flex:1;
+  display:flex;
+  flex-direction:column;
   gap: 0.5rem;
 }
 
-.field-group label {
-  font-size: 0.9rem;
-  color: #84A98C;
+.field-group label{
+  font-size: 0.85rem;
+  color: var(--cs-muted2);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 600;
+  letter-spacing: 0.14em;
+  font-weight: 700;
 }
 
-.field-group textarea {
+/* Textareas: dark glass fields */
+.field-group textarea{
   min-height: 4.5rem;
-  padding: 1rem 1.25rem;
-  font-size: 1.15rem;
-  border: 3px solid #84A98C;
-  border-radius: 1rem;
-  background: #2F3E46;
-  color: #CAD2C5;
-  resize: none;
+  padding: 1rem 1.1rem;
+  font-size: 1.05rem;
+
+  border: 1px solid var(--cs-borderSoft);
+  border-radius: 16px;
+
+  background: rgba(0,0,0,0.18);
+  color: rgba(255,255,255,0.88);
+
+  resize:none;
   font-family: inherit;
-  transition: all 0.3s;
-  margin: 0;
+
+  transition: border-color .25s ease, box-shadow .25s ease, background .25s ease, transform .25s ease;
+  margin:0;
+  backdrop-filter: blur(10px);
 }
 
-.field-group textarea:focus {
-  outline: none;
-  border-color: #CAD2C5;
+.field-group textarea:focus{
+  outline:none;
+  border-color: rgba(24,240,166,0.65);
+  box-shadow: 0 0 0 3px rgba(24,240,166,0.10);
+  background: rgba(0,0,0,0.24);
 }
 
-.field-group textarea.gazing {
-  border-color: #CAD2C5;
-  box-shadow: 0 0 1rem rgba(132, 169, 140, 0.3);
+.field-group textarea.gazing{
+  border-color: rgba(24,240,166,0.75);
+  box-shadow:
+    0 0 0 1px rgba(24,240,166,0.18),
+    0 0 18px rgba(24,240,166,0.10);
 }
 
-/* ── Delete Button — BIG ── */
-.delete-card-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ── Delete Button — BIG (card button) ── */
+.delete-card-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
   min-width: 5rem;
   min-height: 5rem;
   width: 5rem;
   height: 5rem;
-  background: rgba(82, 121, 111, 0.15);
-  border: 3px solid #84A98C;
-  border-radius: 1.25rem;
-  color: #84A98C;
-  cursor: pointer;
+
+  background: linear-gradient(180deg, rgba(255,255,255,0.030), rgba(255,255,255,0.015));
+  border: 1px solid var(--cs-border);
+  border-radius: 18px;
+
+  color: rgba(255,255,255,0.70);
+  cursor:pointer;
   font-size: 2rem;
-  flex-shrink: 0;
+
+  flex-shrink:0;
   margin-top: 1.2rem;
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
-  padding: 0;
+
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+  position:relative;
+  overflow:hidden;
+  padding:0;
+  backdrop-filter: blur(12px);
 }
 
 .delete-card-btn:hover,
-.delete-card-btn.gazing {
-  background: rgba(82, 121, 111, 0.3);
-  border-color: #CAD2C5;
-  color: #CAD2C5;
-  transform: scale(1.1);
-  box-shadow: 0 0 1.5rem rgba(132, 169, 140, 0.4);
+.delete-card-btn.gazing{
+  border-color: rgba(24,240,166,0.75);
+  background: linear-gradient(180deg, rgba(24,240,166,0.08), rgba(255,255,255,0.02));
+  color: rgba(255,255,255,0.92);
+  transform: scale(1.04);
+  box-shadow:
+    0 0 0 1px rgba(24,240,166,0.18),
+    0 0 18px var(--cs-accentGlow);
 }
 
-.delete-card-btn .dwell-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 0.35rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 0 0 1.25rem 1.25rem;
+/* Dwell on delete: full wash fill (matches new style) */
+.delete-card-btn .dwell-bar{
+  position:absolute;
+  inset:0;
+  background: transparent;
+  pointer-events:none;
 }
-
-.delete-card-btn .dwell-fill {
+.delete-card-btn .dwell-fill{
   height: 100%;
   width: 0%;
-  background: #84A98C;
+  background: linear-gradient(90deg, rgba(24,240,166,0.10), rgba(24,240,166,0.20));
   transition: width 0.1s linear;
 }
 
 /* ── Action Bar ── */
-.action-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  padding: 1.25rem 0 0.5rem;
-  flex-shrink: 0;
+.action-bar{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 1.25rem;
+
+  padding: 1.1rem 0 0.5rem;
+  flex-shrink:0;
+
   max-width: 70rem;
-  width: 100%;
-  margin: 0 auto;
+  width:100%;
+  margin:0 auto;
 }
 
-.action-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Action buttons become “primary cards” with green preserved */
+.action-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
   gap: 0.75rem;
-  padding: 1.5rem 3.5rem;
-  font-size: 1.4rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 1.25rem;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s;
-  color: #CAD2C5;
+
+  padding: 1.35rem 3rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+
+  border: 1px solid rgba(132,169,140,0.35);
+  border-radius: 18px;
+  cursor:pointer;
+
+  position:relative;
+  overflow:hidden;
+
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
+  color: rgba(255,255,255,0.90);
   font-family: inherit;
-  margin: 0;
+  margin:0;
+
   min-height: 4.5rem;
+  backdrop-filter: blur(12px);
 }
 
-.add-btn {
-  background: #52796F;
-  flex: 1;
+/* Keep your green buttons but make them “glass green” */
+.add-btn,
+.save-btn{
+  background: linear-gradient(180deg, rgba(82,121,111,0.55), rgba(82,121,111,0.28));
+  flex:1;
   max-width: 20rem;
 }
 
-.add-btn:hover,
-.add-btn.gazing {
-  background: #84A98C;
-  color: #2F3E46;
-  transform: scale(1.05);
-  box-shadow: 0 0 2rem rgba(132, 169, 140, 0.5);
+.add-btn:hover, .add-btn.gazing,
+.save-btn:hover, .save-btn.gazing{
+  border-color: rgba(24,240,166,0.75);
+  background: linear-gradient(180deg, rgba(24,240,166,0.12), rgba(255,255,255,0.02));
+  color: rgba(255,255,255,0.95);
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(24,240,166,0.20),
+    0 0 18px var(--cs-accentGlow),
+    0 0 50px var(--cs-accentGlow2);
 }
 
-.save-btn {
-  background: #52796F;
-  flex: 1;
-  max-width: 20rem;
+/* Dwell on action buttons: wash fill */
+.action-btn .dwell-bar{
+  position:absolute;
+  inset:0;
+  background: transparent;
+  pointer-events:none;
 }
-
-.save-btn:hover,
-.save-btn.gazing {
-  background: #84A98C;
-  color: #2F3E46;
-  transform: scale(1.05);
-  box-shadow: 0 0 2rem rgba(132, 169, 140, 0.5);
-}
-
-.action-btn .dwell-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 0.35rem;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 0 0 1.25rem 1.25rem;
-}
-
-.action-btn .dwell-fill {
+.action-btn .dwell-fill{
   height: 100%;
   width: 0%;
-  background: #CAD2C5;
+  background: linear-gradient(90deg, rgba(24,240,166,0.10), rgba(24,240,166,0.20));
   transition: width 0.1s linear;
 }
 
-.action-icon {
-  font-size: 1.6rem;
-}
+/* Make sure text stays above dwell fill */
+.action-btn > *{ position: relative; z-index: 1; }
 
-.action-label {
-  white-space: nowrap;
-}
+.action-icon{ font-size: 1.5rem; opacity: 0.9; }
+.action-label{ white-space: nowrap; }
 
-.card-count {
-  color: #84A98C;
-  font-size: 1.15rem;
+/* Card count: muted label style */
+.card-count{
+  color: var(--cs-muted2);
+  font-size: 1.05rem;
   white-space: nowrap;
   min-width: 6rem;
-  text-align: center;
-  font-weight: 600;
+  text-align:center;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 /* ── Toast ── */
-.toast {
+.toast{
   position: fixed;
   bottom: -5rem;
   left: 50%;
   transform: translateX(-50%);
-  padding: 1.25rem 3rem;
-  border-radius: 1.25rem;
-  font-size: 1.25rem;
-  font-weight: 600;
+  padding: 1rem 2.2rem;
+  border-radius: 18px;
+  font-size: 1.1rem;
+  font-weight: 800;
   z-index: 10000;
   transition: bottom 0.4s ease;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 10px 35px rgba(0,0,0,0.55);
   white-space: nowrap;
+
+  border: 1px solid var(--cs-borderSoft);
+  background: linear-gradient(180deg, var(--cs-surfaceTop), var(--cs-surfaceBot));
+  color: rgba(255,255,255,0.90);
+  backdrop-filter: blur(12px);
 }
 
-.toast.show { bottom: 2rem; }
-.toast.success { background: #52796F; color: #CAD2C5; }
-.toast.error { background: #354F52; color: #CAD2C5; border: 2px solid #84A98C; }
-.toast.info { background: #52796F; color: #CAD2C5; }
+.toast.show{ bottom: 2rem; }
+
+.toast.success{
+  border-color: rgba(24,240,166,0.35);
+  box-shadow: 0 10px 35px rgba(0,0,0,0.55), 0 0 18px rgba(24,240,166,0.12);
+}
+
+.toast.error{
+  border-color: rgba(255,255,255,0.14);
+}
+
+.toast.info{
+  border-color: rgba(132,169,140,0.30);
+}
 
 /* ── Responsive ── */
-@media (max-width: 768px) {
-  .title-section {
-    flex-direction: column;
-  }
+@media (max-width: 768px){
+  .title-section{ flex-direction: column; }
+  .card-fields{ flex-direction: column; }
+  .card-entry{ flex-wrap: wrap; }
 
-  .card-fields {
-    flex-direction: column;
-  }
-
-  .card-entry {
-    flex-wrap: wrap;
-  }
-
-  .delete-card-btn {
+  .delete-card-btn{
     width: 100%;
     min-height: 4rem;
     height: 4rem;
     margin-top: 0;
   }
 
-  .action-bar {
-    flex-wrap: wrap;
-  }
-
-  .action-btn {
+  .action-bar{ flex-wrap: wrap; }
+  .action-btn{
     flex: 1 1 100%;
     max-width: none;
   }
+}
+
+/* ── Extra contrast: Set Title + Enter Question/Answer ── */
+
+/* Set Title input (the top title field) */
+.title-section .gaze-input{
+  color: rgba(255,255,255,0.98);
+  border-color: rgba(255,255,255,0.18);
+  background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.025));
+}
+
+/* Placeholder text for Set Title */
+.title-section .gaze-input::placeholder{
+  color: rgba(255,255,255,0.72);
+}
+
+/* Make the "ENTER QUESTION / ENTER ANSWER" labels brighter */
+.field-group label{
+  color: rgba(255,255,255,0.72);
+}
+
+/* Textareas (enter question/answer) */
+.field-group textarea{
+  color: rgba(255,255,255,0.96);
+  border-color: rgba(255,255,255,0.16);
+  background: rgba(0,0,0,0.28);
+}
+
+/* Placeholder text inside textareas */
+.field-group textarea::placeholder{
+  color: rgba(255,255,255,0.68);
+}
+
+/* Keep strong focus/gazing contrast */
+.title-section .gaze-input:focus,
+.title-section .gaze-input.gazing,
+.field-group textarea:focus,
+.field-group textarea.gazing{
+  border-color: rgba(24,240,166,0.85);
+  box-shadow:
+    0 0 0 1px rgba(24,240,166,0.22),
+    0 0 20px rgba(24,240,166,0.14);
 }
