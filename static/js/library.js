@@ -117,14 +117,20 @@ document.addEventListener('DOMContentLoaded', function () {
         '</div>' +
         '<div class="dwell-bar"><div class="dwell-fill"></div></div>';
 
-      card.addEventListener('click', function () {
+      card.addEventListener('click', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
         openSetModal(set.id);
       });
       setsGrid.appendChild(card);
     });
 
-    var createCard = document.createElement('a');
-    createCard.href = '/create-set';
+    var createCard = document.createElement('div');
+    createCard.style.cursor = 'pointer';
+    createCard.addEventListener('click', function (e) {
+      e.stopPropagation();
+      window.location.href = '/create-set';
+    });
     createCard.className = 'create-card';
     createCard.id = 'grid-create-btn';
     createCard.innerHTML =
@@ -322,6 +328,10 @@ document.addEventListener('DOMContentLoaded', function () {
   onGaze(function (x, y) {
     handleScrollGaze(x, y);
     activeDwellButtons.forEach(function (b) { b.update(x, y); });
+
+    if (window.updateChatbotDwell) {
+      window.updateChatbotDwell(x, y);
+    }
   });
 
   /* ── Init ── */

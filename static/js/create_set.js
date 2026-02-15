@@ -1,8 +1,7 @@
 console.log('[create_set] Script loaded');
 
-/* Wait for DOM to be fully ready */
 document.addEventListener('DOMContentLoaded', function () {
-  console.log('[create_set] DOM ready, setting up...');
+  console.log('[create_set] DOM ready');
 
   var cardsList = document.getElementById('cards-list');
   var cardsWrapper = document.getElementById('cards-wrapper');
@@ -12,26 +11,137 @@ document.addEventListener('DOMContentLoaded', function () {
   var setTitleInput = document.getElementById('set-title');
   var setDescInput = document.getElementById('set-description');
 
-  /* Debug: check all elements found */
-  console.log('[create_set] Elements:', {
-    cardsList: !!cardsList,
-    cardsWrapper: !!cardsWrapper,
-    addCardBtn: !!addCardBtn,
-    saveSetBtn: !!saveSetBtn,
-    cardCountEl: !!cardCountEl,
-    setTitleInput: !!setTitleInput,
-    setDescInput: !!setDescInput,
-  });
-
   var activeDwellButtons = [];
+  var voiceInputDwellButtons = [];
   var cardIdCounter = 0;
 
-  /* ── Card Management ── */
+  var fieldRecognition = null;
+  var fieldIsListening = false;
+  var activeWrapper = null;
+  var activeInput = null;
+  var activeStatus = null;
+
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  function stopFieldListening() {
+    if (fieldRecognition && fieldIsListening) {
+      try {
+        fieldRecognition.stop();
+      } catch (e) {}
+    }
+    fieldIsListening = false;
+    if (activeWrapper) activeWrapper.classList.remove('listening');
+    if (activeStatus) activeStatus.textContent = '';
+    activeWrapper = null;
+    activeInput = null;
+    activeStatus = null;
+    fieldRecognition = null;
+
+    if (typeof resumeGlobalListening === 'function') {
+      resumeGlobalListening();
+    }
+  }
+
+  function startFieldListening(wrapper) {
+    if (!SR) return;
+
+    var input = wrapper.querySelector('input') || wrapper.querySelector('textarea');
+    var status = wrapper.querySelector('.voice-status');
+
+    if (!input) return;
+
+    if (fieldIsListening && activeWrapper === wrapper) {
+      stopFieldListening();
+      return;
+    }
+
+    stopFieldListening();
+
+    if (typeof pauseGlobalListening === 'function') {
+      pauseGlobalListening();
+    }
+
+    fieldRecognition = new SR();
+    fieldRecognition.continuous = false;
+    fieldRecognition.interimResults = true;
+    fieldRecognition.lang = 'en-US';
+    fieldRecognition.maxAlternatives = 1;
+
+    activeWrapper = wrapper;
+    activeInput = input;
+    activeStatus = status;
+    fieldIsListening = true;
+
+    var existingText = input.value || '';
+
+    fieldRecognition.onstart = function () {
+      wrapper.classList.add('listening');
+      wrapper.classList.remove('gazing');
+      if (status) status.textContent = '🎤 Listening...';
+    };
+
+    fieldRecognition.onresult = function (event) {
+      var finalTranscript = '';
+      var interimTranscript = '';
+
+      for (var i = event.resultIndex; i < event.results.length; i++) {
+        var t = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += t;
+        } else {
+          interimTranscript += t;
+        }
+      }
+
+      if (finalTranscript) {
+        var newText = existingText ? existingText + ' ' + finalTranscript.trim() : finalTranscript.trim();
+        input.value = newText;
+        if (input.tagName === 'TEXTAREA') {
+          input.style.height = 'auto';
+          input.style.height = input.scrollHeight + 'px';
+        }
+        if (status) status.textContent = '✅ Got it!';
+      } else if (interimTranscript) {
+        if (status) status.textContent = '🎤 ' + interimTranscript;
+      }
+    };
+
+    fieldRecognition.onerror = function (event) {
+      wrapper.classList.remove('listening');
+      if (status) status.textContent = '❌ ' + event.error;
+      fieldIsListening = false;
+    };
+
+    fieldRecognition.onend = function () {
+      wrapper.classList.remove('listening');
+      fieldIsListening = false;
+      var w = wrapper;
+      var s = status;
+      setTimeout(function () {
+        if (s && !fieldIsListening) s.textContent = '';
+      }, 3000);
+
+      voiceInputDwellButtons.forEach(function (b) {
+        if (b.el === w) b.reset();
+      });
+
+      if (typeof resumeGlobalListening === 'function') {
+        resumeGlobalListening();
+      }
+    };
+
+    try {
+      fieldRecognition.start();
+    } catch (e) {
+      fieldRecognition.stop();
+      setTimeout(function () { fieldRecognition.start(); }, 100);
+    }
+  }
+
   function createCard(term, definition) {
     term = term || '';
     definition = definition || '';
     cardIdCounter++;
-    console.log('[create_set] Creating card #' + cardIdCounter);
 
     var card = document.createElement('div');
     card.className = 'card-entry';
@@ -43,11 +153,19 @@ document.addEventListener('DOMContentLoaded', function () {
       '<div class="card-fields">' +
         '<div class="field-group">' +
           '<label>Term</label>' +
-          '<textarea class="term-input gaze-textarea" placeholder="Enter term or question">' + term + '</textarea>' +
+          '<div class="voice-input-wrapper">' +
+            '<textarea class="gaze-textarea term-input" placeholder="Look here to speak term...">' + term + '</textarea>' +
+            '<div class="dwell-bar"><div class="dwell-fill"></div></div>' +
+            '<div class="voice-status"></div>' +
+          '</div>' +
         '</div>' +
         '<div class="field-group">' +
           '<label>Definition</label>' +
-          '<textarea class="definition-input gaze-textarea" placeholder="Enter definition or answer">' + definition + '</textarea>' +
+          '<div class="voice-input-wrapper">' +
+            '<textarea class="gaze-textarea definition-input" placeholder="Look here to speak definition...">' + definition + '</textarea>' +
+            '<div class="dwell-bar"><div class="dwell-fill"></div></div>' +
+            '<div class="voice-status"></div>' +
+          '</div>' +
         '</div>' +
       '</div>' +
       '<button class="delete-card-btn" title="Delete card">' +
@@ -61,6 +179,12 @@ document.addEventListener('DOMContentLoaded', function () {
       deleteCard(card);
     });
 
+    card.querySelectorAll('.voice-input-wrapper').forEach(function (wrapper) {
+      wrapper.addEventListener('click', function () {
+        startFieldListening(wrapper);
+      });
+    });
+
     card.querySelectorAll('textarea').forEach(function (ta) {
       ta.addEventListener('input', function () {
         ta.style.height = 'auto';
@@ -70,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     updateCardCount();
     rebuildDwellButtons();
-    cardsWrapper.scrollTop = cardsWrapper.scrollHeight;
+    cardsWrapper.scrollTop = 0;
     return card;
   }
 
@@ -101,7 +225,6 @@ document.addEventListener('DOMContentLoaded', function () {
     cardCountEl.textContent = n + ' card' + (n !== 1 ? 's' : '');
   }
 
-  /* ── Save ── */
   function saveSet() {
     var title = setTitleInput.value.trim();
     if (!title) {
@@ -158,7 +281,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (label) label.textContent = 'Save Set';
   }
 
-  /* ── Toast ── */
   function showToast(message, type) {
     type = type || 'info';
     var toast = document.getElementById('toast');
@@ -168,10 +290,11 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(function () { toast.classList.remove('show'); }, 3500);
   }
 
-  /* ── Dwell Wiring ── */
   function rebuildDwellButtons() {
     activeDwellButtons.forEach(function (b) { b.reset(); });
     activeDwellButtons = [];
+    voiceInputDwellButtons.forEach(function (b) { b.reset(); });
+    voiceInputDwellButtons = [];
 
     var homeBtn = document.getElementById('home-btn');
     var calibrateBtn = document.getElementById('calibrate-btn');
@@ -204,21 +327,14 @@ document.addEventListener('DOMContentLoaded', function () {
         deleteCard(card);
       }));
     });
-  }
 
-  /* ── Gaze helpers ── */
-  function handleInputGaze(x, y) {
-    document.querySelectorAll('.gaze-input, .gaze-textarea').forEach(function (input) {
-      var r = input.getBoundingClientRect();
-      var pad = 40;
-      var inside = x >= r.left - pad && x <= r.right + pad &&
-                   y >= r.top - pad && y <= r.bottom + pad;
-      if (inside) {
-        input.classList.add('gazing');
-        input.focus();
-      } else {
-        input.classList.remove('gazing');
-      }
+    document.querySelectorAll('.voice-input-wrapper').forEach(function (wrapper) {
+      var dwellBtn = new DwellButton(wrapper, 2000, function () {
+        startFieldListening(wrapper);
+        setTimeout(function () { dwellBtn.reset(); }, 2500);
+      });
+      voiceInputDwellButtons.push(dwellBtn);
+      activeDwellButtons.push(dwellBtn);
     });
   }
 
@@ -232,33 +348,36 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  /* ── Click handlers ── */
   if (addCardBtn) {
     addCardBtn.addEventListener('click', function () {
-      console.log('[create_set] Add card clicked');
       createCard();
     });
   }
   if (saveSetBtn) {
     saveSetBtn.addEventListener('click', function () {
-      console.log('[create_set] Save clicked');
       saveSet();
     });
   }
 
-  /* ── Register gaze callback ── */
-  onGaze(function (x, y) {
-    handleInputGaze(x, y);
-    handleScrollGaze(x, y);
-    activeDwellButtons.forEach(function (b) { b.update(x, y); });
+  document.querySelectorAll('.title-section .voice-input-wrapper').forEach(function (wrapper) {
+    wrapper.addEventListener('click', function () {
+      startFieldListening(wrapper);
+    });
   });
 
-  /* ── Init ── */
-  console.log('[create_set] Creating starter cards...');
+  onGaze(function (x, y) {
+    handleScrollGaze(x, y);
+    activeDwellButtons.forEach(function (b) { b.update(x, y); });
+
+    if (window.updateChatbotDwell) {
+      window.updateChatbotDwell(x, y);
+    }
+  });
+
   createCard();
   createCard();
   rebuildDwellButtons();
 
-  console.log('[create_set] Booting WebGazer...');
   bootWebGazer();
 });
+

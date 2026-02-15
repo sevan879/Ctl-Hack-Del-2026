@@ -22,6 +22,8 @@
     <div class="dwell-bar"><div class="dwell-fill"></div></div>
   </button>
 
+  <div id="gaze-dot"></div>
+
   {% block body_content %}
   {% endblock %}
 
@@ -42,20 +44,13 @@
 
     <div id="chat-messages" class="chat-messages">
       <div class="chat-msg bot">
-        <p>Hi! I'm your AI study assistant. Click the mic button or hover over it to speak your question!</p>
+        <p>Hi! I'm your AI study assistant. Just speak your question!</p>
       </div>
     </div>
 
     <div class="chatbox-input-area">
-      <div id="chat-interim" class="chat-interim"></div>
-      <button id="chat-mic-btn" class="chat-mic-btn">
-        🎤 Click or hover to speak
-        <div class="dwell-bar"><div class="dwell-fill"></div></div>
-      </button>
-      <div id="chat-listening" class="chat-listening hidden">
-        <div class="chat-pulse-dot"></div>
-        <span>Listening...</span>
-      </div>
+      <div id="chat-status" class="chat-status"></div>
+      <input type="text" id="chat-text-input" class="chat-text-input" placeholder="Speak or type your message..." />
     </div>
   </div>
 

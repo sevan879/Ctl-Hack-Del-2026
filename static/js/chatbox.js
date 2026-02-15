@@ -3,80 +3,15 @@
   var trigger = document.getElementById('chatbox-trigger');
   var closeBtn = document.getElementById('chatbox-close');
   var messagesDiv = document.getElementById('chat-messages');
-  var micBtn = document.getElementById('chat-mic-btn');
-  var interimDiv = document.getElementById('chat-interim');
-  var listeningDiv = document.getElementById('chat-listening');
+  var textInput = document.getElementById('chat-text-input');
 
   if (!panel || !trigger) return;
 
   var chatOpen = false;
-  var chatRecognition = null;
-  var chatIsListening = false;
   var chatHistory = [];
   var chatDwellButtons = [];
-
-  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  function initChatSpeech() {
-    if (!SR) return;
-
-    chatRecognition = new SR();
-    chatRecognition.continuous = false;
-    chatRecognition.interimResults = true;
-    chatRecognition.lang = 'en-US';
-    chatRecognition.maxAlternatives = 1;
-
-    chatRecognition.onstart = function () {
-      chatIsListening = true;
-      if (micBtn) micBtn.classList.add('listening');
-      if (listeningDiv) listeningDiv.classList.remove('hidden');
-    };
-
-    chatRecognition.onresult = function (event) {
-      var finalTranscript = '';
-      var interimTranscript = '';
-
-      for (var i = event.resultIndex; i < event.results.length; i++) {
-        var t = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          finalTranscript += t;
-        } else {
-          interimTranscript += t;
-        }
-      }
-
-      if (interimDiv) interimDiv.textContent = interimTranscript || '';
-
-      if (finalTranscript) {
-        if (interimDiv) interimDiv.textContent = '';
-        sendChatMessage(finalTranscript.trim());
-      }
-    };
-
-    chatRecognition.onerror = function () {
-      chatIsListening = false;
-      if (micBtn) micBtn.classList.remove('listening');
-      if (listeningDiv) listeningDiv.classList.add('hidden');
-    };
-
-    chatRecognition.onend = function () {
-      chatIsListening = false;
-      if (micBtn) micBtn.classList.remove('listening');
-      if (listeningDiv) listeningDiv.classList.add('hidden');
-    };
-  }
-
-  function startChatListening() {
-    if (!chatRecognition) initChatSpeech();
-    if (chatRecognition && !chatIsListening) {
-      try {
-        chatRecognition.start();
-      } catch (e) {
-        chatRecognition.stop();
-        setTimeout(function () { chatRecognition.start(); }, 150);
-      }
-    }
-  }
+  var chatSilenceTimer = null;
+  var CHAT_SILENCE_DELAY = 2000; // 2 seconds of silence before auto-send
 
   function escapeHtml(text) {
     var div = document.createElement('div');
@@ -130,10 +65,28 @@
         var botReply = data.response || 'Sorry, I couldn\'t process that.';
         addMessage(botReply, 'bot');
         chatHistory.push({ role: 'assistant', content: botReply });
+        
+        // CRITICAL: Restart listening for the next message
+        setTimeout(function() {
+          if (chatOpen && textInput) {
+            textInput.value = '';
+            voiceSystem.existingText = '';
+            startChatListening();
+          }
+        }, 500);
       })
       .catch(function () {
         removeTypingIndicator();
         addMessage('Sorry, something went wrong. Try again!', 'bot');
+        
+        // CRITICAL: Restart listening even on error
+        setTimeout(function() {
+          if (chatOpen && textInput) {
+            textInput.value = '';
+            voiceSystem.existingText = '';
+            startChatListening();
+          }
+        }, 500);
       });
   }
 
@@ -144,6 +97,10 @@
     panel.classList.add('slide-in');
     trigger.classList.add('hidden-trigger');
     setupChatDwellButtons();
+    if (textInput) {
+      textInput.focus();
+      startChatListening();
+    }
   }
 
   function closeChatbox() {
@@ -152,9 +109,43 @@
     panel.classList.add('hidden');
     panel.classList.remove('slide-in');
     trigger.classList.remove('hidden-trigger');
-    if (chatRecognition && chatIsListening) chatRecognition.stop();
     chatDwellButtons.forEach(function (b) { b.reset(); });
     chatDwellButtons = [];
+    stopChatListening();
+    
+    // CRITICAL: Clear the text input when closing
+    if (textInput) {
+      textInput.value = '';
+    }
+    // CRITICAL: Clear voiceSystem existingText
+    voiceSystem.existingText = '';
+  }
+
+  function startChatListening() {
+    if (typeof switchToFieldMode !== 'function') return;
+    
+    var wrapper = textInput.parentElement;
+    
+    // Clear any existing text before starting
+    textInput.value = '';
+    voiceSystem.existingText = '';
+    
+    switchToFieldMode(wrapper, function() {
+      // On completion, send the message
+      var msg = textInput.value.trim();
+      if (msg) {
+        sendChatMessage(msg);
+        textInput.value = '';
+        voiceSystem.existingText = ''; // Clear for next message
+      }
+    });
+  }
+
+  function stopChatListening() {
+    if (chatSilenceTimer) clearTimeout(chatSilenceTimer);
+    if (typeof switchToGlobalMode === 'function') {
+      switchToGlobalMode();
+    }
   }
 
   function setupChatDwellButtons() {
@@ -168,12 +159,6 @@
       setTimeout(function () { closeDwell.reset(); }, 2000);
     });
     chatDwellButtons.push(closeDwell);
-
-    var micDwell = new DwellButton(micBtn, 1500, function () {
-      startChatListening();
-      setTimeout(function () { micDwell.reset(); }, 2500);
-    });
-    chatDwellButtons.push(micDwell);
   }
 
   var triggerDwell = null;
@@ -190,39 +175,61 @@
     });
   }
 
-  function pollGaze() {
-    var gazeDot = document.getElementById('gaze-dot');
-    if (!gazeDot || gazeDot.style.display === 'none') return;
-
-    var x = parseFloat(gazeDot.style.left) || 0;
-    var y = parseFloat(gazeDot.style.top) || 0;
-    if (x === 0 && y === 0) return;
-
-    if (triggerDwell && !chatOpen) {
-      triggerDwell.update(x, y);
-    }
-
-    if (chatOpen) {
-      chatDwellButtons.forEach(function (b) { b.update(x, y); });
-    }
-  }
-
   trigger.addEventListener('click', openChatbox);
   closeBtn.addEventListener('click', closeChatbox);
 
-  micBtn.addEventListener('click', function () {
-    if (chatIsListening) {
-      chatRecognition.stop();
-    } else {
-      startChatListening();
-    }
-  });
+  if (textInput) {
+    textInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        var msg = textInput.value.trim();
+        if (msg) {
+          sendChatMessage(msg);
+          textInput.value = '';
+        }
+      }
+    });
+
+    // Monitor input changes for auto-send after silence
+    var lastValue = '';
+    setInterval(function() {
+      if (!chatOpen) return;
+      
+      var currentValue = textInput.value.trim();
+      
+      // If value changed, reset silence timer
+      if (currentValue !== lastValue) {
+        lastValue = currentValue;
+        
+        if (chatSilenceTimer) clearTimeout(chatSilenceTimer);
+        
+        // Set new timer to auto-send after silence
+        if (currentValue) {
+          chatSilenceTimer = setTimeout(function() {
+            if (textInput.value.trim()) {
+              sendChatMessage(textInput.value.trim());
+              textInput.value = '';
+              voiceSystem.existingText = '';
+              lastValue = '';
+            }
+          }, CHAT_SILENCE_DELAY);
+        }
+      }
+    }, 100);
+  }
 
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && chatOpen) closeChatbox();
   });
 
-  initChatSpeech();
   initTriggerDwell();
-  setInterval(pollGaze, 50);
+
+  // Register chatbot buttons globally
+  window.updateChatbotDwell = function(x, y) {
+    if (triggerDwell && !chatOpen) {
+      triggerDwell.update(x, y);
+    }
+    if (chatOpen) {
+      chatDwellButtons.forEach(function (b) { b.update(x, y); });
+    }
+  };
 })();

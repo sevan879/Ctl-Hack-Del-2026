@@ -67,73 +67,29 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function initTopicSTT() {
-    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) return;
-
     var wrapper = document.querySelector('.topic-input-wrapper');
     var voiceStatus = document.getElementById('voice-status');
 
     if (!wrapper || !topicInput) return;
-    if (topicDwellBtn) return;
 
-    topicRecognition = new SR();
-    topicRecognition.continuous = false;
-    topicRecognition.interimResults = true;
-    topicRecognition.lang = 'en-US';
-    topicRecognition.maxAlternatives = 1;
-
-    topicRecognition.onstart = function () {
-      topicIsListening = true;
-      wrapper.classList.add('listening');
-      wrapper.classList.remove('gazing');
-      if (voiceStatus) voiceStatus.textContent = '🎤 Listening... speak your topic';
-    };
-
-    topicRecognition.onresult = function (event) {
-      var finalTranscript = '';
-      var interimTranscript = '';
-
-      for (var i = event.resultIndex; i < event.results.length; i++) {
-        var t = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          finalTranscript += t;
-        } else {
-          interimTranscript += t;
-        }
-      }
-
-      if (finalTranscript) {
-        topicInput.value = finalTranscript.trim();
-        if (voiceStatus) voiceStatus.textContent = '✅ Got it: "' + finalTranscript.trim() + '"';
-      } else if (interimTranscript) {
-        topicInput.value = interimTranscript;
-        if (voiceStatus) voiceStatus.textContent = '🎤 Hearing: "' + interimTranscript + '"';
-      }
-    };
-
-    topicRecognition.onerror = function (event) {
-      topicIsListening = false;
-      wrapper.classList.remove('listening');
-      if (voiceStatus) voiceStatus.textContent = '❌ Error: ' + event.error;
-    };
-
-    topicRecognition.onend = function () {
-      topicIsListening = false;
-      wrapper.classList.remove('listening');
-      if (topicDwellBtn) topicDwellBtn.reset();
-      setTimeout(function () {
-        if (voiceStatus && !topicIsListening) voiceStatus.textContent = '';
-      }, 3000);
-    };
+    if (topicDwellBtn) {
+      topicDwellBtn.reset();
+      activeDwellButtons.push(topicDwellBtn);
+      return;
+    }
 
     function startTopicListening() {
-      if (topicRecognition && !topicIsListening) {
-        try {
-          topicRecognition.start();
-        } catch (e) {
-          topicRecognition.stop();
-          setTimeout(function () { topicRecognition.start(); }, 100);
-        }
+      if (typeof switchToFieldMode === 'function') {
+        switchToFieldMode(wrapper, function () {
+          // Field mode complete callback
+          if (topicDwellBtn) topicDwellBtn.reset();
+        });
+      }
+    }
+
+    function stopTopicListening() {
+      if (typeof switchToGlobalMode === 'function') {
+        switchToGlobalMode();
       }
     }
 
@@ -144,8 +100,8 @@ document.addEventListener('DOMContentLoaded', function () {
     activeDwellButtons.push(topicDwellBtn);
 
     wrapper.addEventListener('click', function () {
-      if (topicIsListening) {
-        topicRecognition.stop();
+      if (voiceSystem && voiceSystem.mode === 'field' && voiceSystem.activeWrapper === wrapper) {
+        stopTopicListening();
       } else {
         startTopicListening();
       }
@@ -316,8 +272,13 @@ document.addEventListener('DOMContentLoaded', function () {
     var restartBtn = document.getElementById('restart-btn');
     activeDwellButtons.push(new DwellButton(restartBtn, 2000, function () {
       questions = []; currentQ = 0; score = 0; results = [];
-      topicInput.value = ''; startBtn.disabled = false;
+      answered = false;
+      dwellTarget = null;
+      dwellStart = 0;
+      topicInput.value = ''; 
+      startBtn.disabled = false;
       showScreen(startScreen);
+      topicInput.focus();
     }));
   }
 
@@ -329,8 +290,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     if (e.target.id === 'restart-btn' || (e.target.closest && e.target.closest('#restart-btn'))) {
       questions = []; currentQ = 0; score = 0; results = [];
-      topicInput.value = ''; startBtn.disabled = false;
+      answered = false;
+      dwellTarget = null;
+      dwellStart = 0;
+      topicInput.value = ''; 
+      startBtn.disabled = false;
       showScreen(startScreen);
+      topicInput.focus();
     }
   });
 
@@ -339,6 +305,10 @@ document.addEventListener('DOMContentLoaded', function () {
       handleQuizGaze(x, y);
     }
     activeDwellButtons.forEach(function (b) { b.update(x, y); });
+    
+    if (window.updateChatbotDwell) {
+      window.updateChatbotDwell(x, y);
+    }
   });
 
   setupDwellButtons();

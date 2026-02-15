@@ -18,7 +18,6 @@ body {
   align-items: center;
   margin-bottom: 1.25rem;
   flex-shrink: 0;
-  padding-top: 4rem;
 }
 
 .library-header h1 {
@@ -125,15 +124,16 @@ body {
 /* ── Sets Grid — padding to prevent clip ── */
 .sets-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: 1.25rem;
   flex: 1;
   overflow-y: auto;
-  overflow-x: hidden;
   min-height: 0;
+  width: 100%;
+  max-width: 65rem;
+  padding: 1rem;
   align-content: start;
-  /* Extra padding so scaled cards don't clip against edges */
-  padding: 1rem 1.5rem 2rem 1.5rem;
+  margin-left: 5rem;
 }
 
 .sets-grid::-webkit-scrollbar {
@@ -247,20 +247,12 @@ body {
 
 .set-card .dwell-bar {
   display: block;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 0.35rem;
   background: #222;
 }
 
 .set-card .dwell-fill {
   display: block;
-  height: 100%;
-  width: 0%;
   background: #f59e0b;
-  transition: width 0.1s linear;
 }
 
 /* ── Create Card ── */
@@ -310,19 +302,11 @@ body {
 
 .create-card .dwell-bar {
   display: block;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 0.35rem;
   background: rgba(79, 70, 229, 0.1);
 }
 
 .create-card .dwell-fill {
   display: block;
-  height: 100%;
-  width: 0%;
-  background: #4f46e5;
   transition: width 0.1s linear;
 }
 
@@ -429,20 +413,11 @@ body {
 }
 
 .modal-close .dwell-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 0.3rem;
   background: rgba(0, 0, 0, 0.2);
-  border-radius: 0 0 1rem 1rem;
 }
 
 .modal-close .dwell-fill {
-  height: 100%;
-  width: 0%;
   background: #ef4444;
-  transition: width 0.1s linear;
 }
 
 .modal-description {
@@ -619,20 +594,11 @@ body {
 }
 
 .modal-btn .dwell-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 0.35rem;
   background: rgba(0, 0, 0, 0.2);
-  border-radius: 0 0 1.25rem 1.25rem;
 }
 
 .modal-btn .dwell-fill {
-  height: 100%;
-  width: 0%;
   background: #f59e0b;
-  transition: width 0.1s linear;
 }
 
 /* ── Toast ── */

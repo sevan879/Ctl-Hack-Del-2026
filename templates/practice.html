@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}EyeQ - Practice{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/practice.css') }}">
+{% endblock %}
+
+{% block body_content %}
+  <div id="gaze-dot"></div>
+
+  <!-- Select Set Screen -->
+  <div id="select-screen" class="screen active">
+    <div class="select-header">
+      <h1>⚡ Practice Mode</h1>
+      <p>Choose a study set to practice</p>
+    </div>
+
+    <div id="select-loading" class="select-loading">
+      <div class="spinner"></div>
+      <p>Loading sets…</p>
+    </div>
+
+    <div id="select-empty" class="select-empty" style="display:none;">
+      <div class="empty-icon">📭</div>
+      <h2>No Study Sets</h2>
+      <p>Create a set first to start practicing!</p>
+      <a href="/create-set" class="big-btn create-btn" id="empty-create-btn">
+        <span>📝 Create a Set</span>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </a>
+    </div>
+
+    <div id="select-grid" class="select-grid" style="display:none;"></div>
+  </div>
+
+  <!-- Mode Select Screen -->
+  <div id="mode-screen" class="screen">
+    <div class="mode-header">
+      <h1 id="mode-set-title"></h1>
+      <p id="mode-set-info"></p>
+    </div>
+
+    <div class="mode-grid">
+      <button class="mode-card" id="mode-flashcards" data-mode="flashcards">
+        <div class="mode-icon">🃏</div>
+        <h2>Flashcards</h2>
+        <p>Flip through cards one by one</p>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+
+      <button class="mode-card" id="mode-quiz" data-mode="quiz">
+        <div class="mode-icon">❓</div>
+        <h2>Quiz</h2>
+        <p>Multiple choice from your cards</p>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+
+      <button class="mode-card" id="mode-match" data-mode="match">
+        <div class="mode-icon">🔗</div>
+        <h2>Match</h2>
+        <p>Pair terms with definitions</p>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+
+      <button class="mode-card" id="mode-write" data-mode="write">
+        <div class="mode-icon">🗣️</div>
+        <h2>Recall</h2>
+        <p>Say or enter the answer from memory</p>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+    </div>
+
+    <button class="big-btn back-btn" id="mode-back-btn">
+      <span>← Back to Sets</span>
+      <div class="dwell-bar"><div class="dwell-fill"></div></div>
+    </button>
+  </div>
+
+  <!-- Flashcards Screen -->
+  <div id="flashcard-screen" class="screen">
+    <div class="study-header">
+      <span id="fc-counter" class="study-counter">1 / 10</span>
+      <span id="fc-progress-text" class="study-progress-text">0% complete</span>
+    </div>
+
+    <div class="fc-card-container">
+      <div class="fc-card" id="fc-card">
+        <div class="fc-card-inner" id="fc-card-inner">
+          <div class="fc-card-front">
+            <div class="fc-label">TERM</div>
+            <div class="fc-content" id="fc-front-text"></div>
+          </div>
+          <div class="fc-card-back">
+            <div class="fc-label">DEFINITION</div>
+            <div class="fc-content" id="fc-back-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fc-controls">
+      <button class="big-btn nav-btn" id="fc-prev-btn">
+        <span>← Previous</span>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+
+      <button class="big-btn flip-btn" id="fc-flip-btn">
+        <span>🔄 Flip Card</span>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+
+      <button class="big-btn nav-btn" id="fc-next-btn">
+        <span>Next →</span>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+    </div>
+
+    <div class="fc-progress-bar">
+      <div class="fc-progress-fill" id="fc-progress-fill"></div>
+    </div>
+
+    <button class="big-btn back-btn fc-exit" id="fc-exit-btn">
+      <span>✕ Exit</span>
+      <div class="dwell-bar"><div class="dwell-fill"></div></div>
+    </button>
+  </div>
+
+  <!-- Quiz Screen -->
+  <div id="quiz-screen" class="screen">
+    <div class="study-header">
+      <span id="qz-counter" class="study-counter">Question 1 / 10</span>
+      <span id="qz-score" class="study-score">Score: 0</span>
+    </div>
+
+    <div class="qz-question" id="qz-question"></div>
+
+    <div class="qz-options" id="qz-options"></div>
+
+    <div id="qz-feedback" class="qz-feedback" style="display:none;">
+      <div id="qz-feedback-text" class="qz-feedback-text"></div>
+      <div id="qz-explanation" class="qz-explanation"></div>
+      <button class="big-btn nav-btn" id="qz-next-btn">
+        <span>Next →</span>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+    </div>
+
+    <button class="big-btn back-btn qz-exit" id="qz-exit-btn">
+      <span>✕ Exit</span>
+      <div class="dwell-bar"><div class="dwell-fill"></div></div>
+    </button>
+  </div>
+
+  <!-- Match Screen -->
+  <div id="match-screen" class="screen">
+    <div class="study-header">
+      <span id="mt-counter" class="study-counter">0 / 6 matched</span>
+      <span id="mt-timer" class="study-score">⏱ 0s</span>
+    </div>
+
+    <div class="mt-board" id="mt-board"></div>
+
+    <button class="big-btn back-btn mt-exit" id="mt-exit-btn">
+      <span>✕ Exit</span>
+      <div class="dwell-bar"><div class="dwell-fill"></div></div>
+    </button>
+  </div>
+
+  <!-- Recall Screen -->
+  <div id="write-screen" class="screen">
+    <div class="study-header">
+      <span id="wr-counter" class="study-counter">1 / 10</span>
+      <span id="wr-score" class="study-score">Score: 0</span>
+    </div>
+
+    <div class="wr-prompt">
+      <div class="wr-label">What is the definition of:</div>
+      <div class="wr-term" id="wr-term"></div>
+    </div>
+
+    <div class="wr-input-area">
+      <textarea id="wr-input" class="wr-input gaze-textarea" placeholder="Speak or enter your answer..." rows="3"></textarea>
+      <button class="big-btn submit-btn" id="wr-submit-btn">
+        <span>Check Answer</span>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+    </div>
+
+    <div id="wr-feedback" class="wr-feedback" style="display:none;">
+      <div id="wr-feedback-text" class="wr-feedback-text"></div>
+      <div id="wr-correct-answer" class="wr-correct-answer"></div>
+      <button class="big-btn nav-btn" id="wr-next-btn">
+        <span>Next →</span>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+    </div>
+
+    <button class="big-btn back-btn wr-exit" id="wr-exit-btn">
+      <span>✕ Exit</span>
+      <div class="dwell-bar"><div class="dwell-fill"></div></div>
+    </button>
+  </div>
+
+  <!-- Results Screen -->
+  <div id="results-screen" class="screen">
+    <div class="results-icon">🏆</div>
+    <h1 id="results-title">Practice Complete!</h1>
+    <div class="results-score" id="results-score"></div>
+    <div class="results-details" id="results-details"></div>
+
+    <div class="results-actions">
+      <button class="big-btn nav-btn" id="results-retry-btn">
+        <span>🔄 Try Again</span>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+      <button class="big-btn back-btn" id="results-modes-btn">
+        <span>📋 Other Modes</span>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+      <button class="big-btn back-btn" id="results-sets-btn">
+        <span>📚 All Sets</span>
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+      </button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{{ url_for('static', filename='js/practice.js') }}"></script>
+{% endblock %}

@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function handleGaze(x, y) {
+
+    if (typeof guidedTour !== 'undefined' && guidedTour.active) return;
     var cards = document.querySelectorAll('.mode-card');
     var gazedCard = null;
 
@@ -69,8 +71,14 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   onGaze(function (x, y) {
+    console.log('onGaze called:', x, y); // ADD THIS
+    if (typeof guidedTour !== 'undefined' && guidedTour.active) return;
     handleGaze(x, y);
     activeDwellButtons.forEach(function (b) { b.update(x, y); });
+
+    if (window.updateChatbotDwell) {
+      window.updateChatbotDwell(x, y);
+    }
   });
 
   setupNavDwell();

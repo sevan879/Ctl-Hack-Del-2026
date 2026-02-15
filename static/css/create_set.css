@@ -3,7 +3,6 @@ body {
   overflow: hidden;
 }
 
-/* ── Layout ── */
 .create-container {
   display: flex;
   flex-direction: column;
@@ -16,9 +15,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   flex-shrink: 0;
-  padding-top: 4rem;
 }
 
 .create-header h1 {
@@ -26,7 +24,6 @@ body {
   margin: 0;
 }
 
-/* ── Title Section ── */
 .title-section {
   display: flex;
   gap: 1rem;
@@ -38,8 +35,16 @@ body {
   margin-right: auto;
 }
 
-.title-section .gaze-input {
+.voice-input-wrapper {
+  position: relative;
   flex: 1;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.voice-input-wrapper .gaze-input,
+.voice-input-wrapper .gaze-textarea {
+  width: 100%;
   padding: 1.25rem 1.75rem;
   font-size: 1.25rem;
   border: 3px solid #333;
@@ -51,18 +56,60 @@ body {
   margin: 0;
 }
 
-.title-section .gaze-input:focus {
+.voice-input-wrapper .gaze-input:focus,
+.voice-input-wrapper .gaze-textarea:focus {
   outline: none;
   border-color: #4f46e5;
-  transform: scale(1.01);
 }
 
-.title-section .gaze-input.gazing {
+.voice-input-wrapper.gazing .gaze-input,
+.voice-input-wrapper.gazing .gaze-textarea {
   border-color: #f59e0b;
   box-shadow: 0 0 1.5rem rgba(245, 158, 11, 0.3);
 }
 
-/* ── Scrollable Cards Area ── */
+.voice-input-wrapper.listening .gaze-input,
+.voice-input-wrapper.listening .gaze-textarea {
+  border-color: #ef4444;
+  box-shadow: 0 0 2rem rgba(239, 68, 68, 0.4);
+  animation: input-pulse 1.5s infinite;
+}
+
+@keyframes input-pulse {
+  0%, 100% { box-shadow: 0 0 1rem rgba(239, 68, 68, 0.3); }
+  50% { box-shadow: 0 0 2.5rem rgba(239, 68, 68, 0.6); }
+}
+
+.voice-input-wrapper .dwell-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: #333;
+}
+
+.voice-input-wrapper .dwell-fill {
+  height: 100%;
+  width: 0%;
+  background: #f59e0b;
+  transition: width 0.08s linear;
+}
+
+.voice-input-wrapper.listening .dwell-fill {
+  width: 100%;
+  background: #ef4444;
+}
+
+.voice-input-wrapper .voice-status {
+  position: absolute;
+  bottom: -1.4rem;
+  left: 0;
+  font-size: 0.8rem;
+  color: #10b981;
+  white-space: nowrap;
+}
+
 .cards-wrapper {
   flex: 1;
   overflow-y: auto;
@@ -71,6 +118,8 @@ body {
   width: 100%;
   margin: 0 auto;
   padding-right: 0.5rem;
+  padding-top: 0;
+  margin-top: 0;
 }
 
 .cards-wrapper::-webkit-scrollbar {
@@ -91,13 +140,12 @@ body {
   background: #4f46e5;
 }
 
-/* ── Card Entry ── */
 .card-entry {
   background: #1a1a2e;
   border: 2px solid #2a2a3e;
   border-radius: 1.5rem;
   padding: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   display: flex;
   align-items: flex-start;
   gap: 1.25rem;
@@ -157,7 +205,11 @@ body {
   font-weight: 600;
 }
 
-.field-group textarea {
+.field-group .voice-input-wrapper {
+  position: relative;
+}
+
+.field-group .gaze-textarea {
   min-height: 4.5rem;
   padding: 1rem 1.25rem;
   font-size: 1.15rem;
@@ -169,19 +221,33 @@ body {
   font-family: inherit;
   transition: all 0.3s;
   margin: 0;
+  width: 100%;
 }
 
-.field-group textarea:focus {
+.field-group .gaze-textarea:focus {
   outline: none;
   border-color: #4f46e5;
 }
 
-.field-group textarea.gazing {
+.field-group .voice-input-wrapper.gazing .gaze-textarea {
   border-color: #f59e0b;
   box-shadow: 0 0 1rem rgba(245, 158, 11, 0.3);
 }
 
-/* ── Delete Button — BIG ── */
+.field-group .voice-input-wrapper.listening .gaze-textarea {
+  border-color: #ef4444;
+  box-shadow: 0 0 1.5rem rgba(239, 68, 68, 0.4);
+  animation: input-pulse 1.5s infinite;
+}
+
+.field-group .voice-status {
+  font-size: 0.75rem;
+  min-height: 1rem;
+  position: relative;
+  bottom: auto;
+  margin-top: 0.25rem;
+}
+
 .delete-card-btn {
   display: flex;
   align-items: center;
@@ -213,23 +279,14 @@ body {
 }
 
 .delete-card-btn .dwell-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 0.35rem;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 0 0 1.25rem 1.25rem;
 }
 
 .delete-card-btn .dwell-fill {
-  height: 100%;
-  width: 0%;
   background: #ef4444;
-  transition: width 0.1s linear;
 }
 
-/* ── Action Bar ── */
 .action-bar {
   display: flex;
   align-items: center;
@@ -289,20 +346,12 @@ body {
 }
 
 .action-btn .dwell-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 0.35rem;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 0 0 1.25rem 1.25rem;
 }
 
 .action-btn .dwell-fill {
-  height: 100%;
-  width: 0%;
   background: #f59e0b;
-  transition: width 0.1s linear;
 }
 
 .action-icon {
@@ -322,7 +371,6 @@ body {
   font-weight: 600;
 }
 
-/* ── Toast ── */
 .toast {
   position: fixed;
   bottom: -5rem;
@@ -343,7 +391,6 @@ body {
 .toast.error { background: #ef4444; color: white; }
 .toast.info { background: #4f46e5; color: white; }
 
-/* ── Responsive ── */
 @media (max-width: 768px) {
   .title-section {
     flex-direction: column;

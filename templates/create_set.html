@@ -15,8 +15,16 @@
     </div>
 
     <div class="title-section">
-      <input type="text" id="set-title" class="gaze-input" placeholder="Set title (e.g. Biology Chapter 5)" autocomplete="off">
-      <input type="text" id="set-description" class="gaze-input" placeholder="Description (optional)" autocomplete="off">
+      <div class="voice-input-wrapper" data-field="set-title">
+        <input type="text" id="set-title" class="gaze-input" placeholder="Look here to speak set title..." autocomplete="off">
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+        <div class="voice-status"></div>
+      </div>
+      <div class="voice-input-wrapper" data-field="set-description">
+        <input type="text" id="set-description" class="gaze-input" placeholder="Look here to speak description..." autocomplete="off">
+        <div class="dwell-bar"><div class="dwell-fill"></div></div>
+        <div class="voice-status"></div>
+      </div>
     </div>
 
     <div class="cards-wrapper" id="cards-wrapper">
