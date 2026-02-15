@@ -11,15 +11,15 @@
 
   <div class="library-container">
     <div class="library-header">
-      <h1>📚 My Library</h1>
+      <h1><span class="material-symbols-outlined" style="font-size: 1.2em; vertical-align: text-bottom; margin-right: 0.3em;">library_books</span>My Library</h1>
     </div>
 
     <div id="empty-state" class="empty-state" style="display:none;">
-      <div class="empty-icon">📭</div>
+      <div class="empty-icon material-symbols-outlined">inbox</div>
       <h2>No Study Sets Yet</h2>
       <p>Create your first study set to get started!</p>
       <a href="/create-set" class="empty-cta" id="empty-create-btn">
-        <span>📝 Create a Set</span>
+        <span><span class="material-symbols-outlined" style="vertical-align: text-bottom; margin-right: 0.3em;">edit_note</span>Create a Set</span>
         <div class="dwell-bar"><div class="dwell-fill"></div></div>
       </a>
     </div>
@@ -37,7 +37,7 @@
       <div class="modal-header">
         <h2 id="modal-title"></h2>
         <button id="modal-close-btn" class="modal-close">
-          ✕
+          <span class="material-symbols-outlined">close</span>
           <div class="dwell-bar"><div class="dwell-fill"></div></div>
         </button>
       </div>
@@ -52,11 +52,11 @@
 
       <div class="modal-actions">
         <a href="#" id="modal-study-btn" class="modal-btn study-btn">
-          <span>⚡ Study</span>
+          <span><span class="material-symbols-outlined" style="vertical-align: text-bottom; margin-right: 0.3em;">play_circle</span>Study</span>
           <div class="dwell-bar"><div class="dwell-fill"></div></div>
         </a>
         <button id="modal-delete-btn" class="modal-btn delete-btn">
-          <span>🗑️ Delete</span>
+          <span><span class="material-symbols-outlined" style="vertical-align: text-bottom; margin-right: 0.3em;">delete</span>Delete</span>
           <div class="dwell-bar"><div class="dwell-fill"></div></div>
         </button>
       </div>
@@ -65,7 +65,7 @@
 
   <div id="confirm-modal" class="modal-overlay" style="display:none;">
     <div class="modal-card confirm-card">
-      <div class="confirm-icon">⚠️</div>
+      <div class="confirm-icon material-symbols-outlined">warning</div>
       <h2>Delete this set?</h2>
       <p id="confirm-text" class="modal-description"></p>
       <div class="modal-actions">

@@ -12,7 +12,7 @@
   <!-- Select Set Screen -->
   <div id="select-screen" class="screen active">
     <div class="select-header">
-      <h1>⚡ Practice Mode</h1>
+      <h1><span class="material-symbols-outlined" style="font-size: 1.2em; vertical-align: text-bottom; margin-right: 0.3em;">school</span>Practice Mode</h1>
       <p>Choose a study set to practice</p>
     </div>
 
@@ -22,11 +22,11 @@
     </div>
 
     <div id="select-empty" class="select-empty" style="display:none;">
-      <div class="empty-icon">📭</div>
+      <div class="empty-icon material-symbols-outlined">inbox</div>
       <h2>No Study Sets</h2>
       <p>Create a set first to start practicing!</p>
       <a href="/create-set" class="big-btn create-btn" id="empty-create-btn">
-        <span>📝 Create a Set</span>
+        <span><span class="material-symbols-outlined" style="vertical-align: text-bottom; margin-right: 0.3em;">edit_note</span>Create a Set</span>
         <div class="dwell-bar"><div class="dwell-fill"></div></div>
       </a>
     </div>
@@ -43,28 +43,28 @@
 
     <div class="mode-grid">
       <button class="mode-card" id="mode-flashcards" data-mode="flashcards">
-        <div class="mode-icon">🃏</div>
+        <div class="mode-icon material-symbols-outlined">flip_to_back</div>
         <h2>Flashcards</h2>
         <p>Flip through cards one by one</p>
         <div class="dwell-bar"><div class="dwell-fill"></div></div>
       </button>
 
       <button class="mode-card" id="mode-quiz" data-mode="quiz">
-        <div class="mode-icon">❓</div>
+        <div class="mode-icon material-symbols-outlined">help</div>
         <h2>Quiz</h2>
         <p>Multiple choice from your cards</p>
         <div class="dwell-bar"><div class="dwell-fill"></div></div>
       </button>
 
       <button class="mode-card" id="mode-match" data-mode="match">
-        <div class="mode-icon">🔗</div>
+        <div class="mode-icon material-symbols-outlined">link</div>
         <h2>Match</h2>
         <p>Pair terms with definitions</p>
         <div class="dwell-bar"><div class="dwell-fill"></div></div>
       </button>
 
       <button class="mode-card" id="mode-write" data-mode="write">
-        <div class="mode-icon">🗣️</div>
+        <div class="mode-icon material-symbols-outlined">voice_chat</div>
         <h2>Recall</h2>
         <p>Say or enter the answer from memory</p>
         <div class="dwell-bar"><div class="dwell-fill"></div></div>
@@ -106,7 +106,7 @@
       </button>
 
       <button class="big-btn flip-btn" id="fc-flip-btn">
-        <span>🔄 Flip Card</span>
+        <span><span class="material-symbols-outlined" style="vertical-align: text-bottom; margin-right: 0.3em;">sync</span>Flip Card</span>
         <div class="dwell-bar"><div class="dwell-fill"></div></div>
       </button>
 
@@ -156,7 +156,7 @@
   <div id="match-screen" class="screen">
     <div class="study-header">
       <span id="mt-counter" class="study-counter">0 / 6 matched</span>
-      <span id="mt-timer" class="study-score">⏱ 0s</span>
+      <span id="mt-timer" class="study-score"><span class="material-symbols-outlined" style="vertical-align: text-bottom; margin-right: 0.2em; font-size: 1.1em;">schedule</span>0s</span>
     </div>
 
     <div class="mt-board" id="mt-board"></div>
@@ -204,22 +204,22 @@
 
   <!-- Results Screen -->
   <div id="results-screen" class="screen">
-    <div class="results-icon">🏆</div>
+    <div class="results-icon material-symbols-outlined">emoji_events</div>
     <h1 id="results-title">Practice Complete!</h1>
     <div class="results-score" id="results-score"></div>
     <div class="results-details" id="results-details"></div>
 
     <div class="results-actions">
       <button class="big-btn nav-btn" id="results-retry-btn">
-        <span>🔄 Try Again</span>
+        <span><span class="material-symbols-outlined" style="vertical-align: text-bottom; margin-right: 0.3em;">sync</span>Try Again</span>
         <div class="dwell-bar"><div class="dwell-fill"></div></div>
       </button>
       <button class="big-btn back-btn" id="results-modes-btn">
-        <span>📋 Other Modes</span>
+        <span><span class="material-symbols-outlined" style="vertical-align: text-bottom; margin-right: 0.3em;">menu</span>Other Modes</span>
         <div class="dwell-bar"><div class="dwell-fill"></div></div>
       </button>
       <button class="big-btn back-btn" id="results-sets-btn">
-        <span>📚 All Sets</span>
+        <span><span class="material-symbols-outlined" style="vertical-align: text-bottom; margin-right: 0.3em;">library_books</span>All Sets</span>
         <div class="dwell-bar"><div class="dwell-fill"></div></div>
       </button>
     </div>

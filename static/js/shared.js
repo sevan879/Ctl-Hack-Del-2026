@@ -496,6 +496,8 @@ function bootWebGazer() {
     webgazer.setRegression('ridge');
     webgazer.showVideoPreview(true);
     webgazer.showPredictionPoints(false);
+    webgazer.showFaceOverlay(true);
+    webgazer.showFaceFeedbackBox(false);
 
     webgazer.setGazeListener(function (data) {
       if (!data) return;
@@ -517,20 +519,61 @@ function bootWebGazer() {
       }
     });
 
+    // Create the fixed wrapper that will hold all WebGazer visual elements
+    var camWrapper = document.createElement('div');
+    camWrapper.id = 'webgazer-cam-wrapper';
+    document.body.appendChild(camWrapper);
+
+    // Move all WebGazer visual elements into the wrapper.
+    // Returns true when at least video + one canvas are captured.
+    function captureWebGazerElements() {
+      var captured = 0;
+      var ids = ['webgazerVideoFeed', 'webgazerVideoCanvas', 'webgazerFaceOverlay'];
+      ids.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) {
+          if (el.parentElement !== camWrapper) camWrapper.appendChild(el);
+          captured++;
+        }
+      });
+      // Also pull canvases out of WebGazer's own container
+      var container = document.getElementById('webgazerVideoContainer');
+      if (container) {
+        var children = Array.prototype.slice.call(container.children);
+        children.forEach(function(child) {
+          if (child.tagName === 'CANVAS' || child.tagName === 'VIDEO') {
+            if (child.parentElement !== camWrapper) {
+              camWrapper.appendChild(child);
+              captured++;
+            }
+          }
+        });
+      }
+      return captured >= 2; // video + at least one canvas
+    }
+
+    // MutationObserver to grab elements as WebGazer creates them
+    var observer = new MutationObserver(function() {
+      if (captureWebGazerElements()) {
+        observer.disconnect(); // stop observing once we have everything
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
     webgazer.begin()
       .then(function () {
-        setTimeout(function () {
-          var vid = document.getElementById('webgazerVideoFeed');
-          var canvas = document.getElementById('webgazerVideoCanvas');
-          var css =
-            'position:fixed!important;bottom:10px!important;right:10px!important;' +
-            'top:auto!important;left:auto!important;width:160px!important;height:120px!important;' +
-            'border:2px solid #333!important;border-radius:8px!important;z-index:9000!important;';
-          if (vid) vid.style.cssText = css;
-          if (canvas) canvas.style.cssText = css.replace('9000', '9001');
-          var wgDot = document.getElementById('webgazerGazeDot');
-          if (wgDot) wgDot.style.display = 'none';
-        }, 1500);
+        // Capture immediately, then keep checking briefly for stragglers
+        if (!captureWebGazerElements()) {
+          var checkCount = 0;
+          var checkInterval = setInterval(function() {
+            if (captureWebGazerElements() || ++checkCount >= 15) {
+              clearInterval(checkInterval);
+              observer.disconnect();
+            }
+          }, 200);
+        } else {
+          observer.disconnect();
+        }
 
         if (!_isCalibrated) {
           var cal = new CalibrationSystem(function () {

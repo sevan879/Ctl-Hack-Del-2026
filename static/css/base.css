@@ -1,68 +1,199 @@
+/* ──────────────────────────────────────────
+   Theme variables (Target Style)
+   ────────────────────────────────────────── */
+:root {
+  --bg0: #050608;
+  --bg1: #070a0f;
+  --vignette: rgba(0, 0, 0, 0.65);
+
+  --cardTop: rgba(255, 255, 255, 0.035);
+  --cardBottom: rgba(255, 255, 255, 0.02);
+  --cardBorder: rgba(255, 255, 255, 0.10);
+  --cardBorderSoft: rgba(255, 255, 255, 0.07);
+
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.52);
+  --muted2: rgba(255, 255, 255, 0.40);
+
+  --accent: #18f0a6; /* teal/green */
+  --accentGlow: rgba(24, 240, 166, 0.25);
+  --accentGlow2: rgba(24, 240, 166, 0.12);
+
+  --radius: 22px;
+  --radiusBtn: 18px;
+}
+
+/* ──────────────────────────────────────────
+   Base reset
+   ────────────────────────────────────────── */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
-  font-family: 'Segoe UI', -apple-system, sans-serif;
-  background: #0f0f1a;
-  color: #e0e0e0;
+  font-family: 'OpenDyslexic', 'Segoe UI', -apple-system, system-ui, sans-serif;
+  background:
+    radial-gradient(1200px 800px at 20% 0%, rgba(255, 255, 255, 0.06), transparent 55%),
+    radial-gradient(900px 650px at 70% 10%, rgba(255, 255, 255, 0.03), transparent 60%),
+    radial-gradient(1400px 900px at 50% 40%, rgba(24, 240, 166, 0.035), transparent 60%),
+    linear-gradient(180deg, var(--bg1), var(--bg0));
+  color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
+  letter-spacing: 0.01em;
 }
 
-/* ── Generic buttons — exclude nav ── */
+/* Soft vignette overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 35%, transparent 35%, var(--vignette) 100%);
+  opacity: 0.9;
+  z-index: -1;
+}
+
+/* ──────────────────────────────────────────
+   Typography
+   ────────────────────────────────────────── */
+h1 {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+
+h2 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  color: rgba(255, 255, 255, 0.88);
+  margin-bottom: 0.8rem;
+}
+
+h3 {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted2);
+  margin-bottom: 1rem;
+}
+
+p {
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+/* ──────────────────────────────────────────
+   Inputs
+   ────────────────────────────────────────── */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+  padding: 1.1rem 1.25rem;
+  font-size: 1.15rem;
+  border-radius: 16px;
+  border: 1px solid var(--cardBorderSoft);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  margin-bottom: 0.9rem;
+  transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+  font-family: inherit;
+  backdrop-filter: blur(8px);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: rgba(24, 240, 166, 0.7);
+  box-shadow: 0 0 0 3px rgba(24, 240, 166, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ──────────────────────────────────────────
+   Buttons as “Cards”
+   Restored Original exclusions: .mode-card, .big-btn, .qz-option
+   ────────────────────────────────────────── */
 button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-btn):not(#cal-skip-btn):not(.mode-card):not(.big-btn):not(.qz-option) {
-  padding: 1.25rem 2.5rem;
+  padding: 1.25rem 2rem;
   font-size: 1.25rem;
-  border: none;
-  border-radius: 1rem;
-  background: #4f46e5;
-  color: white;
+  border-radius: var(--radiusBtn);
+  border: 1px solid var(--cardBorder);
+  background: linear-gradient(180deg, var(--cardTop), var(--cardBottom));
+  color: rgba(255, 255, 255, 0.70);
   cursor: pointer;
   margin-top: 0.75rem;
-  transition: all 0.3s ease;
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
   font-family: inherit;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
 }
 
+/* Hover State */
 button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-btn):not(#cal-skip-btn):not(.mode-card):not(.big-btn):not(.qz-option):hover {
-  background: #4338ca;
-  transform: scale(1.03);
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.80);
 }
 
+/* Gazing / Active State */
+button.gazing,
+button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-btn):not(#cal-skip-btn):not(.mode-card):not(.big-btn):not(.qz-option).gazing {
+  border-color: rgba(24, 240, 166, 0.75);
+  background: linear-gradient(180deg, rgba(24, 240, 166, 0.09), rgba(255, 255, 255, 0.02));
+  color: rgba(255, 255, 255, 0.92);
+  box-shadow:
+    0 0 0 1px rgba(24, 240, 166, 0.25),
+    0 0 18px var(--accentGlow),
+    0 0 50px var(--accentGlow2);
+}
+
+/* Disabled State */
 button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-btn):not(#cal-skip-btn):not(.mode-card):not(.big-btn):not(.qz-option):disabled {
-  background: #666;
+  opacity: 0.45;
   cursor: not-allowed;
   transform: none;
 }
 
-/* ── Shared Nav Button Base ── */
+/* ──────────────────────────────────────────
+   Home / Calibrate fixed buttons
+   ────────────────────────────────────────── */
 .home-button,
 .calibrate-btn {
   position: fixed;
-  top: 0.75rem;
-  min-width: 14rem;
-  height: 4.5rem;
-  background: linear-gradient(135deg, #10b981, #059669);
-  border: 2px solid #34d399;
-  border-radius: 1.25rem;
+  top: 1.25rem;
+  min-width: 12rem;
+  height: 4.25rem;
+  background: linear-gradient(180deg, var(--cardTop), var(--cardBottom));
+  border: 1px solid var(--cardBorder);
+  border-radius: var(--radiusBtn);
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  padding: 0 1.5rem;
+  padding: 0 1.25rem;
   margin: 0;
   text-decoration: none;
-  color: white;
+  color: rgba(255, 255, 255, 0.70);
   cursor: pointer;
   z-index: 9998;
-  transition: all 0.3s ease;
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
   font-family: inherit;
   font-size: inherit;
+  backdrop-filter: blur(10px);
 }
 
 .home-button { left: 1.5rem; }
@@ -70,101 +201,87 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
 
 .home-button:hover, .home-button.gazing,
 .calibrate-btn:hover, .calibrate-btn.gazing {
-  background: linear-gradient(135deg, #059669, #047857);
-  transform: scale(1.08);
-  box-shadow: 0 0 1.5rem rgba(16, 185, 129, 0.5);
-  border-color: #6ee7b7;
+  border-color: rgba(24, 240, 166, 0.75);
+  background: linear-gradient(180deg, rgba(24, 240, 166, 0.09), rgba(255, 255, 255, 0.02));
+  color: rgba(255, 255, 255, 0.92);
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(24, 240, 166, 0.25),
+    0 0 18px var(--accentGlow),
+    0 0 50px var(--accentGlow2);
 }
 
 .home-icon, .calibrate-icon {
-  font-size: 1.8rem;
+  font-size: 1.7rem;
   line-height: 1;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+  opacity: 0.9;
 }
 
 .home-text, .calibrate-text {
-  font-size: 1.3rem;
-  color: white;
-  font-weight: 600;
+  font-size: 1.15rem;
+  font-weight: 650;
   letter-spacing: 0.02em;
   white-space: nowrap;
 }
 
-.dwell-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 0.375rem;
-}
-
-.dwell-fill {
-  height: 100%;
-  width: 0%;
-  transition: width 0.1s linear;
-}
-
+/* ──────────────────────────────────────────
+   Dwell UI (Interaction Feedback)
+   ────────────────────────────────────────── */
 .home-button .dwell-bar,
-.calibrate-btn .dwell-bar {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 0 0 1.25rem 1.25rem;
+.calibrate-btn .dwell-bar,
+button .dwell-bar {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .home-button .dwell-fill,
-.calibrate-btn .dwell-fill {
-  background: #f59e0b;
+.calibrate-btn .dwell-fill,
+button .dwell-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, rgba(24, 240, 166, 0.10), rgba(24, 240, 166, 0.20));
+  transition: width 0.1s linear;
+  filter: blur(0px);
 }
 
-/* ── Typography ── */
-h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 0.625rem; }
-h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); margin-bottom: 0.9375rem; }
-h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); margin-bottom: 0.625rem; }
-p { color: #888; line-height: 1.6; }
-
-/* ── Inputs ── */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-textarea,
-select {
-  padding: 1rem 1.5rem;
-  font-size: 1.25rem;
-  border: 3px solid #333;
-  border-radius: 1rem;
-  background: #1a1a2e;
-  color: white;
-  margin-bottom: 0.75rem;
-  transition: all 0.3s ease;
-  font-family: inherit;
+/* Ensure text/icon stays above the fill */
+.home-button > *, 
+.calibrate-btn > *,
+button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-btn):not(#cal-skip-btn):not(.mode-card):not(.big-btn):not(.qz-option) > * {
+  position: relative;
+  z-index: 1;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-  border-color: #4f46e5;
-}
-
-/* ── Gaze dot ── */
+/* ──────────────────────────────────────────
+   Gaze Pointer
+   ────────────────────────────────────────── */
 #gaze-dot {
   position: fixed;
-  width: 1rem;
-  height: 1rem;
-  background: radial-gradient(circle, rgba(255,80,80,0.8), rgba(255,0,0,0.3));
+  width: 14px;
+  height: 14px;
+  background: rgba(24, 240, 166, 0.95);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
   transform: translate(-50%, -50%);
-  transition: left 0.06s ease-out, top 0.06s ease-out;
+  transition: left 0.08s ease-out, top 0.08s ease-out;
   display: none;
-  box-shadow: 0 0 0.625rem rgba(255, 0, 0, 0.4);
+  box-shadow:
+    0 0 0 6px rgba(24, 240, 166, 0.12),
+    0 0 18px rgba(24, 240, 166, 0.25);
 }
 
-/* ── Calibration Overlay ── */
+/* ──────────────────────────────────────────
+   Calibration Overlay
+   ────────────────────────────────────────── */
 #cal-overlay {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: #0a0a15;
+  inset: 0;
+  background: rgba(5, 6, 8, 0.92);
+  backdrop-filter: blur(10px);
   z-index: 10000;
   display: flex;
   flex-direction: column;
@@ -173,16 +290,33 @@ select:focus {
   padding-top: 1.875rem;
 }
 
-#cal-instruction { text-align: center; margin-bottom: 1.25rem; z-index: 10002; }
-#cal-instruction h2 { font-size: clamp(1.5rem, 4vw, 1.75rem); color: #e0e0e0; margin-bottom: 0.5rem; }
-#cal-instruction p { color: #888; font-size: clamp(0.875rem, 2vw, 1rem); }
+#cal-instruction {
+  text-align: center;
+  margin-bottom: 1.25rem;
+  z-index: 10002;
+}
 
-#cal-dot-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10001; }
+#cal-instruction h2 {
+  color: rgba(255, 255, 255, 0.92);
+  margin-bottom: 0.5rem;
+}
+
+#cal-instruction p {
+  color: var(--muted);
+}
+
+#cal-dot-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10001;
+}
 
 #cal-dot {
   position: absolute;
-  width: 5rem; height: 5rem;
-  background: radial-gradient(circle, #4f46e5 40%, #6366f1 70%, transparent 71%);
+  width: 5rem;
+  height: 5rem;
+  background: radial-gradient(circle, rgba(24, 240, 166, 0.20), rgba(24, 240, 166, 0.02) 55%, transparent 70%);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: left 0.3s ease, top 0.3s ease, width 0.3s ease, height 0.3s ease;
@@ -193,123 +327,181 @@ select:focus {
   content: '';
   position: absolute;
   top: 50%; left: 50%;
-  width: 0.5rem; height: 0.5rem;
-  background: white;
+  width: 10px;
+  height: 10px;
+  background: rgba(24, 240, 166, 0.95);
   border-radius: 50%;
   transform: translate(-50%, -50%);
+  box-shadow: 0 0 18px rgba(24, 240, 166, 0.35);
 }
 
 #cal-ring {
   position: absolute;
   border-radius: 50%;
   transform: translate(-50%, -50%);
+  transition: left 0.3s ease, top 0.3s ease, width 0.3s ease, height 0.3s ease;
   z-index: 10002;
-  border: 4px solid transparent;
-  border-top-color: #f59e0b;
-  border-right-color: #f59e0b;
-  /* animation is set entirely from JS */
+  border: 2px solid transparent;
+  border-top-color: rgba(24, 240, 166, 0.85);
+  border-right-color: rgba(24, 240, 166, 0.85);
 }
 
 @keyframes ring-fill {
-  0%   {
-    transform: translate(-50%, -50%) rotate(0deg);
-    border-color: transparent;
-    border-top-color: #f59e0b;
-  }
-  25%  { border-right-color: #f59e0b; }
-  50%  {
-    border-bottom-color: #f59e0b;
-    transform: translate(-50%, -50%) rotate(180deg);
-  }
-  75%  { border-left-color: #f59e0b; }
-  100% {
-    border-color: #10b981;
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
+  0%   { transform: translate(-50%, -50%) rotate(0deg); border-color: transparent; border-top-color: rgba(24, 240, 166, 0.85); }
+  25%  { border-right-color: rgba(24, 240, 166, 0.85); }
+  50%  { border-bottom-color: rgba(24, 240, 166, 0.85); transform: translate(-50%, -50%) rotate(180deg); }
+  75%  { border-left-color: rgba(24, 240, 166, 0.85); }
+  100% { border-color: rgba(24, 240, 166, 0.85); transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* Un-hide skip button and style it properly */
-#cal-skip-btn {
-  display: flex !important;
+#cal-progress-container {
   position: fixed;
-  bottom: 5rem;
+  bottom: 2.5rem;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  z-index: 10002;
+}
+
+#cal-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: rgba(24, 240, 166, 0.9);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 14px rgba(24, 240, 166, 0.25);
+}
+
+#cal-counter {
+  position: fixed;
+  bottom: 3.3rem;
   left: 50%;
   transform: translateX(-50%);
-  padding: 1.25rem 3rem;
-  font-size: 1.2rem;
-  font-weight: 600;
-  background: rgba(239, 68, 68, 0.15);
-  border: 3px solid rgba(239, 68, 68, 0.4);
-  border-radius: 1.25rem;
-  color: #ef4444;
+  color: var(--muted2);
+  font-size: 0.95rem;
+  z-index: 10002;
+}
+
+#cal-skip-btn {
+  display: flex !important; /* Force flex for alignment if hidden by default logic */
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 1rem 1.75rem;
+  font-size: 1.1rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
-  z-index: 10005;
-  overflow: hidden;
-  font-family: inherit;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
-  margin-top: 0;
+  z-index: 10003;
+  transition: border-color .25s ease, color .25s ease, box-shadow .25s ease;
+  backdrop-filter: blur(10px);
+  /* Reset from original logic if needed */
+  left: auto;
+  transform: none; 
 }
 
 #cal-skip-btn:hover,
 #cal-skip-btn.gazing {
-  background: rgba(239, 68, 68, 0.3);
-  border-color: #ef4444;
-  box-shadow: 0 0 2rem rgba(239, 68, 68, 0.4);
+  border-color: rgba(24, 240, 166, 0.65);
+  color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 16px rgba(24, 240, 166, 0.14);
 }
 
 #cal-skip-btn .dwell-bar {
-  position: absolute;
   bottom: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: rgba(239, 68, 68, 0.2);
+  height: 3px;
+  background: rgba(24, 240, 166, 0.1);
 }
 
 #cal-skip-btn .dwell-fill {
-  height: 100%;
-  width: 0%;
-  background: #ef4444;
-  transition: width 0.1s linear;
+  background: #ef4444; /* Keep red for skip/cancel actions if desired, or use --accent */
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-#cal-progress-container { position: fixed; bottom: 2.5rem; left: 10%; right: 10%; height: 0.375rem; background: #1a1a2e; border-radius: 0.1875rem; z-index: 10002; }
-#cal-progress-bar { height: 100%; background: linear-gradient(90deg, #4f46e5, #10b981); border-radius: 0.1875rem; width: 0%; transition: width 0.3s ease; }
-#cal-counter { position: fixed; bottom: 3.4375rem; left: 50%; transform: translateX(-50%); color: #555; font-size: clamp(0.75rem, 1.5vw, 0.875rem); z-index: 10002; }
-
-/* ── WebGazer webcam ── */
+/* ──────────────────────────────────────────
+   WebGazer elements
+   Adapted to target #webgazer-cam-wrapper (Original ID) 
+   but using the Target Visuals (glassmorphism/preview style)
+   ────────────────────────────────────────── */
+/* Hide WebGazer elements by default — only visible inside wrapper */
 #webgazerVideoFeed,
-#webgazerVideoCanvas {
+#webgazerVideoCanvas,
+#webgazerFaceOverlay,
+#webgazerVideoContainer {
+  visibility: hidden !important;
   position: fixed !important;
-  bottom: 0.625rem !important;
-  right: 0.625rem !important;
+  bottom: 16px !important;
+  right: 16px !important;
   top: auto !important;
   left: auto !important;
-  width: 8.75rem !important;
-  height: 6.5625rem !important;
-  border: 2px solid #333 !important;
-  border-radius: 0.5rem !important;
-  z-index: 9000 !important;
 }
 
-#webgazerFaceFeedbackBox,
-#webgazerGazeDot { display: none !important; }
+/* Webcam + face-mesh wrapper */
+#webgazer-cam-wrapper {
+  position: fixed !important;
+  bottom: 16px !important;
+  right: 16px !important;
+  width: 220px !important;
+  height: 165px !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  z-index: 9000 !important;
+  transform: scaleX(-1);
+  background: rgba(5, 6, 8, 0.6);
+}
 
-#cal-skip-btn{
+/* Video feed fills the wrapper */
+#webgazer-cam-wrapper #webgazerVideoFeed {
+  visibility: visible !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border: none !important;
+  border-radius: 0 !important;
+  z-index: 1 !important;
+}
+
+/* Canvas overlays must NOT use object-fit (breaks coordinate mapping).
+   Instead stretch via width/height to match the wrapper exactly. */
+#webgazer-cam-wrapper #webgazerVideoCanvas,
+#webgazer-cam-wrapper #webgazerFaceOverlay {
+  visibility: visible !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+#webgazer-cam-wrapper #webgazerVideoCanvas { z-index: 2 !important; }
+#webgazer-cam-wrapper #webgazerFaceOverlay { z-index: 3 !important; }
+
+#webgazerFaceFeedbackBox,
+#webgazerGazeDot {
   display: none !important;
+}
+
+/* ──────────────────────────────────────────
+   Material Symbols Icons
+   ────────────────────────────────────────── */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.5em;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-flex;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
 }

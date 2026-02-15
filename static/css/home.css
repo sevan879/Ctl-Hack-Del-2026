@@ -1,6 +1,39 @@
+/* ──────────────────────────────────────────
+   Theme Variables (Consistent with previous)
+   ────────────────────────────────────────── */
+:root {
+  --bg0: #050608;
+  --bg1: #070a0f;
+  --vignette: rgba(0,0,0,0.65);
+
+  --cardTop: rgba(255,255,255,0.035);
+  --cardBottom: rgba(255,255,255,0.02);
+  --cardBorder: rgba(255,255,255,0.10);
+  --cardBorderSoft: rgba(255,255,255,0.07);
+
+  --text: rgba(255,255,255,0.92);
+  --muted: rgba(255,255,255,0.52);
+
+  --accent: #18f0a6; /* Teal/Green from EyeQ image */
+  --accentGlow: rgba(24, 240, 166, 0.25);
+  --accentGlow2: rgba(24, 240, 166, 0.12);
+
+  --radius: 24px;
+}
+
+/* ──────────────────────────────────────────
+   Global Layout
+   ────────────────────────────────────────── */
 body {
   height: 100vh;
   overflow: hidden;
+  /* Deep dark background with vignette */
+  background: 
+    radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05), transparent 60%),
+    radial-gradient(circle at 50% 100%, rgba(24,240,166,0.05), transparent 50%),
+    linear-gradient(180deg, var(--bg1), var(--bg0));
+  color: var(--text);
+  font-family: 'OpenDyslexic', 'Segoe UI', sans-serif;
 }
 
 .home-container {
@@ -9,83 +42,195 @@ body {
   height: 100vh;
   padding: 1.5rem;
   box-sizing: border-box;
+  /* Add vignette overlay */
+  position: relative;
+  z-index: 1;
 }
 
+/* ──────────────────────────────────────────
+   Header (Logo area)
+   ────────────────────────────────────────── */
 .header {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   flex-shrink: 0;
-  padding-top: 0rem;
+  padding-top: 1rem;
+  position: relative;
 }
 
 .header h1 {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-size: clamp(2rem, 5vw, 3rem);
   margin: 0;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.02em;
+  /* Optional: Text glow like the logo in image */
+  text-shadow: 0 0 20px rgba(255,255,255,0.15);
 }
 
+/* ──────────────────────────────────────────
+   Modes Grid
+   ────────────────────────────────────────── */
 .modes-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  gap: 1.25rem;
+  gap: 1.5rem;
   flex: 1;
   min-height: 0;
-  max-width: calc(100% - 5rem);
-  padding-left: 5rem;
+  /* Centered max width for better readability on large screens */
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding-bottom: 2rem;
 }
 
+/* ──────────────────────────────────────────
+   Mode Cards (Glassmorphism Style)
+   ────────────────────────────────────────── */
 .mode-card {
-  background: #1a1a2e;
-  border: 0.25rem solid #333;
-  border-radius: 1.5rem;
+  /* Glass Background */
+  background: linear-gradient(180deg, var(--cardTop), var(--cardBottom));
+  border: 1px solid var(--cardBorder);
+  border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  color: #e0e0e0;
-  transition: all 0.3s;
+  color: var(--text);
+  
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   cursor: pointer;
-  padding: 1.25rem;
+  padding: 2rem;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
+/* Hover & Gaze State */
 .mode-card:hover,
 .mode-card.gazing {
-  border-color: #4f46e5;
-  transform: scale(1.06);
-  box-shadow: 0 0 2.5rem rgba(79, 70, 229, 0.4);
+  border-color: rgba(24, 240, 166, 0.6); /* Teal Border */
+  background: linear-gradient(180deg, rgba(24, 240, 166, 0.08), rgba(255,255,255,0.02));
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 
+    0 10px 40px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(24, 240, 166, 0.2),
+    0 0 30px var(--accentGlow2);
 }
 
+/* ──────────────────────────────────────────
+   MUI Icon Styling
+   ────────────────────────────────────────── */
 .mode-icon {
-  font-size: clamp(3rem, 8vw, 5rem);
-  margin-bottom: 1rem;
+  font-size: clamp(3.5rem, 6vw, 4.5rem);
+  margin-bottom: 1.25rem;
+  color: rgba(255,255,255,0.6);
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
 }
 
+/* Icon glows on hover */
+.mode-card:hover .mode-icon,
+.mode-card.gazing .mode-icon {
+  color: var(--accent); /* Teal */
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 15px var(--accentGlow));
+}
+
+/* ──────────────────────────────────────────
+   Card Typography
+   ────────────────────────────────────────── */
 .mode-card h2 {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  margin-bottom: 0.5rem;
+  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.01em;
 }
 
 .mode-card p {
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  color: #888;
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
+  color: var(--muted);
+  text-align: center;
+  max-width: 80%;
+  line-height: 1.5;
 }
 
+.mode-card:hover h2,
+.mode-card.gazing h2 {
+  color: white;
+}
+.mode-card:hover p,
+.mode-card.gazing p {
+  color: rgba(255,255,255,0.8);
+}
+
+/* ──────────────────────────────────────────
+   Dwell Interaction (Teal Progress)
+   ────────────────────────────────────────── */
 .mode-card .dwell-bar {
-  background: #333;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: transparent;
+  z-index: 10;
 }
 
 .mode-card .dwell-fill {
-  background: #f59e0b;
+  height: 100%;
+  width: 0%;
+  background: var(--accent); /* Teal fill */
+  box-shadow: 0 0 10px var(--accent);
+  transition: width 0.1s linear;
 }
 
+/* ──────────────────────────────────────────
+   Mobile Responsiveness
+   ────────────────────────────────────────── */
 @media (max-width: 768px) {
+  .header {
+    margin-bottom: 1.5rem;
+  }
+  
   .modes-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(4, 1fr);
+    /* Auto rows instead of fixed split */
+    grid-template-rows: repeat(auto-fit, minmax(140px, 1fr)); 
+    padding-left: 0; /* Reset previous padding */
+    gap: 1rem;
+    max-width: 100%;
+  }
+  
+  .mode-card {
+    flex-direction: row; /* Horizontal cards on mobile */
+    justify-content: flex-start;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    text-align: left;
+  }
+  
+  .mode-icon {
+    margin-bottom: 0;
+    font-size: 3rem;
+  }
+  
+  .mode-card p {
+    text-align: left;
+    margin: 0;
+  }
+  
+  /* Text container for horizontal layout */
+  .mode-card-content {
+    display: flex;
+    flex-direction: column;
   }
 }
