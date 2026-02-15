@@ -3,7 +3,6 @@ console.log('[practice] Script loaded');
 document.addEventListener('DOMContentLoaded', function () {
   console.log('[practice] DOM ready');
 
-  /* ── Screens ── */
   var selectScreen = document.getElementById('select-screen');
   var modeScreen = document.getElementById('mode-screen');
   var flashcardScreen = document.getElementById('flashcard-screen');
@@ -14,17 +13,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var allScreens = [selectScreen, modeScreen, flashcardScreen, quizScreen, matchScreen, writeScreen, resultsScreen];
 
-  /* ── State ── */
   var activeDwellButtons = [];
   var allSets = [];
   var currentSet = null;
   var currentMode = null;
 
-  /* Flashcard state */
   var fcIndex = 0;
   var fcFlipped = false;
 
-  /* Quiz state */
   var qzCards = [];
   var qzIndex = 0;
   var qzScore = 0;
@@ -33,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var qzDwellStart = 0;
   var QZ_DWELL = 1800;
 
-  /* Match state */
   var mtPairs = [];
   var mtTiles = [];
   var mtSelected = null;
@@ -45,13 +40,11 @@ document.addEventListener('DOMContentLoaded', function () {
   var mtDwellStart = 0;
   var MT_DWELL = 1500;
 
-  /* Write state */
   var wrCards = [];
   var wrIndex = 0;
   var wrScore = 0;
   var wrAnswered = false;
 
-  /* ── Helpers ── */
   function showScreen(screen) {
     allScreens.forEach(function (s) { s.classList.remove('active'); });
     screen.classList.add('active');
@@ -96,9 +89,6 @@ document.addEventListener('DOMContentLoaded', function () {
     return d.innerHTML;
   }
 
-  /* ═══════════════════════════════════════
-     DWELL BUTTON WIRING
-     ═══════════════════════════════════════ */
   function rebuildDwellButtons() {
     var homeBtn = document.getElementById('home-btn');
     var calibrateBtn = document.getElementById('calibrate-btn');
@@ -108,7 +98,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (calibrateBtn)
       activeDwellButtons.push(new DwellButton(calibrateBtn, 1500, function () { forceRecalibrate(); }));
 
-    /* Select screen */
     if (selectScreen.classList.contains('active')) {
       var emptyCta = document.getElementById('empty-create-btn');
       if (emptyCta && document.getElementById('select-empty').style.display !== 'none')
@@ -119,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    /* Mode screen */
     if (modeScreen.classList.contains('active')) {
       document.querySelectorAll('.mode-card').forEach(function (card) {
         activeDwellButtons.push(new DwellButton(card, 1500, function () { startMode(card.dataset.mode); }));
@@ -129,7 +117,6 @@ document.addEventListener('DOMContentLoaded', function () {
         activeDwellButtons.push(new DwellButton(modeBack, 1500, function () { showScreen(selectScreen); }));
     }
 
-    /* Flashcard screen */
     if (flashcardScreen.classList.contains('active')) {
       var prevBtn = document.getElementById('fc-prev-btn');
       var flipBtn = document.getElementById('fc-flip-btn');
@@ -142,7 +129,6 @@ document.addEventListener('DOMContentLoaded', function () {
       if (exitBtn) activeDwellButtons.push(new DwellButton(exitBtn, 1500, function () { showScreen(modeScreen); }));
     }
 
-    /* Quiz screen */
     if (quizScreen.classList.contains('active')) {
       var qzExit = document.getElementById('qz-exit-btn');
       if (qzExit) activeDwellButtons.push(new DwellButton(qzExit, 1500, function () { showScreen(modeScreen); }));
@@ -153,13 +139,11 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
 
-    /* Match screen */
     if (matchScreen.classList.contains('active')) {
       var mtExit = document.getElementById('mt-exit-btn');
       if (mtExit) activeDwellButtons.push(new DwellButton(mtExit, 1500, function () { clearInterval(mtTimerInterval); showScreen(modeScreen); }));
     }
 
-    /* Write screen */
     if (writeScreen.classList.contains('active')) {
       var wrSubmit = document.getElementById('wr-submit-btn');
       var wrExit = document.getElementById('wr-exit-btn');
@@ -172,7 +156,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
 
-    /* Results screen */
     if (resultsScreen.classList.contains('active')) {
       var retryBtn = document.getElementById('results-retry-btn');
       var modesBtn = document.getElementById('results-modes-btn');
@@ -184,15 +167,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  /* ═══════════════════════════════════════
-     LOAD SETS
-     ═══════════════════════════════════════ */
   function loadSets() {
     var loading = document.getElementById('select-loading');
     var empty = document.getElementById('select-empty');
     var grid = document.getElementById('select-grid');
 
-    /* Check for ?set= query param */
     var urlParams = new URLSearchParams(window.location.search);
     var preselectedSetId = urlParams.get('set');
 
@@ -209,7 +188,6 @@ document.addEventListener('DOMContentLoaded', function () {
           return;
         }
 
-        /* If preselected, jump straight to mode select */
         if (preselectedSetId) {
           var found = false;
           for (var i = 0; i < allSets.length; i++) {
@@ -281,9 +259,6 @@ document.addEventListener('DOMContentLoaded', function () {
     showScreen(modeScreen);
   }
 
-  /* ═══════════════════════════════════════
-     MODE DISPATCH
-     ═══════════════════════════════════════ */
   function startMode(mode) {
     currentMode = mode;
     if (mode === 'flashcards') startFlashcards();
@@ -292,16 +267,12 @@ document.addEventListener('DOMContentLoaded', function () {
     else if (mode === 'write') startWrite();
   }
 
-  /* Click handlers for mode cards */
   document.querySelectorAll('.mode-card').forEach(function (card) {
     card.addEventListener('click', function () { startMode(card.dataset.mode); });
   });
 
   document.getElementById('mode-back-btn').addEventListener('click', function () { showScreen(selectScreen); });
 
-  /* ═══════════════════════════════════════
-     FLASHCARDS
-     ═══════════════════════════════════════ */
   function startFlashcards() {
     fcIndex = 0;
     fcFlipped = false;
@@ -352,9 +323,6 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('fc-exit-btn').addEventListener('click', function () { showScreen(modeScreen); });
   document.getElementById('fc-card').addEventListener('click', fcFlip);
 
-  /* ═══════════════════════════════════════
-     QUIZ MODE
-     ═══════════════════════════════════════ */
   function startQuiz() {
     qzCards = shuffleArray(currentSet.cards.slice());
     qzIndex = 0;
@@ -375,7 +343,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('qz-question').textContent = 'What is the definition of "' + card.term + '"?';
     document.getElementById('qz-feedback').style.display = 'none';
 
-    /* Build options */
     var wrongCards = currentSet.cards.filter(function (c) { return c.term !== card.term; });
     wrongCards = shuffleArray(wrongCards).slice(0, 3);
     var options = shuffleArray([card].concat(wrongCards));
@@ -404,33 +371,76 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function qzSelectAnswer(btn) {
-    qzAnswered = true;
-    var isCorrect = btn.dataset.correct === 'true';
-    if (isCorrect) qzScore++;
+  qzAnswered = true;
+  var isCorrect = btn.dataset.correct === 'true';
+  if (isCorrect) qzScore++;
 
-    var allOpts = document.querySelectorAll('.qz-option');
-    allOpts.forEach(function (opt) {
-      opt.classList.remove('gazing');
-      if (opt.dataset.correct === 'true') opt.classList.add('correct');
-    });
-    if (!isCorrect) btn.classList.add('wrong');
+  var allOpts = document.querySelectorAll('.qz-option');
+  allOpts.forEach(function (opt) {
+    opt.classList.remove('gazing');
+    if (opt.dataset.correct === 'true') opt.classList.add('correct');
+  });
+  if (!isCorrect) btn.classList.add('wrong');
 
-    var feedback = document.getElementById('qz-feedback');
-    feedback.style.display = 'block';
-    document.getElementById('qz-feedback-text').textContent = isCorrect ? '✅ Correct!' : '❌ Wrong!';
+  document.getElementById('qz-options').classList.add('compact');
 
-    var correctCard = qzCards[qzIndex];
-    document.getElementById('qz-explanation').textContent = correctCard.term + ' = ' + correctCard.definition;
+  var feedback = document.getElementById('qz-feedback');
+  feedback.style.display = 'block';
+  document.getElementById('qz-feedback-text').textContent = isCorrect ? '✅ Correct!' : '❌ Wrong!';
+
+  var correctCard = qzCards[qzIndex];
+  document.getElementById('qz-explanation').textContent = correctCard.term + ' = ' + correctCard.definition;
+  document.getElementById('qz-score').textContent = 'Score: ' + qzScore;
+
+  var nextBtn = document.getElementById('qz-next-btn');
+  nextBtn.querySelector('span').textContent = qzIndex >= qzCards.length - 1 ? 'See Results →' : 'Next →';
+
+  activeDwellButtons = [];
+  rebuildDwellButtons();
+}
+
+  function loadQuizQuestion() {
+    qzAnswered = false;
+    qzDwellTarget = null;
+    qzDwellStart = 0;
+
+    document.getElementById('qz-options').classList.remove('compact');
+
+    var card = qzCards[qzIndex];
+    document.getElementById('qz-counter').textContent = 'Question ' + (qzIndex + 1) + ' / ' + qzCards.length;
     document.getElementById('qz-score').textContent = 'Score: ' + qzScore;
+    document.getElementById('qz-question').textContent = 'What is the definition of "' + card.term + '"?';
+    document.getElementById('qz-feedback').style.display = 'none';
 
-    var nextBtn = document.getElementById('qz-next-btn');
-    nextBtn.querySelector('span').textContent = qzIndex >= qzCards.length - 1 ? 'See Results →' : 'Next →';
+    var wrongCards = currentSet.cards.filter(function (c) { return c.term !== card.term; });
+    wrongCards = shuffleArray(wrongCards).slice(0, 3);
+    var options = shuffleArray([card].concat(wrongCards));
+
+    var container = document.getElementById('qz-options');
+    container.innerHTML = '';
+
+    options.forEach(function (opt, i) {
+      var btn = document.createElement('button');
+      btn.className = 'qz-option';
+      btn.dataset.index = i;
+      btn.dataset.correct = (opt.term === card.term) ? 'true' : 'false';
+      btn.innerHTML =
+        '<span>' + escapeHtml(opt.definition) + '</span>' +
+        '<div class="dwell-bar"><div class="dwell-fill"></div></div>';
+
+      btn.addEventListener('click', function () {
+        if (!qzAnswered) qzSelectAnswer(btn);
+      });
+
+      container.appendChild(btn);
+    });
 
     activeDwellButtons = [];
     rebuildDwellButtons();
   }
 
   function qzNextQuestion() {
+    document.getElementById('qz-options').classList.remove('compact');
     if (qzIndex >= qzCards.length - 1) {
       showResults('quiz', { score: qzScore, total: qzCards.length });
     } else {
@@ -442,7 +452,6 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('qz-next-btn').addEventListener('click', function () { qzNextQuestion(); });
   document.getElementById('qz-exit-btn').addEventListener('click', function () { showScreen(modeScreen); });
 
-  /* Quiz gaze handler */
   function handleQuizGaze(x, y) {
     if (qzAnswered) return;
 
@@ -479,15 +488,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  /* ═══════════════════════════════════════
-     MATCH MODE
-     ═══════════════════════════════════════ */
   function startMatch() {
     clearInterval(mtTimerInterval);
     mtSelected = null;
     mtMatched = 0;
 
-    /* Use up to 6 cards */
     var cards = shuffleArray(currentSet.cards.slice()).slice(0, 6);
     mtTotal = cards.length;
     mtPairs = [];
@@ -541,14 +546,12 @@ document.addEventListener('DOMContentLoaded', function () {
       tile.classList.remove('selected');
       mtSelected = null;
     } else {
-      /* Check match */
       var id1 = mtSelected.dataset.pairId;
       var id2 = tile.dataset.pairId;
       var type1 = mtSelected.dataset.type;
       var type2 = tile.dataset.type;
 
       if (id1 === id2 && type1 !== type2) {
-        /* Match! */
         mtSelected.classList.remove('selected');
         mtSelected.classList.add('matched');
         tile.classList.add('matched');
@@ -563,7 +566,6 @@ document.addEventListener('DOMContentLoaded', function () {
           }, 800);
         }
       } else {
-        /* No match */
         var prev = mtSelected;
         prev.classList.remove('selected');
         prev.classList.add('wrong-match');
@@ -578,7 +580,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  /* Match gaze handler */
   function handleMatchGaze(x, y) {
     var tiles = document.querySelectorAll('.mt-tile:not(.matched)');
     var gazedTile = null;
@@ -620,9 +621,6 @@ document.addEventListener('DOMContentLoaded', function () {
     showScreen(modeScreen);
   });
 
-  /* ═══════════════════════════════════════
-     WRITE MODE
-     ═══════════════════════════════════════ */
   function startWrite() {
     wrCards = shuffleArray(currentSet.cards.slice());
     wrIndex = 0;
@@ -643,7 +641,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('wr-feedback').style.display = 'none';
     document.getElementById('wr-submit-btn').style.display = '';
 
-    // Reset voiceSystem so it doesn't carry over old text
     if (typeof voiceSystem !== 'undefined') {
       voiceSystem.existingText = '';
     }
@@ -651,7 +648,6 @@ document.addEventListener('DOMContentLoaded', function () {
     activeDwellButtons = [];
     rebuildDwellButtons();
 
-    // Auto-start voice after card renders
     setTimeout(function () {
       if (!wrAnswered && writeScreen.classList.contains('active')) {
         wrStartVoice();
@@ -659,7 +655,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 600);
   }
 
-  // NEW FUNCTION — add this alongside the other write functions
   function wrStartVoice() {
     if (wrAnswered) return;
     if (typeof switchToFieldMode !== 'function') return;
@@ -667,13 +662,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var wrapper = document.getElementById('wr-input-wrapper');
     if (!wrapper) return;
 
-    // Clear old text so voice starts fresh
     var input = document.getElementById('wr-input');
     if (input) input.value = '';
     if (typeof voiceSystem !== 'undefined') voiceSystem.existingText = '';
 
     switchToFieldMode(wrapper, function () {
-      // Fired when user says "EyeQ done"
       var answer = document.getElementById('wr-input').value.trim();
       if (answer && !wrAnswered) {
         wrCheckAnswer();
@@ -688,11 +681,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var rect = input.getBoundingClientRect();
     var pad = 60;
     var inside = x >= rect.left - pad && x <= rect.right + pad &&
-                 y >= rect.top - pad && y <= rect.bottom + pad;
+                y >= rect.top - pad && y <= rect.bottom + pad;
 
     if (inside) {
       input.classList.add('gazing');
-      // Re-activate voice if it stopped
       if (typeof voiceSystem !== 'undefined' && voiceSystem.mode !== 'field') {
         wrStartVoice();
       }
@@ -702,9 +694,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function wrCheckAnswer() {
+    if (wrAnswered) return;
     wrAnswered = true;
 
-    // Stop voice when answer is submitted
     if (typeof switchToGlobalMode === 'function') switchToGlobalMode();
 
     var card = wrCards[wrIndex];
@@ -749,9 +741,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  /* ═══════════════════════════════════════
-     RESULTS
-     ═══════════════════════════════════════ */
+  document.getElementById('wr-submit-btn').addEventListener('click', function () {
+    if (!wrAnswered) wrCheckAnswer();
+  });
+
+  document.getElementById('wr-next-btn').addEventListener('click', function () {
+    wrNextCard();
+  });
+
+  document.getElementById('wr-exit-btn').addEventListener('click', function () {
+    if (typeof switchToGlobalMode === 'function') switchToGlobalMode();
+    showScreen(modeScreen);
+  });
+
+  document.getElementById('wr-input-wrapper').addEventListener('click', function () {
+    if (!wrAnswered) wrStartVoice();
+  });
+
   function showResults(mode, data) {
     showScreen(resultsScreen);
 
@@ -791,14 +797,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('results-details').textContent = details;
   }
 
-  /* Results click handlers */
   document.getElementById('results-retry-btn').addEventListener('click', function () { startMode(currentMode); });
   document.getElementById('results-modes-btn').addEventListener('click', function () { showScreen(modeScreen); });
   document.getElementById('results-sets-btn').addEventListener('click', function () { showScreen(selectScreen); });
 
-  /* ═══════════════════════════════════════
-     GAZE + SCROLL
-     ═══════════════════════════════════════ */
   function handleScrollGaze(x, y) {
     var grid = document.getElementById('select-grid');
     if (grid && grid.offsetParent !== null) {
@@ -824,9 +826,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  /* ═══════════════════════════════════════
-     BOOT
-     ═══════════════════════════════════════ */
   loadSets();
   bootWebGazer();
 });

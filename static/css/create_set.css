@@ -1,6 +1,5 @@
 :root{
-  /* Dark UI base */
-  --cs-bg: rgba(10, 12, 16, 0.0); /* page uses base background; keep transparent here */
+  --cs-bg: rgba(10, 12, 16, 0.0);
   --cs-surfaceTop: rgba(255,255,255,0.040);
   --cs-surfaceBot: rgba(255,255,255,0.020);
 
@@ -11,11 +10,9 @@
   --cs-muted: rgba(255,255,255,0.95);
   --cs-muted2: rgba(255, 255, 255, 0.977);
 
-  /* Keep your greens */
   --cs-green: #84A98C;
   --cs-greenDark: #52796F;
 
-  /* Teal accent glow (for gaze/hover state like reference) */
   --cs-accent: #18f0a6;
   --cs-accentGlow: rgba(24,240,166,0.25);
   --cs-accentGlow2: rgba(24,240,166,0.12);
@@ -24,13 +21,11 @@
   --cs-radiusBtn: 18px;
 }
 
-/* Keep layout behavior */
 body{
   height: 100vh;
   overflow: hidden;
 }
 
-/* ── Layout ── */
 .create-container{
   display:flex;
   flex-direction:column;
@@ -54,7 +49,6 @@ body{
   color: var(--cs-text);
 }
 
-/* ── Title Section ── */
 .title-section{
   display:flex;
   gap: 1rem;
@@ -163,7 +157,6 @@ body{
     0 0 18px var(--cs-accentGlow);
 }
 
-/* ── Scrollable Cards Area ── */
 .cards-wrapper{
   flex:1;
   overflow-y:auto;
@@ -176,7 +169,6 @@ body{
   margin-top: 0;
 }
 
-/* darker, subtler scrollbar */
 .cards-wrapper::-webkit-scrollbar{ width: 0.55rem; }
 .cards-wrapper::-webkit-scrollbar-track{
   background: rgba(255,255,255,0.04);
@@ -190,7 +182,6 @@ body{
   background: rgba(24,240,166,0.45);
 }
 
-/* ── Card Entry ── */
 .card-entry{
   background: linear-gradient(180deg, var(--cs-surfaceTop), var(--cs-surfaceBot));
   border: 1px solid var(--cs-border);
@@ -223,7 +214,6 @@ body{
   box-shadow: 0 0 20px rgba(24,240,166,0.10);
 }
 
-/* Number badge: keep green but more “chip” */
 .card-number{
   display:flex;
   align-items:center;
@@ -270,7 +260,6 @@ body{
   position: relative;
 }
 
-/* Textareas: dark glass fields */
 .field-group textarea{
   min-height: 4.5rem;
   padding: 1rem 1.1rem;
@@ -351,7 +340,6 @@ body{
     0 0 18px var(--cs-accentGlow);
 }
 
-/* Dwell on delete: full wash fill (matches new style) */
 .delete-card-btn .dwell-bar{
   position:absolute;
   inset:0;
@@ -365,7 +353,6 @@ body{
   transition: width 0.1s linear;
 }
 
-/* ── Action Bar ── */
 .action-bar{
   display:flex;
   align-items:center;
@@ -380,7 +367,6 @@ body{
   margin:0 auto;
 }
 
-/* Action buttons become “primary cards” with green preserved */
 .action-btn{
   display:flex;
   align-items:center;
@@ -407,7 +393,6 @@ body{
   backdrop-filter: blur(12px);
 }
 
-/* Keep your green buttons but make them “glass green” */
 .add-btn,
 .save-btn{
   background: linear-gradient(180deg, rgba(82,121,111,0.55), rgba(82,121,111,0.28));
@@ -427,7 +412,6 @@ body{
     0 0 50px var(--cs-accentGlow2);
 }
 
-/* Dwell on action buttons: wash fill */
 .action-btn .dwell-bar{
   position:absolute;
   inset:0;
@@ -454,13 +438,11 @@ body{
   transition: width 0.1s linear;
 }
 
-/* Make sure text stays above dwell fill */
 .action-btn > *{ position: relative; z-index: 1; }
 
 .action-icon{ font-size: 1.5rem; opacity: 0.9; }
 .action-label{ white-space: nowrap; }
 
-/* Card count: muted label style */
 .card-count{
   color: var(--cs-muted2);
   font-size: 1.05rem;
@@ -471,7 +453,6 @@ body{
   letter-spacing: 0.02em;
 }
 
-/* ── Toast ── */
 .toast{
   position: fixed;
   bottom: -5rem;
@@ -502,7 +483,6 @@ body{
   border-color: rgba(132,169,140,0.30);
 }
 
-/* ── Responsive ── */
 @media (max-width: 768px){
   .title-section{ flex-direction: column; }
   .card-fields{ flex-direction: column; }

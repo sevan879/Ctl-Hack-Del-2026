@@ -1,6 +1,3 @@
-/* ──────────────────────────────────────────
-   Theme variables (Target Style)
-   ────────────────────────────────────────── */
 :root {
   --bg0: #050608;
   --bg1: #070a0f;
@@ -15,7 +12,7 @@
   --muted: rgba(255, 255, 255, 0.52);
   --muted2: rgba(255, 255, 255, 0.40);
 
-  --accent: #18f0a6; /* teal/green */
+  --accent: #18f0a6;
   --accentGlow: rgba(24, 240, 166, 0.25);
   --accentGlow2: rgba(24, 240, 166, 0.12);
 
@@ -23,9 +20,6 @@
   --radiusBtn: 18px;
 }
 
-/* ──────────────────────────────────────────
-   Base reset
-   ────────────────────────────────────────── */
 * {
   margin: 0;
   padding: 0;
@@ -49,7 +43,6 @@ body {
   letter-spacing: 0.01em;
 }
 
-/* Soft vignette overlay */
 body::before {
   content: "";
   position: fixed;
@@ -60,9 +53,6 @@ body::before {
   z-index: -1;
 }
 
-/* ──────────────────────────────────────────
-   Typography
-   ────────────────────────────────────────── */
 h1 {
   font-size: clamp(2.4rem, 5vw, 3.6rem);
   font-weight: 800;
@@ -91,9 +81,6 @@ p {
   font-size: 1.05rem;
 }
 
-/* ──────────────────────────────────────────
-   Inputs
-   ────────────────────────────────────────── */
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -120,9 +107,6 @@ select:focus {
   background: rgba(255, 255, 255, 0.04);
 }
 
-/* ──────────────────────────────────────────
-   Buttons as “Cards”
-   Restored Original exclusions: .mode-card, .big-btn, .qz-option
    ────────────────────────────────────────── */
 button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-btn):not(#cal-skip-btn):not(.mode-card):not(.big-btn):not(.qz-option) {
   padding: 1.25rem 2rem;
@@ -140,14 +124,12 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
   backdrop-filter: blur(10px);
 }
 
-/* Hover State */
 button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-btn):not(#cal-skip-btn):not(.mode-card):not(.big-btn):not(.qz-option):hover {
   transform: translateY(-2px);
   border-color: rgba(255, 255, 255, 0.14);
   color: rgba(255, 255, 255, 0.80);
 }
 
-/* Gazing / Active State */
 button.gazing,
 button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-btn):not(#cal-skip-btn):not(.mode-card):not(.big-btn):not(.qz-option).gazing {
   border-color: rgba(24, 240, 166, 0.75);
@@ -159,16 +141,12 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
     0 0 50px var(--accentGlow2);
 }
 
-/* Disabled State */
 button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-btn):not(#cal-skip-btn):not(.mode-card):not(.big-btn):not(.qz-option):disabled {
   opacity: 0.45;
   cursor: not-allowed;
   transform: none;
 }
 
-/* ──────────────────────────────────────────
-   Home / Calibrate fixed buttons
-   ────────────────────────────────────────── */
 .home-button,
 .calibrate-btn {
   position: fixed;
@@ -224,9 +202,6 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
   white-space: nowrap;
 }
 
-/* ──────────────────────────────────────────
-   Dwell UI (Interaction Feedback)
-   ────────────────────────────────────────── */
 .home-button .dwell-bar,
 .calibrate-btn .dwell-bar,
 button .dwell-bar {
@@ -247,7 +222,6 @@ button .dwell-fill {
   filter: blur(0px);
 }
 
-/* Ensure text/icon stays above the fill */
 .home-button > *, 
 .calibrate-btn > *,
 button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-btn):not(#cal-skip-btn):not(.mode-card):not(.big-btn):not(.qz-option) > * {
@@ -255,9 +229,6 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
   z-index: 1;
 }
 
-/* ──────────────────────────────────────────
-   Gaze Pointer
-   ────────────────────────────────────────── */
 #gaze-dot {
   position: fixed;
   width: 14px;
@@ -267,16 +238,12 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
   pointer-events: none;
   z-index: 99999;
   transform: translate(-50%, -50%);
-  transition: left 0.08s ease-out, top 0.08s ease-out;
   display: none;
   box-shadow:
     0 0 0 6px rgba(24, 240, 166, 0.12),
     0 0 18px rgba(24, 240, 166, 0.25);
 }
 
-/* ──────────────────────────────────────────
-   Calibration Overlay
-   ────────────────────────────────────────── */
 #cal-overlay {
   position: fixed;
   inset: 0;
@@ -385,7 +352,7 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
 }
 
 #cal-skip-btn {
-  display: flex !important; /* Force flex for alignment if hidden by default logic */
+  display: flex !important;
   position: fixed;
   bottom: 2rem;
   right: 2rem;
@@ -399,7 +366,6 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
   z-index: 10003;
   transition: border-color .25s ease, color .25s ease, box-shadow .25s ease;
   backdrop-filter: blur(10px);
-  /* Reset from original logic if needed */
   left: auto;
   transform: none; 
 }
@@ -418,15 +384,9 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
 }
 
 #cal-skip-btn .dwell-fill {
-  background: #ef4444; /* Keep red for skip/cancel actions if desired, or use --accent */
+  background: #ef4444;
 }
 
-/* ──────────────────────────────────────────
-   WebGazer elements
-   Adapted to target #webgazer-cam-wrapper (Original ID) 
-   but using the Target Visuals (glassmorphism/preview style)
-   ────────────────────────────────────────── */
-/* Hide WebGazer elements by default — only visible inside wrapper */
 #webgazerVideoFeed,
 #webgazerVideoCanvas,
 #webgazerFaceOverlay,
@@ -439,7 +399,6 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
   left: auto !important;
 }
 
-/* Webcam + face-mesh wrapper */
 #webgazer-cam-wrapper {
   position: fixed !important;
   bottom: 16px !important;
@@ -454,7 +413,6 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
   background: rgba(5, 6, 8, 0.6);
 }
 
-/* Video feed fills the wrapper */
 #webgazer-cam-wrapper #webgazerVideoFeed {
   visibility: visible !important;
   position: absolute !important;
@@ -467,8 +425,6 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
   z-index: 1 !important;
 }
 
-/* Canvas overlays must NOT use object-fit (breaks coordinate mapping).
-   Instead stretch via width/height to match the wrapper exactly. */
 #webgazer-cam-wrapper #webgazerVideoCanvas,
 #webgazer-cam-wrapper #webgazerFaceOverlay {
   visibility: visible !important;
@@ -489,9 +445,6 @@ button:not(.calibrate-btn):not(.home-button):not(.modal-close):not(.delete-card-
   display: none !important;
 }
 
-/* ──────────────────────────────────────────
-   Material Symbols Icons
-   ────────────────────────────────────────── */
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
   font-weight: normal;

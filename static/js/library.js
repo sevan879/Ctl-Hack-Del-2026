@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var allSets = [];
   var activeSetId = null;
 
-  /* ── Helpers ── */
   function formatDate(iso) {
     try {
       return new Date(iso).toLocaleDateString('en-US', {
@@ -64,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(function () { toast.classList.remove('show'); }, 3500);
   }
 
-  /* ── Fetch & Render ── */
   function loadSets() {
     console.log('[library] Fetching /api/sets...');
 
@@ -140,7 +138,6 @@ document.addEventListener('DOMContentLoaded', function () {
     setsGrid.appendChild(createCard);
   }
 
-  /* ── Set Detail Modal ── */
   function openSetModal(setId) {
     var set = null;
     for (var i = 0; i < allSets.length; i++) {
@@ -229,7 +226,6 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   }
 
-  /* ── Gaze scroll ── */
   function handleScrollGaze(x, y) {
     var containers = [setsGrid, document.getElementById('modal-cards-list')];
     containers.forEach(function (el) {
@@ -243,7 +239,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ── Dwell Wiring ── */
   function rebuildDwellButtons() {
     activeDwellButtons.forEach(function (b) { b.reset(); });
     activeDwellButtons = [];
@@ -302,7 +297,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  /* ── Click handlers ── */
   var modalCloseBtn = document.getElementById('modal-close-btn');
   var modalDeleteBtn = document.getElementById('modal-delete-btn');
   var confirmYesBtn = document.getElementById('confirm-yes-btn');
@@ -324,7 +318,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ── Register gaze callback ── */
   onGaze(function (x, y) {
     handleScrollGaze(x, y);
     activeDwellButtons.forEach(function (b) { b.update(x, y); });
@@ -334,7 +327,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  /* ── Init ── */
   console.log('[library] Loading sets...');
   loadSets();
 

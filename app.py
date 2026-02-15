@@ -13,7 +13,6 @@ CORS(app)
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-# ── Study-set persistence (JSON file) ──
 SETS_FILE = os.path.join(os.path.dirname(__file__), 'study_sets.json')
 
 
@@ -29,7 +28,6 @@ def save_all_sets(sets):
         json.dump(sets, f, indent=2)
 
 
-# ── Page routes ──
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -65,7 +63,6 @@ def review():
     return render_template('review.html')
 
 
-# ── Quiz API ──
 @app.route('/api/generate-quiz', methods=['POST'])
 def generate_quiz():
     try:
@@ -117,7 +114,6 @@ Make sure "correct" is the index (0-3) of the right answer in the options array.
         return jsonify({"error": str(e)}), 500
 
 
-# ── Study-set CRUD API ──
 @app.route('/api/sets', methods=['POST'])
 def create_set_api():
     try:

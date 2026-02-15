@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   onGaze(function (x, y) {
-    console.log('onGaze called:', x, y); // ADD THIS
+    console.log('onGaze called:', x, y);
     if (typeof guidedTour !== 'undefined' && guidedTour.active) return;
     handleGaze(x, y);
     activeDwellButtons.forEach(function (b) { b.update(x, y); });

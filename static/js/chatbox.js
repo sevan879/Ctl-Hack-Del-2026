@@ -11,7 +11,7 @@
   var chatHistory = [];
   var chatDwellButtons = [];
   var chatSilenceTimer = null;
-  var CHAT_SILENCE_DELAY = 2000; // 2 seconds of silence before auto-send
+  var CHAT_SILENCE_DELAY = 2000;
 
   function escapeHtml(text) {
     var div = document.createElement('div');
@@ -66,7 +66,6 @@
         addMessage(botReply, 'bot');
         chatHistory.push({ role: 'assistant', content: botReply });
         
-        // CRITICAL: Restart listening for the next message
         setTimeout(function() {
           if (chatOpen && textInput) {
             textInput.value = '';
@@ -78,8 +77,7 @@
       .catch(function () {
         removeTypingIndicator();
         addMessage('Sorry, something went wrong. Try again!', 'bot');
-        
-        // CRITICAL: Restart listening even on error
+
         setTimeout(function() {
           if (chatOpen && textInput) {
             textInput.value = '';
@@ -112,12 +110,10 @@
     chatDwellButtons.forEach(function (b) { b.reset(); });
     chatDwellButtons = [];
     stopChatListening();
-    
-    // CRITICAL: Clear the text input when closing
+
     if (textInput) {
       textInput.value = '';
     }
-    // CRITICAL: Clear voiceSystem existingText
     voiceSystem.existingText = '';
   }
 
@@ -126,17 +122,15 @@
     
     var wrapper = textInput.parentElement;
     
-    // Clear any existing text before starting
     textInput.value = '';
     voiceSystem.existingText = '';
     
-    switchToFieldMode(wrapper, function() {
-      // On completion, send the message
+    switchToFieldMode(wrapper, function() {e
       var msg = textInput.value.trim();
       if (msg) {
         sendChatMessage(msg);
         textInput.value = '';
-        voiceSystem.existingText = ''; // Clear for next message
+        voiceSystem.existingText = '';
       }
     });
   }
@@ -189,20 +183,17 @@
       }
     });
 
-    // Monitor input changes for auto-send after silence
     var lastValue = '';
     setInterval(function() {
       if (!chatOpen) return;
       
       var currentValue = textInput.value.trim();
-      
-      // If value changed, reset silence timer
+
       if (currentValue !== lastValue) {
         lastValue = currentValue;
         
         if (chatSilenceTimer) clearTimeout(chatSilenceTimer);
-        
-        // Set new timer to auto-send after silence
+
         if (currentValue) {
           chatSilenceTimer = setTimeout(function() {
             if (textInput.value.trim()) {
@@ -223,7 +214,6 @@
 
   initTriggerDwell();
 
-  // Register chatbot buttons globally
   window.updateChatbotDwell = function(x, y) {
     if (triggerDwell && !chatOpen) {
       triggerDwell.update(x, y);

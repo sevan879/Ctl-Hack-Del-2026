@@ -17,25 +17,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ---- Groq setup ----
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 
-# ---- Request/Response models ----
 class QuizRequest(BaseModel):
     topic: str
-    difficulty: str = "medium"     # easy, medium, hard
+    difficulty: str = "medium"
     num_questions: int = 3
 
 
 class AnswerSubmit(BaseModel):
     question_index: int
     selected_option: int
-    dwell_time_ms: int             # how long they stared before selecting
-    time_to_answer_ms: int         # total time on that question
+    dwell_time_ms: int
+    time_to_answer_ms: int
 
-
-# ---- Routes ----
 @app.post("/api/generate-quiz")
 async def generate_quiz(req: QuizRequest):
     prompt = f"""Generate {req.num_questions} multiple choice questions about: {req.topic}
@@ -68,10 +64,9 @@ Make sure "correct" is the index (0-3) of the right answer in the options array.
 
         raw = response.choices[0].message.content.strip()
 
-        # Clean up: sometimes the model wraps in ```json blocks
         if raw.startswith("```"):
-            raw = raw.split("\n", 1)[1]  # remove first line
-            raw = raw.rsplit("```", 1)[0]  # remove last ```
+            raw = raw.split("\n", 1)[1]
+            raw = raw.rsplit("```", 1)[0]
 
         questions = json.loads(raw)
         return {"questions": questions}
@@ -81,6 +76,4 @@ Make sure "correct" is the index (0-3) of the right answer in the options array.
     except Exception as e:
         raise HTTPException(500, str(e))
 
-
-# Serve frontend
 app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")

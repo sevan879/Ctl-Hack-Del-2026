@@ -1,15 +1,11 @@
-/* ──────────────────────────────────────────
-   Chatbox Panel (Glassmorphism Sidebar)
-   ────────────────────────────────────────── */
 .chatbox-panel {
   position: fixed;
   right: 0;
   top: 0;
   width: 32rem;
   height: 100vh;
-  
-  /* Glass dark theme */
-  background: rgba(5, 6, 8, 0.85); /* Dark semi-transparent */
+
+  background: rgba(5, 6, 8, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-left: 1px solid var(--cardBorder);
@@ -31,9 +27,6 @@
   pointer-events: all;
 }
 
-/* ──────────────────────────────────────────
-   Header & Controls
-   ────────────────────────────────────────── */
 .chatbox-header {
   display: flex;
   justify-content: space-between;
@@ -52,7 +45,6 @@
   letter-spacing: -0.01em;
 }
 
-/* Close Button - Card Style */
 .chatbox-close-btn {
   width: 3.25rem;
   height: 3.25rem;
@@ -73,7 +65,7 @@
 
 .chatbox-close-btn:hover,
 .chatbox-close-btn.gazing {
-  background: rgba(239, 68, 68, 0.15); /* Red tint */
+  background: rgba(239, 68, 68, 0.15);
   border-color: rgba(239, 68, 68, 0.5);
   color: #fca5a5;
   box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
@@ -87,16 +79,13 @@
 }
 
 .chatbox-close-btn .dwell-fill {
-  background: #ef4444; /* Keep red for close action */
+  background: #ef4444;
   height: 100%;
   width: 0%;
   transition: width 0.1s linear;
   opacity: 0.3;
 }
 
-/* ──────────────────────────────────────────
-   Chat Trigger (Side Tab)
-   ────────────────────────────────────────── */
 .chatbox-trigger {
   position: fixed;
   right: 0;
@@ -104,8 +93,7 @@
   transform: translateY(-50%);
   width: 4.5rem;
   height: 20rem;
-  
-  /* Match Card Gradients */
+
   background: linear-gradient(180deg, var(--cardTop), var(--cardBottom));
   border: 1px solid var(--cardBorder);
   border-right: none;
@@ -127,7 +115,7 @@
 .chatbox-trigger:hover,
 .chatbox-trigger.gazing {
   width: 5.5rem;
-  border-color: var(--accent); /* Teal Border */
+  border-color: var(--accent);
   background: linear-gradient(180deg, rgba(24, 240, 166, 0.1), rgba(5, 6, 8, 0.9));
   box-shadow: -4px 0 30px var(--accentGlow);
 }
@@ -152,10 +140,9 @@
 .chatbox-trigger.gazing .chatbox-trigger-label,
 .chatbox-trigger:hover .chatbox-trigger-icon,
 .chatbox-trigger.gazing .chatbox-trigger-icon {
-  color: var(--accent); /* Teal Text */
+  color: var(--accent);
 }
 
-/* Dwell Bar for Trigger */
 .chatbox-trigger .dwell-bar {
   position: absolute;
   inset: 0;
@@ -164,9 +151,9 @@
 }
 
 .chatbox-trigger .dwell-fill {
-  background: linear-gradient(to top, var(--accent), transparent); /* Vertical fill for vertical bar */
+  background: linear-gradient(to top, var(--accent), transparent);
   width: 100%;
-  height: 0%; /* Fills vertically */
+  height: 0%;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -180,9 +167,6 @@
   transform: translateY(-50%) translateX(100%);
 }
 
-/* ──────────────────────────────────────────
-   Messages Area
-   ────────────────────────────────────────── */
 .chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -223,16 +207,14 @@
   backdrop-filter: blur(5px);
 }
 
-/* User Message: Teal tint */
 .chat-msg.user p {
-  background: rgba(24, 240, 166, 0.15); /* Accent tint */
+  background: rgba(24, 240, 166, 0.15);
   border: 1px solid rgba(24, 240, 166, 0.3);
   color: white;
   border-bottom-right-radius: 4px;
   box-shadow: 0 4px 15px rgba(24, 240, 166, 0.05);
 }
 
-/* Bot Message: Dark Card style */
 .chat-msg.bot p {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--cardBorder);
@@ -240,9 +222,6 @@
   border-bottom-left-radius: 4px;
 }
 
-/* ──────────────────────────────────────────
-   Input Area
-   ────────────────────────────────────────── */
 .chatbox-input-area {
   padding: 1.5rem;
   border-top: 1px solid var(--cardBorderSoft);
@@ -252,7 +231,7 @@
 
 .chat-status {
   font-size: 0.85rem;
-  color: var(--accent); /* Teal status text */
+  color: var(--accent);
   min-height: 1.25rem;
   margin-bottom: 0.5rem;
   font-style: normal;
@@ -265,8 +244,7 @@
   width: 100%;
   padding: 1.1rem 1.25rem;
   font-size: 1.1rem;
-  
-  /* Match generic inputs */
+
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--cardBorderSoft);
   border-radius: 16px;
@@ -288,9 +266,6 @@
   color: rgba(255, 255, 255, 0.3);
 }
 
-/* ──────────────────────────────────────────
-   Typing Animation
-   ────────────────────────────────────────── */
 .typing-dots {
   display: inline-flex;
   gap: 5px;
@@ -313,9 +288,6 @@
   30% { transform: translateY(-5px); opacity: 1; background: var(--accent); }
 }
 
-/* ──────────────────────────────────────────
-   Mobile
-   ────────────────────────────────────────── */
 @media (max-width: 768px) {
   .chatbox-panel {
     width: 100vw;

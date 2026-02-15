@@ -1,6 +1,3 @@
-/* ──────────────────────────────────────────
-   Theme Variables
-   ────────────────────────────────────────── */
 :root {
   --bg0: #050608;
   --bg1: #070a0f;
@@ -14,7 +11,7 @@
   --text: rgba(255,255,255,0.92);
   --muted: rgba(255,255,255,0.52);
 
-  --accent: #18f0a6; /* Teal */
+  --accent: #18f0a6;
   --accentGlow: rgba(24, 240, 166, 0.25);
   --accentGlow2: rgba(24, 240, 166, 0.12);
 
@@ -37,9 +34,6 @@ body {
   color: var(--text);
 }
 
-/* ──────────────────────────────────────────
-   Screens Layout
-   ────────────────────────────────────────── */
 .screen { 
   display: none; 
   padding: 1.5rem;
@@ -60,9 +54,6 @@ body {
   z-index: 1;
 }
 
-/* ──────────────────────────────────────────
-   Start Screen
-   ────────────────────────────────────────── */
 #start-screen {
   gap: 0.5rem;
   justify-content: center;
@@ -89,7 +80,6 @@ body {
   line-height: 1.5;
 }
 
-/* Difficulty Select Styling */
 #difficulty-select {
   padding: 1.25rem 2.5rem;
   font-size: clamp(1.2rem, 2.5vw, 1.5rem);
@@ -104,7 +94,7 @@ body {
   backdrop-filter: blur(10px);
   transition: all 0.3s;
   font-family: inherit;
-  appearance: none; /* Custom dropdown arrow ideally added via pseudo-element */
+  appearance: none;
   background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2318f0a6%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
   background-repeat: no-repeat;
   background-position: right 1.5rem top 50%;
@@ -118,7 +108,6 @@ body {
   background-color: rgba(255,255,255,0.05);
 }
 
-/* Start Button */
 #start-btn {
   padding: 1.75rem 2rem;
   font-size: clamp(1.5rem, 3vw, 2rem);
@@ -166,7 +155,7 @@ body {
 }
 
 #start-btn .dwell-fill {
-  background: var(--accent); /* Teal progress fill */
+  background: var(--accent);
   height: 100%; width: 0%; transition: width 0.1s linear;
 }
 
@@ -179,9 +168,6 @@ body {
   text-transform: uppercase;
 }
 
-/* ──────────────────────────────────────────
-   Quiz Screen
-   ────────────────────────────────────────── */
 #quiz-screen {
   padding: 1rem;
   max-width: 65rem;
@@ -225,7 +211,6 @@ body {
   flex-shrink: 0;
 }
 
-/* Option Cards */
 .option {
   background: linear-gradient(180deg, var(--cardTop), var(--cardBottom));
   border: 1px solid var(--cardBorder);
@@ -241,7 +226,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center; /* Center content */
+  align-items: center;
   text-align: center;
 }
 
@@ -286,11 +271,10 @@ body {
 }
 
 .option .dwell-fill {
-  background: var(--amber); /* Amber dwell for options */
+  background: var(--amber);
   height: 100%; width: 0%; transition: width 0.08s linear;
 }
 
-/* Feedback Section */
 #feedback {
   text-align: center;
   margin-top: 0.5rem;
@@ -315,7 +299,6 @@ body {
   margin-left: auto; margin-right: auto;
 }
 
-/* Next / Restart Buttons */
 #next-btn {
   width: 100%;
   max-width: 100%;
@@ -373,13 +356,10 @@ body {
 }
 
 .btn-dwell-fill {
-  background: var(--accent); /* Teal fill */
+  background: var(--accent);
   height: 100%; width: 0%; transition: width 0.1s linear;
 }
 
-/* ──────────────────────────────────────────
-   Results Screen
-   ────────────────────────────────────────── */
 #results-screen {
   gap: 0.75rem;
   max-width: 50rem;
@@ -419,9 +399,6 @@ body {
   text-align: center;
 }
 
-/* ──────────────────────────────────────────
-   Topic Input (with Gaze/Voice states)
-   ────────────────────────────────────────── */
 .topic-input-wrapper {
   position: relative;
   width: clamp(20rem, 60vw, 35rem);
@@ -493,9 +470,6 @@ body {
   text-shadow: 0 0 10px var(--accentGlow);
 }
 
-/* ──────────────────────────────────────────
-   WebGazer (Hidden Logic)
-   ────────────────────────────────────────── */
 #webgazer-cam-wrapper #webgazerVideoFeed,
 #webgazer-cam-wrapper #webgazerVideoCanvas {
   position: absolute !important;
@@ -527,9 +501,6 @@ body {
   gap: 0.75rem;
 }
 
-/* ──────────────────────────────────────────
-   Responsive
-   ────────────────────────────────────────── */
 @media (max-width: 768px) {
   #options-container {
     grid-template-columns: 1fr;

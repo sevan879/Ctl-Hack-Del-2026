@@ -63,10 +63,8 @@ class DwellButton {
     this.startTime = 0;
     this.activated = false;
 
-    // Look for existing dwell-fill first
     this.fill = this.el.querySelector('.dwell-fill');
     
-    // If no fill exists, create the whole dwell bar structure
     if (!this.fill) {
       var bar = document.createElement('div');
       bar.className = 'dwell-bar';
@@ -137,18 +135,11 @@ function CalibrationSystem(onComplete) {
   this.isRunning  = false;
   this.isFirstTime = localStorage.getItem('eyeq_calibrated') !== 'true';
 
-  // Fewer, better-distributed points — corners removed entirely.
-  // WebGazer ridge regression needs DENSITY near centre, not extremes.
   this.pointPositions = [
-    // Row 1
     { x: 15, y: 15 }, { x: 50, y: 10 }, { x: 85, y: 15 },
-    // Row 2
     { x: 20, y: 38 }, { x: 50, y: 35 }, { x: 80, y: 38 },
-    // Row 3 (centre band — most important)
     { x: 15, y: 50 }, { x: 35, y: 50 }, { x: 50, y: 50 }, { x: 65, y: 50 }, { x: 85, y: 50 },
-    // Row 4
     { x: 20, y: 62 }, { x: 50, y: 65 }, { x: 80, y: 62 },
-    // Row 5
     { x: 15, y: 82 }, { x: 50, y: 85 }, { x: 85, y: 82 },
   ];
 
@@ -157,17 +148,14 @@ function CalibrationSystem(onComplete) {
   this.totalRounds       = 3;
   this.dotSizes          = [90, 60, 38];
 
-  // How long to show each dot while continuously recording
-  this.timePerPoint      = 2500;   // ms per dot
-  // How frequently to call recordScreenPosition
-  this.recordInterval    = 80;     // ms  (~12 samples/sec)
+  this.timePerPoint      = 2500;
+  this.recordInterval    = 80;
 
-  this._recordTimer  = null;   // setInterval handle for recording
-  this._advanceTimer = null;   // setTimeout handle for next dot
-  this._gazeCallback = null;   // onGaze handle for cleanup
+  this._recordTimer  = null;
+  this._advanceTimer = null;
+  this._gazeCallback = null;
 }
 
-// ── createUI ──────────────────────────────────────────────────
 CalibrationSystem.prototype.createUI = function () {
   this.overlay = document.createElement('div');
   this.overlay.id = 'cal-overlay';
@@ -183,11 +171,7 @@ CalibrationSystem.prototype.createUI = function () {
     '<div id="cal-progress-container">' +
       '<div id="cal-progress-bar"></div>' +
     '</div>' +
-    '<p id="cal-counter"></p>' +
-    '<button id="cal-skip-btn" style="display:flex!important">' +
-      '⏭️ Skip Calibration' +
-      '<div class="dwell-bar"><div class="dwell-fill"></div></div>' +
-    '</button>';
+    '<p id="cal-counter"></p>';
   document.body.appendChild(this.overlay);
 
   this.dot         = document.getElementById('cal-dot');
@@ -197,25 +181,9 @@ CalibrationSystem.prototype.createUI = function () {
   this.counter     = document.getElementById('cal-counter');
   this.progressBar = document.getElementById('cal-progress-bar');
 
-  var self    = this;
-  var skipBtn = document.getElementById('cal-skip-btn');
-
-  skipBtn.addEventListener('click', function () { self.skip(); });
-
-  this.skipDwellBtn = new DwellButton(skipBtn, 1500, function () {
-    self.skip();
-  });
-
-  // Single gaze callback: just drives the skip button dwell.
-  // Recording is done via a timed interval — no gaze needed.
-  this._gazeCallback = function (x, y) {
-    if (!self.isRunning) return;
-    self.skipDwellBtn.update(x, y);
-  };
-  onGaze(this._gazeCallback);
+  this._gazeCallback = null;
 };
 
-// ── start ─────────────────────────────────────────────────────
 CalibrationSystem.prototype.start = function () {
   _calibrationActive = true;
   this.createUI();
@@ -232,7 +200,6 @@ CalibrationSystem.prototype.start = function () {
   }
 };
 
-// ── showIntroSequence ─────────────────────────────────────────
 CalibrationSystem.prototype.showIntroSequence = function () {
   var self = this;
 
@@ -257,7 +224,6 @@ CalibrationSystem.prototype.showIntroSequence = function () {
   setTimeout(function () { self.showGetReady(); }, 14000);
 };
 
-// ── showGetReady ──────────────────────────────────────────────
 CalibrationSystem.prototype.showGetReady = function () {
   var self = this;
   this.label.textContent    = 'Get Ready';
@@ -269,7 +235,6 @@ CalibrationSystem.prototype.showGetReady = function () {
   setTimeout(function () { self.startRound(); },                           3000);
 };
 
-// ── startRound ────────────────────────────────────────────────
 CalibrationSystem.prototype.startRound = function () {
   this.shuffledPoints    = this.shuffleArray([].concat(this.pointPositions));
   this.currentPointIndex = 0;
@@ -284,9 +249,7 @@ CalibrationSystem.prototype.startRound = function () {
   this.showPoint();
 };
 
-// ── showPoint ─────────────────────────────────────────────────
 CalibrationSystem.prototype.showPoint = function () {
-  // Clear any running timers from the previous point
   if (this._recordTimer)  { clearInterval(this._recordTimer);  this._recordTimer  = null; }
   if (this._advanceTimer) { clearTimeout(this._advanceTimer);  this._advanceTimer = null; }
 
@@ -296,7 +259,6 @@ CalibrationSystem.prototype.showPoint = function () {
       this.complete();
       return;
     }
-    // Brief inter-round pause
     this.dot.style.display  = 'none';
     this.ring.style.display = 'none';
     this.label.textContent    = 'Round ' + this.currentRound + ' Complete! ✅';
@@ -311,43 +273,35 @@ CalibrationSystem.prototype.showPoint = function () {
   var screenX = (pos.x / 100) * window.innerWidth;
   var screenY = (pos.y / 100) * window.innerHeight;
 
-  // ── Position dot ──
   this.dot.style.width  = size + 'px';
   this.dot.style.height = size + 'px';
   this.dot.style.left   = screenX + 'px';
   this.dot.style.top    = screenY + 'px';
-  // Reset dot colour
   this.dot.style.background =
     'radial-gradient(circle, #4f46e5 40%, #6366f1 70%, transparent 71%)';
 
-  // ── Position ring and restart animation ──
   var ringSize = size + 24;
   this.ring.style.width  = ringSize + 'px';
   this.ring.style.height = ringSize + 'px';
   this.ring.style.left   = screenX + 'px';
   this.ring.style.top    = screenY + 'px';
   this.ring.style.animation = 'none';
-  this.ring.offsetHeight;  // force reflow
+  this.ring.offsetHeight;
   this.ring.style.animation = 'ring-fill ' + this.timePerPoint + 'ms linear forwards';
 
-  // ── Update counter / progress ──
   this.counter.textContent = 'Point ' + (this.currentPointIndex + 1) +
                              ' of '   + this.shuffledPoints.length;
   this._updateProgress();
 
-  // ── Continuously record gaze at this dot's screen position ──
-  // WebGazer's ridge regression learns from every call — more = better.
   var self = this;
   this._recordTimer = setInterval(function () {
     self._recordSample(screenX, screenY);
   }, this.recordInterval);
 
-  // ── Advance to next dot after timePerPoint ──
   this._advanceTimer = setTimeout(function () {
     clearInterval(self._recordTimer);
     self._recordTimer = null;
 
-    // Green flash to signal success
     if (self.dot) {
       self.dot.style.background =
         'radial-gradient(circle, #10b981 40%, #34d399 70%, transparent 71%)';
@@ -359,7 +313,6 @@ CalibrationSystem.prototype.showPoint = function () {
   }, this.timePerPoint);
 };
 
-// ── _recordSample — the key fix: use the real WebGazer API ────
 CalibrationSystem.prototype._recordSample = function (x, y) {
   try {
     if (typeof webgazer !== 'undefined' && webgazer.recordScreenPosition) {
@@ -368,7 +321,6 @@ CalibrationSystem.prototype._recordSample = function (x, y) {
   } catch (e) {}
 };
 
-// ── _updateProgress ───────────────────────────────────────────
 CalibrationSystem.prototype._updateProgress = function () {
   var totalPoints  = this.totalRounds * this.pointPositions.length;
   var donePts      = this.currentRound * this.pointPositions.length +
@@ -376,7 +328,6 @@ CalibrationSystem.prototype._updateProgress = function () {
   this.progressBar.style.width = ((donePts / totalPoints) * 100) + '%';
 };
 
-// ── complete ──────────────────────────────────────────────────
 CalibrationSystem.prototype.complete = function () {
   _calibrationActive = false;
   this.isRunning = false;
@@ -404,7 +355,6 @@ CalibrationSystem.prototype.complete = function () {
   }, 1800);
 };
 
-// ── skip ──────────────────────────────────────────────────────
 CalibrationSystem.prototype.skip = function () {
   _calibrationActive = false;
   var wasFirstTime = this.isFirstTime;
@@ -421,7 +371,6 @@ CalibrationSystem.prototype.skip = function () {
   }
 };
 
-// ── _cleanup ──────────────────────────────────────────────────
 CalibrationSystem.prototype._cleanup = function () {
   if (this._recordTimer)  { clearInterval(this._recordTimer);  this._recordTimer  = null; }
   if (this._advanceTimer) { clearTimeout(this._advanceTimer);  this._advanceTimer = null; }
@@ -432,7 +381,6 @@ CalibrationSystem.prototype._cleanup = function () {
   }
 };
 
-// ── shuffleArray ──────────────────────────────────────────────
 CalibrationSystem.prototype.shuffleArray = function (arr) {
   for (var i = arr.length - 1; i > 0; i--) {
     var j    = Math.floor(Math.random() * (i + 1));
@@ -456,31 +404,18 @@ function snapToTargetGlobal(x, y) {
   if (_calibrationActive) return { x: x, y: y };
   if (guidedTour.active) return { x: x, y: y };
   var selectors = [
-    /* Nav */
     '.home-button', '.calibrate-btn',
-    /* Calibration */
     '#cal-skip-btn',
-    /* Tour */
     '#tour-tooltip', '#tour-skip-btn',
-    /* Home page cards */
     '.mode-card',
-    /* Practice — select & mode screens */
     '.select-card', '.set-card',
-    /* Practice — study buttons */
     '.big-btn', '.fc-exit', '.qz-exit', '.mt-exit', '.wr-exit',
-    /* Practice — quiz options & match tiles */
     '.qz-option', '.mt-tile',
-    /* Practice — write input */
     '.wr-input', '#wr-input-wrapper',
-    /* AI Quiz */
     '.option', '#start-btn', '#next-btn', '#restart-btn',
-    /* Create set */
     '.action-btn', '.delete-card-btn', '.voice-input-wrapper',
-    /* Inputs */
     '.gaze-input', '.gaze-textarea', '.field-group textarea', '#topic-input',
-    /* Chatbox */
     '#chatbox-trigger', '#chatbox-close', '#chat-text-input',
-    /* Misc */
     '.modal-btn', '.modal-close', '.empty-cta', '.create-card'
   ];
   var targets = document.querySelectorAll(selectors.join(', '));
@@ -519,33 +454,42 @@ function bootWebGazer() {
     webgazer.showFaceOverlay(true);
     webgazer.showFaceFeedbackBox(false);
 
-    webgazer.setGazeListener(function (data) {
-      if (!data) return;
+    var _displayX = null;
+var _displayY = null;
+var SNAP_LERP = 0.60;
 
-      var pt = _sharedSmoother.update(data.x, data.y);
-      pt = snapToTargetGlobal(pt.x, pt.y);
+webgazer.setGazeListener(function (data) {
+  if (!data) return;
 
-      if (gazeDot) {
-        gazeDot.style.display = 'block';
-        gazeDot.style.left = pt.x + 'px';
-        gazeDot.style.top = pt.y + 'px';
-      }
+  var raw = _sharedSmoother.update(data.x, data.y);
+  var target = snapToTargetGlobal(raw.x, raw.y);
 
-      if (_isCalibrated) {
-        for (var i = 0; i < _gazeCallbacks.length; i++) {
-          try { _gazeCallbacks[i](pt.x, pt.y); }
-          catch (err) {}
-        }
-      }
-    });
+  if (_displayX === null) {
+    _displayX = target.x;
+    _displayY = target.y;
+  }
 
-    // Create the fixed wrapper that will hold all WebGazer visual elements
+  _displayX = _displayX + (target.x - _displayX) * SNAP_LERP;
+  _displayY = _displayY + (target.y - _displayY) * SNAP_LERP;
+
+  if (gazeDot) {
+    gazeDot.style.display = 'block';
+    gazeDot.style.left = _displayX + 'px';
+    gazeDot.style.top = _displayY + 'px';
+  }
+
+  if (_isCalibrated) {
+    for (var i = 0; i < _gazeCallbacks.length; i++) {
+      try { _gazeCallbacks[i](_displayX, _displayY); }
+      catch (err) {}
+    }
+  }
+});
+
     var camWrapper = document.createElement('div');
     camWrapper.id = 'webgazer-cam-wrapper';
     document.body.appendChild(camWrapper);
 
-    // Move all WebGazer visual elements into the wrapper.
-    // Returns true when at least video + one canvas are captured.
     function captureWebGazerElements() {
       var captured = 0;
       var ids = ['webgazerVideoFeed', 'webgazerVideoCanvas', 'webgazerFaceOverlay'];
@@ -556,7 +500,7 @@ function bootWebGazer() {
           captured++;
         }
       });
-      // Also pull canvases out of WebGazer's own container
+
       var container = document.getElementById('webgazerVideoContainer');
       if (container) {
         var children = Array.prototype.slice.call(container.children);
@@ -569,20 +513,18 @@ function bootWebGazer() {
           }
         });
       }
-      return captured >= 2; // video + at least one canvas
+      return captured >= 2;
     }
 
-    // MutationObserver to grab elements as WebGazer creates them
     var observer = new MutationObserver(function() {
       if (captureWebGazerElements()) {
-        observer.disconnect(); // stop observing once we have everything
+        observer.disconnect();
       }
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
     webgazer.begin()
       .then(function () {
-        // Capture immediately, then keep checking briefly for stragglers
         if (!captureWebGazerElements()) {
           var checkCount = 0;
           var checkInterval = setInterval(function() {
@@ -599,6 +541,7 @@ function bootWebGazer() {
           var cal = new CalibrationSystem(function () {
             _isCalibrated = true;
           });
+          window._activeCalibration = cal;
           cal.start();
         }
       })
@@ -616,6 +559,7 @@ function forceRecalibrate() {
   var cal = new CalibrationSystem(function () {
     _isCalibrated = true;
   });
+  window._activeCalibration = cal;
   cal.start();
 }
 
@@ -638,7 +582,7 @@ var voiceSystem = {
   onFieldComplete: null,
   paused: false,
   silenceTimer: null,
-  SILENCE_DELAY: 2000 // 2 seconds of silence
+  SILENCE_DELAY: 2000
 };
 
 function initVoiceSystem() {
@@ -656,7 +600,6 @@ function initVoiceSystem() {
   };
 
   voiceSystem.recognition.onresult = function (event) {
-    // Reset silence timer on any speech
     if (voiceSystem.silenceTimer) {
       clearTimeout(voiceSystem.silenceTimer);
     }
@@ -675,10 +618,8 @@ function initVoiceSystem() {
       }
     }
 
-    // Start silence timer after speech stops
     if (voiceSystem.mode === 'field') {
       voiceSystem.silenceTimer = setTimeout(function() {
-        // Auto-complete after silence
         if (voiceSystem.activeStatus) {
           voiceSystem.activeStatus.textContent = '✅ Done!';
         }
@@ -690,8 +631,7 @@ function initVoiceSystem() {
   voiceSystem.recognition.onerror = function (event) {
     voiceSystem.listening = false;
     if (voiceSystem.silenceTimer) clearTimeout(voiceSystem.silenceTimer);
-    
-    // Don't restart if paused for external STT
+
     if (voiceSystem.paused) return;
     if (event.error === 'no-speech' || event.error === 'aborted') {
       restartVoiceSystem();
@@ -701,8 +641,7 @@ function initVoiceSystem() {
   voiceSystem.recognition.onend = function () {
     voiceSystem.listening = false;
     if (voiceSystem.silenceTimer) clearTimeout(voiceSystem.silenceTimer);
-    
-    // Don't restart if paused for external STT
+
     if (voiceSystem.paused) return;
     if (voiceSystem.mode === 'field') {
       cleanupFieldMode();
@@ -713,7 +652,6 @@ function initVoiceSystem() {
   startVoiceSystem();
 }
 
-// Add pause/resume helpers for external STT coordination
 function pauseGlobalVoice() {
   voiceSystem.paused = true;
   if (voiceSystem.silenceTimer) clearTimeout(voiceSystem.silenceTimer);
@@ -754,7 +692,6 @@ function switchToFieldMode(wrapper, onComplete) {
     return;
   }
 
-  // CRITICAL: Clear everything before starting
   voiceSystem.existingText = '';
   
   voiceSystem.mode = 'field';
@@ -763,7 +700,6 @@ function switchToFieldMode(wrapper, onComplete) {
   voiceSystem.activeStatus = status;
   voiceSystem.onFieldComplete = onComplete || null;
 
-  // Clear the input when starting
   input.value = '';
 
   wrapper.classList.add('listening');
@@ -780,8 +716,7 @@ function switchToGlobalMode() {
     clearTimeout(voiceSystem.silenceTimer);
     voiceSystem.silenceTimer = null;
   }
-  
-  // CRITICAL: Clear existingText when leaving field mode
+
   voiceSystem.existingText = '';
   
   cleanupFieldMode();
@@ -809,7 +744,6 @@ function cleanupFieldMode() {
   voiceSystem.activeInput = null;
   voiceSystem.activeStatus = null;
   voiceSystem.activeDwellBtn = null;
-  // CRITICAL: Clear existingText in cleanup too
   voiceSystem.existingText = '';
   voiceSystem.onFieldComplete = null;
 }
@@ -854,7 +788,6 @@ function handleFieldInput(transcript, isFinal) {
   if (!input) return;
 
   if (isFinal) {
-    // Always append to fresh start (since existingText is cleared at start)
     var newText = voiceSystem.existingText ? voiceSystem.existingText + ' ' + transcript.trim() : transcript.trim();
     input.value = newText;
     voiceSystem.existingText = newText;
@@ -871,16 +804,16 @@ function handleFieldInput(transcript, isFinal) {
 }
 
 function handleGlobalCommand(transcript) {
-  // Skip calibration voice command
   if (matchCommand(transcript, [
     'eyeq skip calibration', 'eye q skip calibration', 'iq skip calibration',
     'eyeq skip', 'eye q skip', 'iq skip'
   ])) {
     if (_calibrationActive) {
       showCommandFeedback('⏭️ Skipping Calibration');
-      // Find and trigger skip on the active calibration
-      var skipBtn = document.getElementById('cal-skip-btn');
-      if (skipBtn) skipBtn.click();
+      if (window._activeCalibration) {
+        window._activeCalibration.skip();
+        window._activeCalibration = null;
+      }
     }
     return;
   }
@@ -955,34 +888,6 @@ function matchCommand(transcript, commands) {
   }
   return false;
 }
-
-// function showVoiceFeedback(transcript) {
-//   var el = document.getElementById('voice-feedback');
-//   if (!el) {
-//     el = document.createElement('div');
-//     el.id = 'voice-feedback';
-//     el.style.cssText =
-//       'position:fixed;top:20px;left:50%;transform:translateX(-50%);' +
-//       'background:rgba(30,30,46,0.95);color:#a6adc8;padding:0.75rem 1.5rem;' +
-//       'border-radius:0.75rem;font-size:0.875rem;z-index:99999;display:none;' +
-//       'border:1px solid rgba(166,173,200,0.2);font-family:monospace;';
-//     document.body.appendChild(el);
-//   }
-
-//   el.textContent = '🎤 "' + transcript + '"';
-//   el.style.display = 'block';
-//   el.style.opacity = '1';
-
-//   setTimeout(function () {
-//     el.style.opacity = '0';
-//     el.style.transition = 'opacity 0.3s';
-//   }, 1500);
-
-//   setTimeout(function () {
-//     el.style.display = 'none';
-//     el.style.opacity = '1';
-//   }, 1800);
-// }
 
 function showCommandFeedback(message) {
   var el = document.getElementById('command-feedback');
@@ -1406,11 +1311,11 @@ function injectTourStyles() {
   style.textContent =
     '#tour-overlay {' +
       'position:fixed;top:0;left:0;right:0;bottom:0;' +
-      'z-index:99990;pointer-events:all;transition:opacity 0.3s;' +  // ← none → all
+      'z-index:99990;pointer-events:all;transition:opacity 0.3s;' +
     '}' +
     '.tour-backdrop {' +
       'position:absolute;top:0;left:0;right:0;bottom:0;' +
-      'background:rgba(0,0,0,0.7);pointer-events:all;' +  // ← add pointer-events:all
+      'background:rgba(0,0,0,0.7);pointer-events:all;' +
     '}' +
     '#tour-tooltip {' +
       'position:fixed;width:450px;max-width:calc(100vw - 40px);' +

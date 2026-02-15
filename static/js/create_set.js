@@ -14,17 +14,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var activeDwellButtons = [];
   var cardIdCounter = 0;
 
-  /* ═══════════════════════════════════════
-     VOICE — delegate entirely to shared.js
-     ═══════════════════════════════════════ */
-
-  // Activate voice for any voice-input-wrapper.
-  // Uses the same switchToFieldMode that chatbox uses — continuous,
-  // restarts automatically, stops on "EyeQ done".
   function startFieldListening(wrapper) {
     if (typeof switchToFieldMode !== 'function') return;
 
-    // If already listening on this wrapper, toggle off
     if (voiceSystem && voiceSystem.mode === 'field' &&
         voiceSystem.activeWrapper === wrapper) {
       switchToGlobalMode();
@@ -35,19 +27,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (status) status.textContent = '🎤 Listening… say "EyeQ done" to finish';
 
     switchToFieldMode(wrapper, function () {
-      // Called when the user says "EyeQ done" or recognition ends
       if (status) {
         status.textContent = '✅ Done!';
         setTimeout(function () { status.textContent = ''; }, 2000);
       }
-      // Reset the dwell button so they can re-activate if needed
       rebuildDwellButtons();
     });
   }
 
-  /* ═══════════════════════════════════════
-     CARD MANAGEMENT
-     ═══════════════════════════════════════ */
   function createCard(term, definition) {
     term       = term       || '';
     definition = definition || '';
@@ -87,19 +74,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     cardsList.appendChild(card);
 
-    // Click on wrapper → start voice
     card.querySelectorAll('.voice-input-wrapper').forEach(function (wrapper) {
       wrapper.addEventListener('click', function () {
         startFieldListening(wrapper);
       });
     });
 
-    // Delete button
     card.querySelector('.delete-card-btn').addEventListener('click', function () {
       deleteCard(card);
     });
 
-    // Auto-resize textareas on manual input
     card.querySelectorAll('textarea').forEach(function (ta) {
       ta.addEventListener('input', function () {
         ta.style.height = 'auto';
@@ -109,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     updateCardCount();
     rebuildDwellButtons();
-    // Scroll new card into view
     setTimeout(function () {
       card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }, 100);
@@ -121,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function () {
       showToast('Need at least 1 card', 'error');
       return;
     }
-    // If we're currently listening on a field in this card, stop
     if (voiceSystem && voiceSystem.activeWrapper &&
         card.contains(voiceSystem.activeWrapper)) {
       if (typeof switchToGlobalMode === 'function') switchToGlobalMode();
@@ -148,9 +130,6 @@ document.addEventListener('DOMContentLoaded', function () {
     cardCountEl.textContent = n + ' card' + (n !== 1 ? 's' : '');
   }
 
-  /* ═══════════════════════════════════════
-     SAVE
-     ═══════════════════════════════════════ */
   function saveSet() {
     var title = setTitleInput.value.trim();
     if (!title) {
@@ -207,9 +186,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (label) label.textContent = 'Save Set';
   }
 
-  /* ═══════════════════════════════════════
-     TOAST
-     ═══════════════════════════════════════ */
   function showToast(message, type) {
     var toast = document.getElementById('toast');
     if (!toast) return;
@@ -218,9 +194,6 @@ document.addEventListener('DOMContentLoaded', function () {
     setTimeout(function () { toast.classList.remove('show'); }, 3500);
   }
 
-  /* ═══════════════════════════════════════
-     DWELL BUTTONS
-     ═══════════════════════════════════════ */
   function rebuildDwellButtons() {
     activeDwellButtons.forEach(function (b) { b.reset(); });
     activeDwellButtons = [];
@@ -248,7 +221,6 @@ document.addEventListener('DOMContentLoaded', function () {
         saveSet();
       }));
 
-    // Delete buttons
     document.querySelectorAll('.delete-card-btn').forEach(function (btn) {
       var card = btn.closest('.card-entry');
       activeDwellButtons.push(new DwellButton(btn, 1500, function () {
@@ -256,20 +228,15 @@ document.addEventListener('DOMContentLoaded', function () {
       }));
     });
 
-    // Voice input wrappers — gaze dwell activates voice
     document.querySelectorAll('.voice-input-wrapper').forEach(function (wrapper) {
       var dwellBtn = new DwellButton(wrapper, 1800, function () {
         startFieldListening(wrapper);
-        // Reset after short delay so the fill clears
         setTimeout(function () { dwellBtn.reset(); }, 500);
       });
       activeDwellButtons.push(dwellBtn);
     });
   }
 
-  /* ═══════════════════════════════════════
-     GAZE SCROLL
-     ═══════════════════════════════════════ */
   function handleScrollGaze(x, y) {
     if (!cardsWrapper) return;
     var r    = cardsWrapper.getBoundingClientRect();
@@ -280,29 +247,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  /* ═══════════════════════════════════════
-     CLICK HANDLERS (mouse / keyboard users)
-     ═══════════════════════════════════════ */
   if (addCardBtn)  addCardBtn.addEventListener('click',  function () { createCard(); });
   if (saveSetBtn)  saveSetBtn.addEventListener('click',  function () { saveSet(); });
 
-  // Title / description wrappers
   document.querySelectorAll('.title-section .voice-input-wrapper').forEach(function (wrapper) {
     wrapper.addEventListener('click', function () { startFieldListening(wrapper); });
   });
 
-  /* ═══════════════════════════════════════
-     GAZE LISTENER
-     ═══════════════════════════════════════ */
   onGaze(function (x, y) {
     handleScrollGaze(x, y);
     activeDwellButtons.forEach(function (b) { b.update(x, y); });
     if (window.updateChatbotDwell) window.updateChatbotDwell(x, y);
   });
 
-  /* ═══════════════════════════════════════
-     INIT
-     ═══════════════════════════════════════ */
   createCard();
   createCard();
   rebuildDwellButtons();

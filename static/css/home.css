@@ -1,6 +1,3 @@
-/* ──────────────────────────────────────────
-   Theme Variables (Consistent with previous)
-   ────────────────────────────────────────── */
 :root {
   --bg0: #050608;
   --bg1: #070a0f;
@@ -14,20 +11,16 @@
   --text: rgba(255,255,255,0.92);
   --muted: rgba(255,255,255,0.52);
 
-  --accent: #18f0a6; /* Teal/Green from EyeQ image */
+  --accent: #18f0a6;
   --accentGlow: rgba(24, 240, 166, 0.25);
   --accentGlow2: rgba(24, 240, 166, 0.12);
 
   --radius: 24px;
 }
 
-/* ──────────────────────────────────────────
-   Global Layout
-   ────────────────────────────────────────── */
 body {
   height: 100vh;
   overflow: hidden;
-  /* Deep dark background with vignette */
   background: 
     radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05), transparent 60%),
     radial-gradient(circle at 50% 100%, rgba(24,240,166,0.05), transparent 50%),
@@ -42,14 +35,10 @@ body {
   height: 100vh;
   padding: 1.5rem;
   box-sizing: border-box;
-  /* Add vignette overlay */
   position: relative;
   z-index: 1;
 }
 
-/* ──────────────────────────────────────────
-   Header (Logo area)
-   ────────────────────────────────────────── */
 .header {
   display: flex;
   justify-content: center;
@@ -66,13 +55,9 @@ body {
   font-weight: 800;
   color: white;
   letter-spacing: -0.02em;
-  /* Optional: Text glow like the logo in image */
   text-shadow: 0 0 20px rgba(255,255,255,0.15);
 }
 
-/* ──────────────────────────────────────────
-   Modes Grid
-   ────────────────────────────────────────── */
 .modes-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -80,18 +65,13 @@ body {
   gap: 1.5rem;
   flex: 1;
   min-height: 0;
-  /* Centered max width for better readability on large screens */
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
   padding-bottom: 2rem;
 }
 
-/* ──────────────────────────────────────────
-   Mode Cards (Glassmorphism Style)
-   ────────────────────────────────────────── */
 .mode-card {
-  /* Glass Background */
   background: linear-gradient(180deg, var(--cardTop), var(--cardBottom));
   border: 1px solid var(--cardBorder);
   border-radius: var(--radius);
@@ -113,10 +93,9 @@ body {
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 
-/* Hover & Gaze State */
 .mode-card:hover,
 .mode-card.gazing {
-  border-color: rgba(24, 240, 166, 0.6); /* Teal Border */
+  border-color: rgba(24, 240, 166, 0.6);
   background: linear-gradient(180deg, rgba(24, 240, 166, 0.08), rgba(255,255,255,0.02));
   transform: translateY(-4px) scale(1.02);
   box-shadow: 
@@ -125,9 +104,6 @@ body {
     0 0 30px var(--accentGlow2);
 }
 
-/* ──────────────────────────────────────────
-   MUI Icon Styling
-   ────────────────────────────────────────── */
 .mode-icon {
   font-size: clamp(3.5rem, 6vw, 4.5rem);
   margin-bottom: 1.25rem;
@@ -136,17 +112,13 @@ body {
   filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
 }
 
-/* Icon glows on hover */
 .mode-card:hover .mode-icon,
 .mode-card.gazing .mode-icon {
-  color: var(--accent); /* Teal */
+  color: var(--accent);
   transform: scale(1.1);
   filter: drop-shadow(0 0 15px var(--accentGlow));
 }
 
-/* ──────────────────────────────────────────
-   Card Typography
-   ────────────────────────────────────────── */
 .mode-card h2 {
   font-size: clamp(1.4rem, 2.5vw, 1.8rem);
   margin-bottom: 0.75rem;
@@ -172,9 +144,6 @@ body {
   color: rgba(255,255,255,0.8);
 }
 
-/* ──────────────────────────────────────────
-   Dwell Interaction (Teal Progress)
-   ────────────────────────────────────────── */
 .mode-card .dwell-bar {
   position: absolute;
   bottom: 0;
@@ -188,14 +157,11 @@ body {
 .mode-card .dwell-fill {
   height: 100%;
   width: 0%;
-  background: var(--accent); /* Teal fill */
+  background: var(--accent);
   box-shadow: 0 0 10px var(--accent);
   transition: width 0.1s linear;
 }
 
-/* ──────────────────────────────────────────
-   Mobile Responsiveness
-   ────────────────────────────────────────── */
 @media (max-width: 768px) {
   .header {
     margin-bottom: 1.5rem;
@@ -203,15 +169,14 @@ body {
   
   .modes-grid {
     grid-template-columns: 1fr;
-    /* Auto rows instead of fixed split */
     grid-template-rows: repeat(auto-fit, minmax(140px, 1fr)); 
-    padding-left: 0; /* Reset previous padding */
+    padding-left: 0;
     gap: 1rem;
     max-width: 100%;
   }
   
   .mode-card {
-    flex-direction: row; /* Horizontal cards on mobile */
+    flex-direction: row;
     justify-content: flex-start;
     padding: 1.5rem;
     gap: 1.5rem;
@@ -228,7 +193,6 @@ body {
     margin: 0;
   }
   
-  /* Text container for horizontal layout */
   .mode-card-content {
     display: flex;
     flex-direction: column;

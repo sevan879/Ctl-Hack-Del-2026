@@ -295,7 +295,6 @@ document.addEventListener('DOMContentLoaded', function () {
     topicInput.focus();
   }
 
-  // Click handlers
   document.getElementById('next-btn').addEventListener('click', function () {
     if (!answered) return;
     goNext();
