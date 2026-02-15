@@ -239,7 +239,7 @@ body {
 }
 
 .empty-icon {
-  font-family: 'Material Icons';
+  font-family: 'Material Symbols Outlined';
   font-weight: normal;
   font-style: normal;
   font-size: 6rem;
@@ -291,7 +291,7 @@ body {
 }
 
 .select-card-icon {
-  font-family: 'Material Icons';
+  font-family: 'Material Symbols Outlined';
   font-weight: normal;
   font-style: normal;
   font-size: 3rem;
@@ -366,7 +366,7 @@ body {
 }
 
 .mode-card .mode-icon {
-  font-family: 'Material Icons';
+  font-family: 'Material Symbols Outlined';
   font-weight: normal;
   font-style: normal;
   font-size: 3.5rem;
@@ -787,7 +787,7 @@ body {
    RESULTS SCREEN
    ────────────────────────────────────────── */
 .results-icon {
-  font-family: 'Material Icons';
+  font-family: 'Material Symbols Outlined';
   font-weight: normal;
   font-style: normal;
   font-size: 6rem;
