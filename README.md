@@ -16,12 +16,12 @@ EyeQ eliminates the need for a mouse or keyboard entirely. By combining precisio
 
 ## Features
 
-Eye-Tracking Navigation — Browse the entire app using only your eyes. UI elements use magnetic snap zones and dwell-to-activate interaction, so looking at a button is enough to select it.
-Voice-Controlled AI Assistant — Ask questions, request explanations, and control the app through natural speech commands powered by Google Cloud Speech API.
-AI-Generated Quizzes — Instantly generate quizzes on any topic using the Groq API. Study materials are created on-demand and tailored to your needs.
-Flashcard System — Review and study with flashcards, navigated entirely through gaze and voice.
-Accessible-First UI — Large snap-friendly buttons (72px+ targets), high-contrast feedback, generous spacing, and no hover-dependent interactions. Every design decision prioritizes hands-free usability.
-Adaptive Calibration — Eye-tracking calibration adapts to various screen sizes and lighting conditions for a reliable experience.
+- **Eye-Tracking Navigation** — Browse the entire app using only your eyes. UI elements use magnetic snap zones and dwell-to-activate interaction.
+- **Voice-Controlled AI Assistant** — Ask questions, request explanations, and control the app through natural speech commands powered by Google Cloud Speech API.
+- **AI-Generated Quizzes** — Instantly generate quizzes on any topic using the Groq API. Study materials are created on-demand and tailored to your needs.
+- **Flashcard System** — Review and study with flashcards, navigated entirely through gaze and voice.
+- **Accessible-First UI** — Large snap-friendly buttons (72px+ targets), high-contrast feedback, generous spacing, and no hover-dependent interactions. Every design decision prioritizes hands-free usability.
+- **Adaptive Calibration** — Eye-tracking calibration adapts to various screen sizes and lighting conditions for a reliable experience.
 
 ---
 
